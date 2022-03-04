@@ -21,7 +21,7 @@ function css() {
 }
 function shop() {
 	return src([
-		'parallax/assets/seerseven.min.css',
+		'parallax/assets/desmond.min.css',
 		'parallax/assets/vendor.min.css',
 	]).pipe(dest(shopify));
 }
