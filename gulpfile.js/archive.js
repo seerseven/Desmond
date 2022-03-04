@@ -1,20 +1,18 @@
 'use strict';
 
 const { series, parallel, watch, src, dest, task } = require('gulp');
-const plumber = require('gulp-plumber');
-const gulpCopy = require('gulp-copy');
 const clean = require('gulp-clean');
 const zip = require('gulp-zip');
 var fs = require('fs');
 
 //Variables
 
-const tholos = 'jarvis-vault/tholos';
-const vault = 'jarvis-vault/tholos/archives';
+const tholos = 'state/tholos';
+const vault = 'state/tholos/archives';
 
-const NONODE = '!jarvis-core/node_modules/**';
-const NOLOCK = '!jarvis-core/package-lock.json';
-
+const NONODE = '!app/node_modules/**';
+const NOLOCK = '!app/package-lock.json';
+const nodemon = 'app/node_modules/@seerseven/desmond/src/*.js';
 var months = [
 	'Jan',
 	'Feb',
@@ -52,7 +50,7 @@ var month = months[d.getMonth()];
 var year = d.getFullYear();
 var x = '' + hr + ampm + '-' + date + month + year;
 var caps = x.toUpperCase();
-var base = 'jarvis-vault/tholos/';
+var base = 'state/tholos/';
 var core = 'CORE-';
 var git = 'GIT-';
 var npm = 'NPM-';
@@ -71,7 +69,7 @@ function dirName(val) {
 		var full = base + npm + caps;
 	}
 	if (val === 'arch') {
-		var full = base + npm + caps;
+		var full = base + arch + caps;
 	}
 	return full;
 }
@@ -86,7 +84,7 @@ function zipName(val) {
 		var full = npm + caps + zp;
 	}
 	if (val === 'arch') {
-		var full = npm + caps + zp;
+		var full = arch + caps + zp;
 	}
 	return full;
 }
@@ -113,9 +111,7 @@ function mkdir(cb) {
 
 //Git STEP 1 COPY Files2
 function cCopy() {
-	return src(['jarvis-core/**/*', NONODE, 'jarvis-core/.*/**/*']).pipe(
-		dest(coreName)
-	);
+	return src(['app/**/*', NONODE, 'app/.*/**/*']).pipe(dest(coreName));
 }
 function cZip() {
 	return src([coreName + '/**/*', coreName + '/.*/**/*'])
@@ -126,22 +122,9 @@ function cClean() {
 	return src(coreName).pipe(clean());
 }
 
-//Git STEP 1 COPY Files2
-function gCopy() {
-	return src(['jarvis-git/**/*', 'jarvis-git/.*/**/*']).pipe(dest(gitName));
-}
-function gZip() {
-	return src([gitName + '/**/*', gitName + '/.*/**/*'])
-		.pipe(zip(gitZipName))
-		.pipe(dest(tholos));
-}
-function gClean() {
-	return src(gitName).pipe(clean());
-}
-
 //NPM STEP 1 COPY Files2
 function nCopy() {
-	return src('jarvis-npm/**/*').pipe(dest(npmName));
+	return src('npm/**/*').pipe(dest(npmName));
 }
 function nZip() {
 	return src([npmName + '/**/*'])
@@ -155,31 +138,24 @@ function nClean() {
 //Once All Folders are Zipped
 //Compile One Master ZIP Archive
 function arc() {
-	return src(['jarvis-vault/tholos/**/*', '!jarvis-vault/tholos/archives/**'])
+	return src(['state/tholos/**/*', '!state/tholos/archives/**'])
 		.pipe(zip(archZipName))
 		.pipe(dest(vault));
 }
 function burn() {
-	return src([
-		'jarvis-vault/tholos/**/*',
-		'!jarvis-vault/tholos/archives/**',
-	]).pipe(clean());
+	return src(['state/tholos/**/*', '!state/tholos/archives/**']).pipe(clean());
 }
 
 //Merge Main Workspace with Git Master and Push to Origin
 //Git STEP 1 COPY Files2
 function merge() {
-	return src(['jarvis-core/**/*', NONODE, NOLOCK, 'jarvis-core/.*/**/*']).pipe(
-		dest('jarvis-git')
-	);
+	return src(nodemon).pipe(dest('npm/src'));
 }
 
 exports.nclean = nClean;
 exports.nzip = nZip;
 exports.ncopy = nCopy;
-exports.gcopy = gCopy;
-exports.gzip = gZip;
-exports.gclean = gClean;
+
 exports.ccopy = cCopy;
 exports.czip = cZip;
 exports.cclean = cClean;

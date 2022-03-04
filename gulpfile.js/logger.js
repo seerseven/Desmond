@@ -8,24 +8,17 @@ const plumber = require('gulp-plumber');
 const app = './';
 
 function core() {
-	return src('jarvis-core/package.json')
+	return src('app/package.json')
 		.pipe(plumber())
 		.pipe(bump({ type: 'patch' }))
-		.pipe(dest('jarvis-core'));
-}
-
-function git() {
-	return src('jarvis-git/package.json')
-		.pipe(plumber())
-		.pipe(bump({ type: 'patch' }))
-		.pipe(dest('jarvis-git'));
+		.pipe(dest('app'));
 }
 
 function npm() {
-	return src('jarvis-npm/package.json')
+	return src('npm/package.json')
 		.pipe(plumber())
 		.pipe(bump({ type: 'patch' }))
-		.pipe(dest('jarvis-npm'));
+		.pipe(dest('npm'));
 }
 
 function master() {
@@ -37,5 +30,4 @@ function master() {
 
 exports.core = core;
 exports.npm = npm;
-exports.git = git;
 exports.master = master;
