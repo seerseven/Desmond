@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html class="no-js" lang="{{ request.locale.iso_code }}" data-theme="">
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <meta content="" name="theme-color"/>
+    <link rel="canonical" href="{{ canonical_url }}"/>
+    <link crossorigin href="https://cdn.shopify.com" rel="preconnect"/>
+
+    {% render 'theme-meta' %}
+    {% render 'theme-root' %}
+    {% render 'theme-src' %}
+    {{
+			content_for_header
+		}}
+  </head>
+
+  <body>
+    <div id="element"></div>
+
+    {% section 'header_new' %}
+
+    <div class="container media" id="main">
+      <div class="mxw-10 sin">
+        <h1>Smooth Collapsible Sidebar Navigation Example</h1>
+        <p class="lead">
+          A modern sidebar navigation with smooth expand & collapse transitions,
+          					written in CSS/CSS3 and vanilla JavaScript.
+        </p>
+
+        <div class="page mt-5 p-4 mx-auto">
+          <div id="block-be2ef39cad6b4a7b9323e5d661b095bc">new block</div>
+          <div class="something" id="page-index">
+            <div id="block-6d55f0a3e06c494e9a42d3a4349643ae">
+              <div class="block-wrap" id="sortable">
+                <div class="block ui-state-default">Block 1 Content</div>
+                <div class="block ui-state-default">Block 2 Content</div>
+                <div class="block ui-state-default">Block 3 Content</div>
+                <div class="block ui-state-default">Block 4 Content</div>
+                <div class="block ui-state-default">Block 5 Content</div>
+                <div class="block ui-state-default">Block 6 Content</div>
+              </div>
+
+              main content
+            </div>
+            content here
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main> -->
+
+    {% section 'footer' %}
+    {% render 'theme-admin' %}
+  </body>
+</html>

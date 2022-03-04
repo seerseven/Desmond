@@ -1,0 +1,41 @@
+{
+  "author": {
+    "name": "Seerseven",
+    "email": "dev@seerseven.com"
+  },
+  "bin": {
+    "desmond": "src/cli.js"
+  },
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "esbuild": "^0.14.14",
+    "esbuild-sass-plugin": "^2.2.1"
+  },
+  "description": "Bin utilities for Desmond",
+  "devDependencies": {
+    "eslint": "^8.5.0",
+    "jest": "^27.4.5",
+    "prettier": "^2.5.1"
+  },
+  "files": [
+    "src"
+  ],
+  "keywords": [
+    "shopify",
+    "bundler",
+    "cli",
+    "desmond",
+    "theme"
+  ],
+  "license": "ISC",
+  "main": "src/cli.js",
+  "name": "@seerseven/desmond",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "format": "prettier --write ."
+  },
+  "type": "module",
+  "version": "1.0.0"
+}

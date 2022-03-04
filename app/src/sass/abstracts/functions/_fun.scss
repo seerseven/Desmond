@@ -1,0 +1,60 @@
+@use 'sass:map';
+@use '../variables' as *;
+@use '../variables/maps' as *;
+
+@function v($prop) {
+	@return var(--#{$prop});
+}
+
+$fonts: (
+	font-body: v(font-body),
+	font-accent: v(font-accent),
+	font-head: v(font-head),
+	font-nav: v(font-nav),
+);
+
+$yggdrasil: (
+	fuckYOU: s(fuckYOU),
+	fuckYOU1: s(fuckYOU1),
+	fuckYOU2: s(fuckYOU2),
+);
+
+@function ff($ff) {
+	@return map-get($fonts, $ff);
+}
+
+@function s($setting) {
+	@return $q1 + $q2 + $q3 + $setting + $q4;
+}
+
+@function insta($key) {
+	$value: map-get($insta-filters, $key);
+	@return $value;
+}
+
+@function f($key) {
+	$value: map-get($filters-map, $key);
+	@return $value;
+}
+
+@function hex($key, $alpha: 1) {
+	$value: map-get($hexmap, $key);
+	@return rgba($value, $alpha);
+}
+
+@function chex($key, $alpha: 1) {
+	$value: map-get($hexmap, $key);
+	@return contrast(rgba($value, $alpha));
+}
+
+// Our function for shorter usage of map-get();
+// @function setcolor($mod, $tone) {
+// 	$modword: map.get($mods, $mod);
+// 	$colortone: map.get($tones, $tone);
+// 	@return randomColor($modword, $color);
+// }
+// @function rndm($mod, $color) {
+// 	$color: map-get($colorNames, $key);
+// 	$mod: map-get($aimlessColor, $key);
+// 	@return randomColor($mod, $color);
+// }

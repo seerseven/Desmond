@@ -1,0 +1,216 @@
+@use 'sass:map';
+@use '../variables' as *;
+
+//CSS CENTERING
+
+@mixin collapse($element: collapse) {
+	.side-bar.#{$element} & {
+		@content;
+	}
+}
+
+@mixin close {
+	.side-bar.close & {
+		@content;
+	}
+}
+
+@mixin change {
+	&.change {
+		@content;
+	}
+}
+@keyframes fadeOutFromBlock {
+	0% {
+		position: relative;
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	99% {
+		position: relative;
+		opacity: 0;
+		transform: translateX(0);
+	}
+
+	100% {
+		position: absolute;
+		opacity: 0;
+		transform: translateX(-999px);
+	}
+}
+
+@keyframes fadeInFromNone {
+	0% {
+		position: absolute;
+		opacity: 0;
+		transform: translateX(-999px);
+	}
+
+	1% {
+		position: relative;
+		opacity: 0;
+		transform: translateX(0);
+	}
+
+	100% {
+		position: relative;
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@mixin d-block($animationSeconds: 0.3s) {
+	position: relative;
+	opacity: 1;
+	transform: translateX(0);
+	animation: fadeInFromNone $animationSeconds ease-in;
+	will-change: opacity, transform;
+	transition: 0.3s;
+}
+
+@mixin d-none($animationSeconds: 0.1s) {
+	position: absolute;
+	opacity: 0;
+	transform: translateX(-999px);
+	animation: fadeOutFromBlock $animationSeconds ease-out;
+	will-change: opacity, transform;
+	transition: 0.3s;
+}
+
+@mixin d-flex(
+	$justify: center,
+	$align: center,
+	$direction: row,
+	$wrap: nowrap
+) {
+	display: flex !important;
+	flex-direction: $direction !important;
+	flex-wrap: $wrap !important;
+	justify-content: $justify !important;
+	align-content: stretch !important;
+	align-items: $align !important;
+}
+
+@mixin flex-item($grow: 0, $shrink: 1, $basis: auto, $order: 0, $self: auto) {
+	order: $order;
+	flex: $grow $shrink $basis;
+	align-self: $self;
+}
+//CSS Filter Mixin
+@mixin effect($key, $prop) {
+	$filter: map-get($filters-map, $key);
+	filter: $filter + unquote('(') + $prop + unquote(')');
+}
+
+//Multipl Background Image Urls
+@mixin image-set($normal, $zoom, $print) {
+	bimg: image-set(url($normal) 1x, url($zoom) 2x, url($print) 600dpi);
+}
+
+//Linear Easing Gradient
+@mixin blendaxis($dir, $color1, $ease, $color2) {
+	background: linear-gradient($dir, $color1, $ease, $color2);
+}
+
+//Radial Easing Gradient
+@mixin blendsphere($dir, $color1, $ease, $color2) {
+	background: radial-gradient($dir, $color1, $ease, $color2);
+}
+
+//Insert Placeholder Image from Dummy Image
+@mixin placeholder($psize) {
+	background-image: placehold($psize, $psize);
+	width: $psize * 1px;
+	height: $psize * 1px;
+}
+
+//Create ':' Namespace CSS Selectors
+@mixin css($cls, $wee) {
+	.#{$cls}\:#{$wee} {
+		@content;
+	}
+}
+
+@mixin before($content: '') {
+	&:before {
+		content: $content;
+		@content;
+	}
+}
+
+@mixin hover {
+	&:hover {
+		@content;
+	}
+}
+@mixin pseudo($display: block, $pos: absolute, $content: '') {
+	content: $content;
+	display: $display;
+	position: $pos;
+}
+
+@mixin radius($borderRadius: 50%) {
+	radius: $borderRadius;
+}
+
+// Remove all the bullets from a list.
+@mixin list-no-bullets {
+	list-style-type: none;
+	list-style-image: none;
+}
+
+// Remove bullets and whitespace from a list.
+@mixin list-plain {
+	@include list-no-bullets;
+	margin: 0;
+	padding: 0;
+}
+
+// Make all list items in a list appear on the same line, inline.
+@mixin list-inline {
+	@include list-plain;
+	display: inline;
+	li {
+		display: inline;
+	}
+}
+
+// Make all list items in a list appear on the same line as floated block
+// elements.
+//
+// $margin controls the amount of whitespace between items
+// $dir controls the floating direction.
+@mixin list-horizontal($margin: $grid-margin, $dir: left) {
+	@include list-plain;
+	@include clearfix;
+	li {
+		float: left;
+		display: inline;
+		margin-#{$dir}: $margin;
+	}
+}
+
+// Mixin for a defniition list element, to have its terms and definitions
+// appear on a single line.
+@mixin list-dl-table($width, $margin: $grid-margin) {
+	padding-left: $width + $margin;
+	dt {
+		float: left;
+		clear: left;
+		display: inline;
+		width: $width;
+		margin-right: $margin;
+		margin-left: -$width - $margin;
+	}
+}
+
+// Add custom list bullets using background images.
+//
+// All arguments are delegated to the `text-icon` mixin.
+@mixin list-image-bullets($img, $padding: $grid-margin, $x: 0, $y: 0) {
+	@include list-no-bullets;
+	li {
+		@include text-icon($img, $padding, $x, $y);
+	}
+}

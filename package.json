@@ -1,0 +1,35 @@
+{
+  "name": "desmond-master",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"gulp watch\" \"node cron.js\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "add-filename-increment": "^1.0.0",
+    "concurrently": "^7.0.0",
+    "cron": "^1.8.2",
+    "del": "^6.0.0",
+    "gulp": "^4.0.2",
+    "gulp-bump": "^3.2.0",
+    "gulp-chug": "^0.5.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-copy": "^4.0.1",
+    "gulp-git": "^2.10.1",
+    "gulp-git-push": "^2.0.0",
+    "gulp-gitignore": "^0.1.0",
+    "gulp-hub": "^4.2.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-prompt": "^1.2.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-shell": "^0.8.0",
+    "gulp-wait": "^0.0.2",
+    "gulp-zip": "^5.1.0"
+  },
+  "dependencies": {
+    "moment": "^2.29.1"
+  }
+}
