@@ -1,40 +1,29 @@
 'use strict';
 
 const { series, parallel, watch, src, dest } = require('gulp');
-const bump = require('gulp-bump');
-const plumber = require('gulp-plumber');
-const gulpCopy = require('gulp-copy');
-const arch = require('./archive.js');
+const arc = require('./archive.js');
 const ver = require('./logger.js');
-// const gitTasks = require('./git.js');
 
-exports.merge = arch.merge;
-exports.dir = arch.mkdir;
+exports.merge = arc.merge;
+exports.dir = arc.mkdir;
 exports.verCore = ver.core;
 exports.verNpm = ver.npm;
 exports.verMaster = ver.master;
-// exports.save = gitTasks.gitSave;
-// exports.send = gitTasks.gitSend;
-// // exports.deploy = series(gitTasks.gitSave, gitTasks.gitSend);
-exports.arc = arch.arc;
-exports.burn = arch.burn;
-exports.ncopy = arch.ncopy;
+exports.arc = arc.arc;
+exports.burn = arc.burn;
+exports.nodecopy = arc.nodecopy;
 
-exports.ccopy = arch.ccopy;
-exports.czip = arch.czip;
-exports.cclean = arch.cclean;
+exports.appcopy = arc.appcopy;
+exports.appzip = arc.appzip;
+exports.appclean = arc.appclean;
 
 exports.vault = series(
-	arch.mkdir,
-	parallel(arch.ncopy, arch.ccopy),
-	parallel(arch.nzip, arch.czip),
-	parallel(arch.nclean, arch.cclean),
-	arch.arc,
-	arch.burn
+	arc.mkdir,
+	parallel(arc.nodecopy, arc.appcopy),
+	parallel(arc.nodezip, arc.appzip),
+	parallel(arc.nodeclean, arc.appclean),
+	arc.arc,
+	arc.burn
 );
 
 exports.vers = parallel(ver.core, ver.npm, ver.master);
-
-exports.watch = function () {
-	watch('test', core);
-};

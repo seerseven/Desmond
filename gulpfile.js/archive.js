@@ -51,19 +51,15 @@ var year = d.getFullYear();
 var x = '' + hr + ampm + '-' + date + month + year;
 var caps = x.toUpperCase();
 var base = 'state/tholos/';
-var core = 'CORE-';
-var git = 'GIT-';
+var app = 'APP-';
 var npm = 'NPM-';
 var arch = 'ARCHIVE-';
 var zp = '.zip';
 
 //Folder Names with Timestamp
 function dirName(val) {
-	if (val === 'core') {
-		var full = base + core + caps;
-	}
-	if (val === 'git') {
-		var full = base + git + caps;
+	if (val === 'app') {
+		var full = base + app + caps;
 	}
 	if (val === 'npm') {
 		var full = base + npm + caps;
@@ -74,11 +70,8 @@ function dirName(val) {
 	return full;
 }
 function zipName(val) {
-	if (val === 'core') {
-		var full = core + caps + zp;
-	}
-	if (val === 'git') {
-		var full = git + caps + zp;
+	if (val === 'app') {
+		var full = app + caps + zp;
 	}
 	if (val === 'npm') {
 		var full = npm + caps + zp;
@@ -88,18 +81,15 @@ function zipName(val) {
 	}
 	return full;
 }
-var coreName = dirName('core');
-var gitName = dirName('git');
+var appName = dirName('app');
 var npmName = dirName('npm');
-var archName = dirName('arch');
-var coreZipName = zipName('core');
-var gitZipName = zipName('git');
+var appZipName = zipName('app');
 var npmZipName = zipName('npm');
 var archZipName = zipName('arch');
 
 //Make New Dirctories for Backup Files
 function mkdir(cb) {
-	const folders = [coreName, gitName, npmName];
+	const folders = [appName, npmName];
 	folders.forEach((dir) => {
 		if (!fs.existsSync(dir)) {
 			fs.mkdirSync(dir);
@@ -110,28 +100,28 @@ function mkdir(cb) {
 }
 
 //Git STEP 1 COPY Files2
-function cCopy() {
-	return src(['app/**/*', NONODE, 'app/.*/**/*']).pipe(dest(coreName));
+function appCopy() {
+	return src(['app/**/*', NONODE, 'app/.*/**/*']).pipe(dest(appName));
 }
-function cZip() {
-	return src([coreName + '/**/*', coreName + '/.*/**/*'])
-		.pipe(zip(coreZipName))
+function appZip() {
+	return src([appName + '/**/*', appName + '/.*/**/*'])
+		.pipe(zip(appZipName))
 		.pipe(dest(tholos));
 }
-function cClean() {
-	return src(coreName).pipe(clean());
+function appClean() {
+	return src(appName).pipe(clean());
 }
 
 //NPM STEP 1 COPY Files2
-function nCopy() {
+function nodeCopy() {
 	return src('npm/**/*').pipe(dest(npmName));
 }
-function nZip() {
+function nodeZip() {
 	return src([npmName + '/**/*'])
 		.pipe(zip(npmZipName))
 		.pipe(dest(tholos));
 }
-function nClean() {
+function nodeClean() {
 	return src(npmName).pipe(clean());
 }
 
@@ -152,13 +142,13 @@ function merge() {
 	return src(nodemon).pipe(dest('npm/src'));
 }
 
-exports.nclean = nClean;
-exports.nzip = nZip;
-exports.ncopy = nCopy;
+exports.nodeclean = nodeClean;
+exports.nodezip = nodeZip;
+exports.nodecopy = nodeCopy;
 
-exports.ccopy = cCopy;
-exports.czip = cZip;
-exports.cclean = cClean;
+exports.appcopy = appCopy;
+exports.appzip = appZip;
+exports.appclean = appClean;
 exports.mkdir = mkdir;
 exports.arc = arc;
 exports.burn = burn;
