@@ -1,0 +1,976 @@
+
+{% comment %}
+    Renders Framework Config Settings Specific to this Page 
+    -- Location: snippets/config.liquid
+{% endcomment %}
+{% render 'config' with 'header' %}
+
+<style>
+
+</style>
+
+{% comment %} Assign Main Header Variables {% endcomment %}
+
+  {% assign height = section.settings.header_height %}
+  {% assign padx = section.settings.navlink_padx %}
+  {% assign pady = section.settings.navlink_pady %}
+  {% assign fsize = height | times:2.4 | floor %}
+  {% assign headerAlign = section.settings.headerAlign %}
+
+  {%- if section.settings.enableTransparentHeader and request.page_type == 'index' -%} <div class=" trans fake hx-{{ height }}"></div> {% else %} <div class="notrans"></div>{% endif %}
+{% comment %} Sticky Wrapper Start {% endcomment %}
+  <{% if section.settings.enable_sticky_header %}sticky-header{% else %}div{% endif %} id="header-container" class="{%- if section.settings.enableTransparentHeader == blank or request.page_type != 'index' -%} bg:header {% endif %}  header-wrapper {% if section.settings.show_separator %} header-wrapper--border-bottom{% endif %}">
+
+
+    {% comment %} Header Wrapper / Background Classes {% endcomment %}
+    <div id="header-wrapper" class="bg-cover bg-norep">
+
+      {% comment %} Main Header {% endcomment %}
+      <header class="px-md-2 ">
+        <div class="flxr-{{ headerAlign }} f-wrap {% if section.settings.enable_fullwidth %}w-100 hx-{{ height }} {% else %} mxw-{{ section.settings.wrapper_width }}{% endif %} p-2">
+
+          {% comment %} Begin Header Blocks Loop {% endcomment %}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+
+
+              {% comment %} Block : Mobile Menu Drawer {% endcomment %}
+              {%- when 'mobile' -%}
+                <!--- Flex Wrapper | Render Media Query Settings ------>
+                <div class="f-item f-icon f-mobile 
+                  {% render 'utility', 
+                    itemCSS: block.settings.mobileCSS,
+                    hideAll: block.settings.hideAll_mobile,
+                    hideSmall: block.settings.hideSmall_mobile,
+                    hideMedium: block.settings.hideMedium_mobile,
+                    hideLarge: block.settings.hideLarge_mobile %}">
+                  <!--- Render Menu Icon ------>
+                  {% render 'header-icons' with 'mobile-menu'  %}
+                </div>
+
+
+              {% comment %} Block : Brand Identity {% endcomment %}
+              {%- when 'brand' -%}
+                <!--- Flex Wrapper | Render Settings ------>
+                <div class="f-item f-logo d-l" {{ block.shopify_attributes }}>
+                  <!--- Render Brand Media ------>
+                  {% render 'header-logo', 
+                  logoLight: block.settings.logoLight,
+                  logoDark: block.settings.logoDark,
+                  logoSize: block.settings.logoSize,
+                  logoMinWidth: block.settings.logoMinWidth %}
+                </div>
+
+
+              {% comment %} Block : Navbar Linklist {% endcomment %}
+              {%- when 'linklist' -%}
+                <!--- Flex Wrapper | Render Media Query Settings ------>
+                <div class="f-item f-links 
+                  {% render 'utility',
+                    itemCSS: block.settings.linklistCSS,
+                    itemWidth: block.settings.linklistWidth,
+                    hideAll: block.settings.hideAll_linklist,  
+                    hideSmall: block.settings.hideSmall_linklist,
+                    hideMedium: block.settings.hideMedium_linklist,
+                    hideLarge: block.settings.hideLarge_linklist%}">
+                  <!--- Render Navbar Links ------>
+                  {% render 'header-linklist',
+                    navAlign: block.settings.navAlign,
+                    navLinks: block.settings.navLinks,
+                    navLinkPaddingX: block.settings.navLinkPaddingX,
+                    navFontSize: block.settings.navFontSize,
+                    navFontWeight: block.settings.navFontWeight,
+                    navTextCaps: block.settings.navTextCaps,
+                    hoverEffect: block.settings.hoverEffect,
+                    transparentLink: section.settings.transparentLink %}
+                </div>
+
+
+              {% comment %} Block : Predictive Search {% endcomment %}
+              {%- when 'search' -%}
+                <!--- Render Media Query Settings ------>
+                <div class="f-item f-icon f-search 
+                  {% render 'utility', 
+                    itemCSS: block.settings.searchCSS,
+                    hideAll: block.settings.hideAll_search,
+                    hideSmall: block.settings.hideSmall_search,
+                    hideMedium: block.settings.hideMedium_search,
+                    hideLarge: block.settings.hideLarge_search %}">
+                  <!--- Render Search Icon ------>
+                  {% render 'header-icons' with 'search-icon'  %}
+                </div>
+
+
+              {% comment %} Block : User Accounts {% endcomment %}
+              {%- when 'accounts' -%}
+                <!--- Flex Wrapper | Render Media Query Settings ------>
+                <div class="f-item f-icon f-accounts 
+                  {% render 'utility', 
+                    itemCSS: block.settings.accountsCSS,
+                    hideAll: block.settings.hideAll_accounts,
+                    hideSmall: block.settings.hideSmall_accounts,
+                    hideMedium: block.settings.hideMedium_accounts,
+                    hideLarge: block.settings.hideLarge_accounts %}">
+                  <!--- Render Account Login Icon ------>
+                  {% render 'header-icons' with 'account-icon'  %}
+                </div>
+
+
+              {% comment %} Block : Shopping Cart {% endcomment %}
+              {%- when 'cart' -%}
+                <!--- Render Media Query Settings ------>
+                <div class="f-item f-icon f-cart 
+                  {% render 'utility', 
+                    itemCSS: block.settings.cartCSS,
+                    hideAll: block.settings.hideAll_cart,
+                    hideSmall: block.settings.hideSmall_cart,
+                    hideMedium: block.settings.hideMedium_cart,
+                    hideLarge: block.settings.hideLarge_cart %}">
+                  <!--- Render Account Login Icon ------>
+                  {% render 'header-icons' with 'cart-icon'  %}
+                </div>
+
+              {% comment %} Block : Theme Switcher - Darkmode {% endcomment %}
+              {%- when 'darkmode' -%}
+
+                {% if block.settings.darkIconPlacement == 'navbar' %}
+                <!--- Flex Wrapper | Render Media Query Settings ------>
+                <div id="darkIconMain" class="f-item f-icon f-dark 
+                  {% render 'utility', 
+                    itemCSS: block.settings.darkCSS,
+                    hideAll: block.settings.hideAll_dark,
+                    hideSmall: block.settings.hideSmall_dark,
+                    hideMedium: block.settings.hideMedium_dark,
+                    hideLarge: block.settings.hideLarge_dark %}">
+                  <!--- Render Darkmode Switch Icon ------>
+
+                  {% render 'header-icons' with 'darkmode-icon',
+                  enableColorMode: block.settings.enableColorMode,
+                  darkModeIconType: block.settings.darkModeIconType,
+                  darkIconPlacement: block.settings.darkIconPlacement  %}
+                </div>
+                {% endif %}
+
+                <!--- Render Sticky Darkmode Switch Icon ------>
+                {% if block.settings.darkIconPlacement == 'sticky' %}
+                  <sticky-darkmode id="sticky-darkmode-toggle" class="sticky-dark {% if block.settings.enableColorMode == blank %}stickybg colormode:off {% else %} colormode:on{% endif %}{%- if block.settings.enableColorMode == blank and section.settings.enableTransparentHeader == blank or request.page_type != 'index' -%}sticky-bgv{% endif %} sticky:show">
+                      {% render 'header-icons' with 'darkmode-icon',
+                      enableColorMode: block.settings.enableColorMode,
+                      darkModeIconType: block.settings.darkModeIconType,
+                      darkIconPlacement: block.settings.darkIconPlacement  %}
+                  </sticky-darkmode>
+                {% endif %}
+
+              {% comment %} Block : Social Media {% endcomment %}
+              {%- when 'social' -%}
+                <!--- Flex Wrapper | Render Media Query Settings ------>
+                <div class="f-item f-icon f-social 
+                  {% render 'utility', 
+                    itemCSS: block.settings.darkCSS,
+                    hideAll: block.settings.hideAll_dark,
+                    hideSmall: block.settings.hideSmall_dark,
+                    hideMedium: block.settings.hideMedium_dark,
+                    hideLarge: block.settings.hideLarge_dark %}">
+                  <!--- Render Social Media Icons ------>
+                  {% render 'header-icons' with 'social-icon',
+                    linkTwitter: block.settings.linkTwitter,
+                    linkFacebook: block.settings.linkFacebook,
+                    linkInstagram: block.settings.linkInstagram,
+                    linkYoutube: block.settings.linkYoutube,
+                    fillColor: section.settings.linkColor %}
+                </div>
+
+
+              {% comment %} Block : Theme Switcher - Darkmode {% endcomment %}
+              {%- when 'searchbar' -%}
+                <!--- Flex Wrapper | Render Media Query Settings ------>
+                <div class="f-item f-searchbar 
+                  {% render 'utility', 
+                    itemCSS: block.settings.searchbarCSS,
+                    hideSmall: block.settings.hideSmall_searchbar,
+                    hideMedium: block.settings.hideMedium_searchbar,
+                    hideLarge: block.settings.hideLarge_searchbar %}">
+                  <!--- Render Search Bar Component ------>
+                  {% render 'header-icons' with 'search-bar'  %}
+                </div>
+
+
+              {% comment %} Block : Icon List Utility {% endcomment %}
+              {%- when 'icons' -%}
+                <!--- Flex Wrapper | Currently Unused ------>
+                <div class="f-item f-icons">
+                  <div class="icon-list">
+                    <ul class="flxr-a list-menu list-menu--inline" role="list">
+                      <li {% render 'break' with w: 'search'  %}>
+                        {% if block.settings.enable_search %}
+                          <div class="f-item f-icon f-search">
+                            {% render 'serch' with 'searchicon'  %}
+                          </div>
+                        {% endif %}
+                      </li>
+                      <li>
+                        {% if block.settings.enable_accounts %}
+                          <div class="f-item f-icon f-accounts">
+                            {% render 'ico-accounts' %}
+                          </div>
+                        {% endif %}
+                      </li>
+                      <li>
+                        {% if block.settings.enable_cart %}
+                          <div class="f-item f-icon f-cart">
+                            {% render 'ico-cart' %}
+                          </div>
+                        {% endif %}
+                      </li>
+                      <li>
+                        {% if block.settings.enable_darkmode %}
+                        <div class="f-item f-icon f-darkmode">
+                          {% render 'ico-darkmode' %}
+                        </div>
+                      {% endif %}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+            {%- endcase -%}
+          {%- endfor -%}
+          {% comment %} End Header Blocks Loop {% endcomment %}
+        </div>
+      </header>
+      {% comment %} End Main Header {% endcomment %}
+
+    </div>
+    {% comment %} End Header Wrapper {% endcomment %}
+
+  </{% if section.settings.enable_sticky_header %}sticky-header{% else %}div{% endif %}>
+  {% comment %} End Sticky Wrapper{% endcomment %}
+
+{%- render 'cart-notification', color_scheme: section.settings.color_scheme -%}
+
+{%- render 'script' with 'header' -%}
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "blocks": [
+  {
+    "type": "mobile",
+    "name": "Mobile Menu",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "hideAll_mobile",
+        "default": false,
+        "label": "Hide"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideSmall_mobile",
+        "default": false,
+        "label": "Hide on Small Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideMedium_mobile",
+        "default": true,
+        "label": "Hide on Medium Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideLarge_mobile",
+        "default": true,
+        "label": "Hide on Large Screens"
+      }
+    ]
+  },
+  {
+    "type": "brand",
+    "name": "Brand/Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logoLight",
+        "label": "Upload Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "logoDark",
+        "label": "Upload Logo for Darkmode"
+      },
+      {
+        "type": "range",
+        "id": "logoSize",
+        "min": 20,
+        "max": 100,
+        "step": 1,
+        "label": "Logo Size",
+        "default": 55
+      },
+      {
+        "type": "range",
+        "id": "logoMinWidth",
+        "min": 6,
+        "max": 22,
+        "step": 1,
+        "label": "Minimum Logo Width",
+        "default": 15
+      }
+    ]
+  },
+  {
+    "type": "linklist",
+    "name": "Linklist",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "navLinks",
+        "default": "main-menu",
+        "label": "Select Menu"
+      },
+      {
+        "type": "text",
+        "id": "linklistCSS",
+        "label": "Linklist CSS"
+      },
+      {
+        "type": "header",
+        "content": "Nav Link Settings"
+      },
+      {
+        "type": "range",
+        "id": "linklistWidth",
+        "min": 0,
+        "max": 80,
+        "step": 1,
+        "label": "Linklist Width",
+        "default": 55
+      },
+      {
+        "type": "select",
+        "id": "navAlign",
+        "options": [
+          {
+            "value": "c",
+            "label": "Center"
+          },
+          {
+            "value": "s",
+            "label": "Align Start"
+          },
+          {
+            "value": "a",
+            "label": "Space Around"
+          },
+          {
+            "value": "q",
+            "label": "Space Evenly"
+          },
+          {
+            "value": "b",
+            "label": "Space Between"
+          },
+          {
+            "value": "e",
+            "label": "Align End"
+          }
+        ],
+        "default": "e",
+        "label": "Nav List Alignment"
+      },
+      {
+        "type": "checkbox",
+        "id": "navTextCaps",
+        "default": false,
+        "label": "Enable All Caps"
+      },
+      {
+        "type": "select",
+        "id": "navFontWeight",
+        "options": [
+          {
+            "value": "0",
+            "label": "None"
+          },
+          {
+            "value": "1",
+            "label": "100"
+          },
+          {
+            "value": "2",
+            "label": "200"
+          },
+          {
+            "value": "l",
+            "label": "Light 300"
+          },
+          {
+            "value": "n",
+            "label": "Normal 400"
+          },
+          {
+            "value": "5",
+            "label": "500"
+          },
+          {
+            "value": "6",
+            "label": "600"
+          },
+          {
+            "value": "b",
+            "label": "Bold 700"
+          },
+          {
+            "value": "8",
+            "label": "800"
+          },
+          {
+            "value": "9",
+            "label": "900"
+          }
+        ],
+        "default": "6",
+        "label": "Nav Font Weight"
+      },
+      {
+        "type": "range",
+        "id": "navFontSize",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "label": "Navlink Font Size",
+        "default": 15
+      },
+      {
+        "type": "range",
+        "id": "navLinkPaddingX",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "label": "Navlink Horizontal Padding",
+        "default": 20
+      },
+      {
+        "type": "select",
+        "id": "hoverEffect",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "swipe-in",
+            "label": "Swipe-In"
+          },
+          {
+            "value": "swipe-out",
+            "label": "Swipe-Out"
+          },
+          {
+            "value": "square",
+            "label": "Square"
+          },
+          {
+            "value": "brackets",
+            "label": "Brackets"
+          },
+          {
+            "value": "borderSlideUp",
+            "label": "BorderSlideUp"
+          },
+          {
+            "value": "sphere",
+            "label": "Sphere"
+          }
+        ],
+        "default": "none",
+        "label": "Hover Effect"
+      },
+      {
+        "type": "header",
+        "content": "Visibility Breakpoints"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideAll_linklist",
+        "default": true,
+        "label": "Hide"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideSmall_linklist",
+        "default": true,
+        "label": "Hide on Small Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideMedium_linklist",
+        "default": false,
+        "label": "Hide on Medium Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideLarge_linklist",
+        "default": false,
+        "label": "Hide on Large Screens"
+      }
+    ]
+  },
+  {
+    "type": "search",
+    "name": "Search Icon",
+    "settings": [
+      {
+        "type": "text",
+        "id": "searchCSS",
+        "label": "Search Icon CSS"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideAll_search",
+        "default": true,
+        "label": "Hide"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideSmall_search",
+        "default": true,
+        "label": "Hide on Small Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideMedium_search",
+        "default": false,
+        "label": "Hide on Medium Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideLarge_search",
+        "default": false,
+        "label": "Hide on Large Screens"
+      }
+    ]
+  },
+  {
+    "type": "accounts",
+    "name": "User Account Icon",
+    "settings": [
+      {
+        "type": "text",
+        "id": "accountsCSS",
+        "label": "Search Icon CSS"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideAll_accounts",
+        "default": true,
+        "label": "Hide"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideSmall_accounts",
+        "default": false,
+        "label": "Hide on Small Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideMedium_accounts",
+        "default": false,
+        "label": "Hide on Medium Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideLarge_accounts",
+        "default": true,
+        "label": "Hide on Large Screens"
+      }
+    ]
+  },
+  {
+    "type": "cart",
+    "name": "Cart Icon",
+    "settings": [
+      {
+        "type": "text",
+        "id": "cartCSS",
+        "label": "Cart Icon CSS"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideAll_cart",
+        "default": false,
+        "label": "Hide"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideSmall_cart",
+        "default": false,
+        "label": "Hide on Small Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideMedium_cart",
+        "default": false,
+        "label": "Hide on Medium Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideLarge_cart",
+        "default": false,
+        "label": "Hide on Large Screens"
+      }
+    ]
+  },
+  {
+    "type": "darkmode",
+    "name": "Darkmode Icon",
+      "settings": [
+      {
+        "type": "text",
+        "id": "darkCSS",
+        "label": "Darkmode Icon CSS"
+      },
+      {
+        "type": "select",
+        "id": "darkIconPlacement",
+        "options": [
+          {
+            "value": "navbar",
+            "label": "Inside Header Navbar"
+          },
+          {
+            "value": "sticky",
+            "label": "Sticky Bottom Right Icon"
+          }
+        ],
+        "default": "sticky",
+        "label": "Select Icon Placement"
+      },
+      {
+        "type": "select",
+        "id": "darkModeIconType",
+        "options": [
+          {
+            "value": "solid",
+            "label": "Solid Icon"
+          },
+          {
+            "value": "outline",
+            "label": "Icon Outline"
+          }
+        ],
+        "default": "solid",
+        "label": "Select Icon Type"
+      },
+      {
+        "type": "checkbox",
+        "id": "enableColorMode",
+        "default": true,
+        "label": "Enable Color Toggler"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideAll_dark",
+        "default": false,
+        "label": "Hide"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideSmall_dark",
+        "default": false,
+        "label": "Hide on Small Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideMedium_dark",
+        "default": false,
+        "label": "Hide on Medium Screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "hideLarge_dark",
+        "default": false,
+        "label": "Hide on Large Screens"
+      }
+    ]
+  },
+  {
+    "type": "social",
+    "name": "Social Media Icons",
+      "settings": [
+      {
+        "type": "text",
+        "id": "linkTwitter",
+        "label": "Twitter Link"
+      },
+      {
+        "type": "text",
+        "id": "linkFacebook",
+        "label": "Facebook Link"
+      },
+      {
+        "type": "text",
+        "id": "linkInstagram",
+        "label": "Instagram Link"
+      },
+      {
+        "type": "text",
+        "id": "linkYoutube",
+        "label": "Youtube Link"
+      }
+    ]
+  },
+  {
+    "type": "icons",
+    "name": "All Icons",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_search",
+        "default": true,
+        "label": "Enable Search"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_searchbarr",
+        "default": true,
+        "label": "Enable Search Bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_accounts",
+        "default": true,
+        "label": "Enable Accounts"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart",
+        "default": true,
+        "label": "Enable Cart"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_darkmode",
+        "default": true,
+        "label": "Enable Darkmode"
+      }
+    ]
+  }
+],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enableTransparentHeader",
+      "default": true,
+      "label": "Enable Transparent Header"
+    },
+    {
+      "type": "select",
+      "id": "transparentLink",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Light Links"
+        },
+        {
+          "value": "light",
+          "label": "Dark Links"
+        }
+      ],
+      "default": "dark",
+      "label": "Transparent Header Link Theme"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "default": true,
+      "label": "Enable Sticky Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_separator",
+      "default": true,
+      "label": "Enable Seperator"
+    },
+    {
+      "type": "select",
+      "id": "headerAlign",
+      "options": [
+        {
+          "value": "c",
+          "label": "Center"
+        },
+        {
+          "value": "s",
+          "label": "Align Start"
+        },
+        {
+          "value": "a",
+          "label": "Space Around"
+        },
+        {
+          "value": "q",
+          "label": "Space Evenly"
+        },
+        {
+          "value": "b",
+          "label": "Space Between"
+        },
+        {
+          "value": "e",
+          "label": "Align End"
+        }
+      ],
+      "default": "c",
+      "label": "Header Alignment"
+    },
+    {
+      "type": "header",
+      "content": "Background Colors : Theme Light"
+    },
+    {
+      "type": "color_background",
+      "id": "headerBG",
+      "label": "Header Background : Gradient"
+    },
+    {
+      "type": "image_picker",
+      "id": "headerIMG",
+      "label": "Header Background : Image"
+    },
+    {
+      "type": "header",
+      "content": "Background Colors : Theme Dark"
+    },
+    {
+      "type": "color_background",
+      "id": "headerBGDark",
+      "label": "Header Background Dark : Gradient"
+    },
+    {
+      "type": "image_picker",
+      "id": "headerIMGDark",
+      "label": "Header Background Dark : Image"
+    },
+    {
+      "type": "header",
+      "content": "Header Sizing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_fullwidth",
+      "default": true,
+      "label": "Enable Full Width"
+    },
+    {
+      "type": "range",
+      "id": "wrapper_width",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "label": "Page Width",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "header_height",
+      "min": 5,
+      "max": 15,
+      "step": 1,
+      "label": "Header Height",
+      "default": 7
+    }
+  ],
+  "default": {
+    "settings": {
+      "enable_sticky_header": true,
+      "show_separator": true,
+      "headerAlign": "c",
+      "enable_fullwidth": true,
+      "wrapper_width": 12,
+      "header_height": 8
+    },
+    "blocks": [
+      {
+      "type": "mobile",
+      "settings": {
+        "hideAll_mobile": false,
+        "hideSmall_mobile": false,
+        "hideMedium_mobile": true,
+        "hideLarge_mobile": true
+        }
+      },
+      {
+      "type": "brand",
+      "settings": {
+        "logoLight": "shopify:\/\/shop_images\/BE_Logo.png",
+        "logoDark": "shopify:\/\/shop_images\/BE_Logo_light.png",
+        "logoSize": 100,
+        "logoMinWidth": 15
+        }
+      },
+      {
+        "type": "linklist",
+        "settings": {
+          "navLinks": "main-menu",
+          "linklistCSS": "",
+          "linklistWidth": 80,
+          "navAlign": "c",
+          "navFontWeight": "6",
+          "navFontSize": 16,
+          "navLinkPaddingX": 4,
+          "hideAll_linklist": true,
+          "hideSmall_linklist": true,
+          "hideMedium_linklist": false,
+          "hideLarge_linklist": false
+        }
+      },
+      {
+        "type": "search",
+        "settings": {
+          "searchCSS": "",
+          "hideAll_search": true,
+          "hideSmall_search": true,
+          "hideMedium_search": false,
+          "hideLarge_search": false
+        }
+      },
+      {
+        "type": "accounts",
+        "settings": {
+          "accountsCSS": "",
+          "hideAll_accounts": true,
+          "hideSmall_accounts": true,
+          "hideMedium_accounts": false,
+          "hideLarge_accounts": false
+        }
+      },
+      {
+        "type": "cart",
+        "settings": {
+          "cartCSS": "",
+          "hideAll_cart": false,
+          "hideSmall_cart": false,
+          "hideMedium_cart": false,
+          "hideLarge_cart": false
+        }
+      },
+      {
+        "type": "darkmode",
+        "settings": {
+          "darkCSS": "",
+          "hideAll_dark": false,
+          "hideSmall_dark": false,
+          "hideMedium_dark": false,
+          "hideLarge_dark": false
+        }
+      }
+    ]
+  }
+}
+
+{% endschema %}
