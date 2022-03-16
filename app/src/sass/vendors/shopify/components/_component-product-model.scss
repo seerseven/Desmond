@@ -14,6 +14,10 @@
   visibility: hidden;
 }
 
+.shopify-design-mode .product__xr-button[data-shopify-xr-hidden] {
+  display: none;
+}
+
 @media screen and (max-width: 749px) {
   slider-component .product__xr-button {
     display: none;
@@ -23,7 +27,6 @@
     display: block;
   }
 }
-
 @media screen and (min-width: 750px) {
   slider-component + .button.product__xr-button {
     display: none;
@@ -33,7 +36,6 @@
     display: none;
   }
 }
-
 .product__xr-button .icon {
   width: 1.4rem;
   margin-right: 1rem;

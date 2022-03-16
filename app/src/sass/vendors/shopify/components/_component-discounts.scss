@@ -12,10 +12,15 @@
   color: rgba(var(--color-button), var(--alpha-button-background));
 }
 
-.discounts__discount--end {
-  justify-content: flex-end;
+.discounts__discount--position {
+  justify-content: center;
 }
 
+@media screen and (min-width: 750px) {
+  .discounts__discount--position {
+    justify-content: flex-end;
+  }
+}
 .discounts__discount > .icon {
   color: rgb(var(--color-foreground));
   width: 1.2rem;

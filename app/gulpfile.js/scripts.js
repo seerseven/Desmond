@@ -3,78 +3,109 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const plumber = require('gulp-plumber');
+const clean = require('gulp-clean');
 
-//Define Src and Dest Filepaths
-const esbuild = 'src/build/';
-const scripts = 'src/scripts/';
-const vendors = 'src/vendors/';
-const dist = 'parallax/assets';
-const shopify = 'shopify/assets';
+//Main Variables
+const v = {
+	build: 'src/build/',
+	jsLibs: 'src/js/libs',
+	srcDist: 'src/dist',
+	paraDist: 'parallax/assets',
+	shopDist: 'shopify/assets',
+	dist: ['parallax/assets', 'shopify/assets'],
+	clean: [
+		'shopify/assets/*.js',
+		'!shopify/assets/*.css',
+		'!shopify/assets/desmond.js',
+		'!shopify/assets/desmond.min.js',
+	],
+};
 
-//List Javascript Vendors in Bundle Order
-var libs = ['jquery.js', 'jqueryUI.js'];
-libs = libs.map((i) => vendors + i);
+const f = {
+	query: function () {
+		var fQuery = ['jquery.js', 'jqueryUI.js'];
+		fQuery = fQuery.map((i) => v.jsLibs + i);
+		return fQuery;
+	},
+	libs: function () {
+		var fLibs = ['three.js', 'vanta.js', 'aos.js', 'rellax.js'];
+		fLibs = fLibs.map((i) => v.jsLibs + i);
+		return fLibs;
+	},
+	core: function () {
+		var fCore = ['jquery.js', 'jqueryUI.js', 'popper.js', 'mdball.js'];
+		fCore = fCore.map((i) => v.jsLibs + i);
+		return fCore;
+	},
+	build: function () {
+		var fBuild = ['shopify.js', 'core.js', 'libs.js', 'theme.js'];
+		fBuild = fBuild.map((i) => v.srcDist + i);
+		return fBuild;
+	},
+};
 
-//List Javascript Vendors in Bundle Order for Shopify
-var shopLibs = [
-	'shopify.js',
-	'jquery.js',
-	'jqueryUI.js',
-	'popper.js',
-	'mdball.js',
-	'three.js',
-	'vanta.js',
-	'aos.js',
-	'rellax.js',
-];
-shopLibs = shopLibs.map((i) => vendors + i);
+const js = {
+	shopify: function () {
+		return src([v.build + 'shopify.js'])
+			.pipe(plumber())
+			.pipe(dest(v.jsLibs))
+			.pipe(dest(v.srcDist))
+			.pipe(uglify())
+			.pipe(rename({ suffix: '.min' }))
+			.pipe(dest(v.shopDist));
+	},
+	query: function () {
+		return src(f.query)
+			.pipe(plumber())
+			.pipe(concat('jQuery.js'))
+			.pipe(uglify())
+			.pipe(rename({ suffix: '.min' }))
+			.pipe(dest(v.paraDist));
+	},
+	libs: function () {
+		return src(f.libs)
+			.pipe(plumber())
+			.pipe(concat('libs.js'))
+			.pipe(dest(v.srcDist))
+			.pipe(uglify())
+			.pipe(rename({ suffix: '.min' }))
+			.pipe(dest(v.shopDist));
+	},
+	core: function () {
+		return src(f.core)
+			.pipe(plumber())
+			.pipe(concat('core.js'))
+			.pipe(dest(v.srcDist))
+			.pipe(uglify())
+			.pipe(rename({ suffix: '.min' }))
+			.pipe(dest(v.shopDist));
+	},
+	theme: function () {
+		return src([v.build + 'theme.js'])
+			.pipe(plumber())
+			.pipe(dest(v.srcDist))
+			.pipe(uglify())
+			.pipe(rename({ suffix: '.min' }))
+			.pipe(dest(v.shopDist));
+	},
+	build: function () {
+		return src(f.build)
+			.pipe(plumber())
+			.pipe(concat('desmond.js'))
+			.pipe(dest(v.shopDist))
+			.pipe(uglify())
+			.pipe(rename({ suffix: '.min' }))
+			.pipe(dest(v.dist));
+	},
+	clean: function () {
+		return src(v.clean).pipe(clean());
+	},
+};
 
-//Move, Minify, and Rename Bundled Modules
-function js() {
-	return src([esbuild + '*.js'])
-		.pipe(plumber())
-		.pipe(dest(scripts))
-		.pipe(dest(dist))
-		.pipe(dest(shopify))
-		.pipe(uglify())
-		.pipe(rename({ suffix: '.min' }))
-		.pipe(dest(dist))
-		.pipe(dest(shopify));
-}
-
-//Move, Minify, and Rename Bundled Vendors
-function lib() {
-	return src(libs)
-		.pipe(plumber())
-		.pipe(concat('lib.js'))
-		.pipe(dest(scripts))
-		.pipe(uglify())
-		.pipe(rename({ suffix: '.min' }))
-		.pipe(dest(dist));
-}
-
-//Move, Minify, and Rename Bundled Vendors
-function shop() {
-	return src(shopLibs)
-		.pipe(plumber())
-		.pipe(concat('vendor.js'))
-		.pipe(dest(scripts))
-		.pipe(uglify())
-		.pipe(rename({ suffix: '.min' }))
-		.pipe(dest(shopify));
-}
-
-function shopifyJS() {
-	return src([esbuild + 'theme.js'])
-		.pipe(plumber())
-		.pipe(dest(scripts))
-		.pipe(dest(shopify))
-		.pipe(uglify())
-		.pipe(rename({ suffix: '.min' }))
-		.pipe(dest(shopify));
-}
-
-exports.js = js;
-exports.lib = lib;
-exports.shop = shop;
-exports.shopifyjs = shopifyJS;
+exports.shopify = js.shopify;
+exports.query = js.query;
+exports.libs = js.libs;
+exports.core = js.core;
+exports.theme = js.theme;
+exports.build = js.build;
+exports.clean = js.clean;
