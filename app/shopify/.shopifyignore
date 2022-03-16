@@ -1,0 +1,15 @@
+# See https://shopify.dev/themes/tools/cli#excluding-files-from-shopify-cli
+# for more about ignoring files while using Shopify CLI.
+
+# Misc
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Dependencies
+themes
+themes/*
+README.md

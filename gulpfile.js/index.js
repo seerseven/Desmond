@@ -17,6 +17,22 @@ exports.appcopy = arc.appcopy;
 exports.appzip = arc.appzip;
 exports.appclean = arc.appclean;
 
+exports.shopdir = arc.shopifydir;
+exports.shopcopy = arc.shopifycopy;
+exports.shopzip = arc.shopifyzip;
+exports.shopclean = arc.shopifyclean;
+exports.shoparc = arc.shopifyarc;
+exports.shopburn = arc.shopifyburn;
+
+exports.theme = series(
+	arc.shopifydir,
+	arc.shopifycopy,
+	arc.shopifyzip,
+	arc.shopifyclean,
+	arc.shopifyarc,
+	arc.shopifyburn
+);
+
 exports.vault = series(
 	arc.mkdir,
 	parallel(arc.nodecopy, arc.appcopy),

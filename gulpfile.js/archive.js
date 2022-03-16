@@ -9,8 +9,10 @@ var fs = require('fs');
 
 const tholos = 'state/tholos';
 const vault = 'state/tholos/archives';
+const themevault = 'state/tholos/themes';
 
 const NONODE = '!app/node_modules/**';
+const NOTHEME = '!app/shopify/themes/**';
 const NOLOCK = '!app/package-lock.json';
 const nodemon = 'app/node_modules/@seerseven/desmond/src/*.js';
 var months = [
@@ -39,20 +41,27 @@ var days = [
 var d = new Date();
 var day = days[d.getDay()];
 var hr = d.getHours();
+var min = d.getMinutes();
 
 var ampm = 'am';
 if (hr > 12) {
 	hr -= 12;
 	ampm = 'pm';
 }
+var strhr = hr.toString();
+var strmin = min.toString();
+var ti = strhr + strmin;
 var date = d.getDate();
 var month = months[d.getMonth()];
 var year = d.getFullYear();
 var x = '' + hr + ampm + '-' + date + month + year;
+var sh = '' + ti + ampm + '-' + date + month + year;
 var caps = x.toUpperCase();
+var shCaps = sh.toUpperCase();
 var base = 'state/tholos/';
 var app = 'APP-';
 var npm = 'NPM-';
+var shop = 'THEME-V00-';
 var arch = 'ARCHIVE-';
 var zp = '.zip';
 
@@ -63,6 +72,9 @@ function dirName(val) {
 	}
 	if (val === 'npm') {
 		var full = base + npm + caps;
+	}
+	if (val === 'shop') {
+		var full = base + shop + shCaps;
 	}
 	if (val === 'arch') {
 		var full = base + arch + caps;
@@ -76,6 +88,9 @@ function zipName(val) {
 	if (val === 'npm') {
 		var full = npm + caps + zp;
 	}
+	if (val === 'shop') {
+		var full = shop + shCaps + zp;
+	}
 	if (val === 'arch') {
 		var full = arch + caps + zp;
 	}
@@ -83,8 +98,10 @@ function zipName(val) {
 }
 var appName = dirName('app');
 var npmName = dirName('npm');
+var shopName = dirName('shop');
 var appZipName = zipName('app');
 var npmZipName = zipName('npm');
+var shopZipName = zipName('shop');
 var archZipName = zipName('arch');
 
 //Make New Dirctories for Backup Files
@@ -125,15 +142,62 @@ function nodeClean() {
 	return src(npmName).pipe(clean());
 }
 
+//NPM STEP 1 COPY Files2
+
+function shopifyDir(cb) {
+	const folders = [shopName];
+	folders.forEach((dir) => {
+		if (!fs.existsSync(dir)) {
+			fs.mkdirSync(dir);
+			console.log('📁  folder created:', dir);
+		}
+	});
+	cb();
+}
+
+function shopifyCopy() {
+	return src(['app/shopify/**/*', NOTHEME]).pipe(dest(shopName));
+}
+function shopifyZip() {
+	return src([shopName + '/**/*'])
+		.pipe(zip(shopZipName))
+		.pipe(dest(tholos));
+}
+function shopifyClean() {
+	return src(shopName).pipe(clean());
+}
+function shopifyArc() {
+	return src([
+		'state/tholos/**/*',
+		'!state/tholos/archives/**',
+		'!state/tholos/themes/**',
+	]).pipe(dest(themevault));
+}
+function shopifyBurn() {
+	return src([
+		'state/tholos/**/*',
+		'!state/tholos/archives/**',
+		'!state/tholos/themes/**',
+	]).pipe(clean());
+}
+
 //Once All Folders are Zipped
 //Compile One Master ZIP Archive
 function arc() {
-	return src(['state/tholos/**/*', '!state/tholos/archives/**'])
+	return src([
+		'state/tholos/**/*',
+		'!state/tholos/archives/**',
+		'!state/tholos/themes/**',
+	])
 		.pipe(zip(archZipName))
 		.pipe(dest(vault));
 }
 function burn() {
-	return src(['state/tholos/**/*', '!state/tholos/archives/**']).pipe(clean());
+	return src([
+		'state/tholos/**/*',
+		'!state/tholos/archives/**',
+		'!state/tholos/themes/**',
+	]).pipe(clean());
 }
 
 //Merge Main Workspace with Git Master and Push to Origin
@@ -145,6 +209,13 @@ function merge() {
 exports.nodeclean = nodeClean;
 exports.nodezip = nodeZip;
 exports.nodecopy = nodeCopy;
+
+exports.shopifydir = shopifyDir;
+exports.shopifyclean = shopifyClean;
+exports.shopifyzip = shopifyZip;
+exports.shopifycopy = shopifyCopy;
+exports.shopifyarc = shopifyArc;
+exports.shopifyburn = shopifyBurn;
 
 exports.appcopy = appCopy;
 exports.appzip = appZip;
