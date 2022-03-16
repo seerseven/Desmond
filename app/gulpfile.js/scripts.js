@@ -64,6 +64,17 @@ function shop() {
 		.pipe(dest(shopify));
 }
 
+function shopifyJS() {
+	return src([esbuild + 'theme.js'])
+		.pipe(plumber())
+		.pipe(dest(scripts))
+		.pipe(dest(shopify))
+		.pipe(uglify())
+		.pipe(rename({ suffix: '.min' }))
+		.pipe(dest(shopify));
+}
+
 exports.js = js;
 exports.lib = lib;
 exports.shop = shop;
+exports.shopifyjs = shopifyJS;

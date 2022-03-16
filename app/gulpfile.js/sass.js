@@ -11,4 +11,22 @@ function scss() {
 		.pipe(dest('src/sass/abstracts/utilities/schema'));
 }
 
+function cssTOscss() {
+	return src('shopify/assets/*.css')
+		.pipe(plumber())
+		.pipe(sass({ outputStyle: 'expanded' }))
+		.pipe(rename({ prefix: '_', extname: '.scss' }))
+		.pipe(dest('src/sass/shopify'));
+}
+
+function filelist() {
+	return src('src/sass/shopify/*.scss')
+		.pipe(plumber())
+		.pipe(require('gulp-filelist')('index.json'))
+		.pipe(rename({ prefix: '_', extname: '.scss' }))
+		.pipe(dest('src/sass/shopify'));
+}
+
 exports.scss = scss;
+exports.cts = cssTOscss;
+exports.list = filelist;

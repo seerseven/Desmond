@@ -1,6 +1,3 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
-
 <div class="page-width">
   <h1 class="title title--primary">{{ section.settings.title | escape }}</h1>
   {%- liquid
@@ -25,6 +22,7 @@
 </div>
 
 {% schema %}
+
 {
   "name": "t:sections.main-list-collections.name",
   "class": "section",
@@ -34,52 +32,43 @@
       "id": "title",
       "label": "t:sections.main-list-collections.settings.title.label",
       "default": "Collections"
-    },
-    {
+    }, {
       "type": "select",
       "id": "sort",
       "options": [
         {
           "value": "alphabetical",
           "label": "t:sections.main-list-collections.settings.sort.options__1.label"
-        },
-        {
+        }, {
           "value": "alphabetical_reversed",
           "label": "t:sections.main-list-collections.settings.sort.options__2.label"
-        },
-        {
+        }, {
           "value": "date_reversed",
           "label": "t:sections.main-list-collections.settings.sort.options__3.label"
-        },
-        {
+        }, {
           "value": "date",
           "label": "t:sections.main-list-collections.settings.sort.options__4.label"
-        },
-        {
+        }, {
           "value": "products_high",
           "label": "t:sections.main-list-collections.settings.sort.options__5.label"
-        },
-        {
+        }, {
           "value": "products_low",
           "label": "t:sections.main-list-collections.settings.sort.options__6.label"
         }
       ],
       "default": "alphabetical",
       "label": "t:sections.main-list-collections.settings.sort.label"
-    },
-    {
+    }, {
       "type": "select",
       "id": "image_ratio",
       "options": [
         {
           "value": "adapt",
           "label": "t:sections.main-list-collections.settings.image_ratio.options__1.label"
-        },
-        {
+        }, {
           "value": "portrait",
           "label": "t:sections.main-list-collections.settings.image_ratio.options__2.label"
-        },
-        {
+        }, {
           "value": "square",
           "label": "t:sections.main-list-collections.settings.image_ratio.options__3.label"
         }
@@ -90,4 +79,5 @@
     }
   ]
 }
+
 {% endschema %}

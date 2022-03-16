@@ -1,7 +1,6 @@
-<script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+{{ 'theme.css' | asset_url | stylesheet_tag }}
 
-
-{{ 'base.css' | asset_url | stylesheet_tag }}
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -12,10 +11,10 @@
     .documentElement
     .className
     .replace("no-js", "js");
-  if (Shopify.designMode) {
-    document
-      .documentElement
-      .classList
-      .add("shopify-design-mode");
-  }
+  // if (Shopify.designMode) {
+  // document
+  //     .documentElement
+  //     .classList
+  //     .add("shopify-design-mode");
+  // }
 </script>

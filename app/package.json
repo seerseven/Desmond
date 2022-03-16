@@ -15,7 +15,7 @@
     "defaults"
   ],
   "scripts": {
-    "serve": "concurrently \"desmond serve\" \"gulp\" \"cd shopify && shopify theme serve\"",
+    "serve": "concurrently \"desmond serve\" \"gulp\"",
     "watch": "desmond watch",
     "build": "desmond build",
     "lint": "desmond lint"
@@ -78,6 +78,7 @@
     "npm": ">=7.0.0"
   },
   "dependencies": {
-    "fluent-ffmpeg": "^2.1.2"
+    "fluent-ffmpeg": "^2.1.2",
+    "gulp-filelist": "^2.0.5"
   }
 }

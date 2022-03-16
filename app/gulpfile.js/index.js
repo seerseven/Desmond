@@ -12,25 +12,34 @@ const gitTasks = require('./git.js');
 const sassTasks = require('./sass.js');
 
 exports.css = cssTasks.css;
+exports.shopcss = cssTasks.shopifycss;
 exports.img = mediaTasks.img;
 exports.vid = mediaTasks.vid;
 exports.js = jsTasks.js;
+exports.shopjs = jsTasks.shopifyjs;
 exports.lib = jsTasks.lib;
 exports.save = gitTasks.gitSave;
 exports.send = gitTasks.gitSend;
 // exports.deploy = series(gitTasks.gitSave, gitTasks.gitSend);
 exports.scss = sassTasks.scss;
+exports.cts = sassTasks.cts;
+exports.list = sassTasks.list;
 
 exports.media = series(mediaTasks.img, mediaTasks.vid);
 
+// exports.default = function () {
+// 	// series(mediaTasks.img, mediaTasks.vid);
+// 	watch('src/build/*.css', series(cssTasks.css));
+// 	watch('src/build/*.js', jsTasks.js);
+// 	watch('src/vendors/*.js', parallel(jsTasks.lib));
+// 	watch(
+// 		'theme/assets/*.min.*',
+// 		{ delay: 3500 },
+// 		series(gitTasks.gitSave, gitTasks.gitSend)
+// 	);
+// };
+
 exports.default = function () {
-	// series(mediaTasks.img, mediaTasks.vid);
-	watch('src/build/*.css', series(cssTasks.css));
-	watch('src/build/*.js', jsTasks.js);
-	watch('src/vendors/*.js', parallel(jsTasks.lib));
-	// watch(
-	// 	'theme/assets/*.min.*',
-	// 	{ delay: 3500 },
-	// 	series(gitTasks.gitSave, gitTasks.gitSend)
-	// );
+	watch('src/build/theme.css', cssTasks.shopifycss);
+	watch('src/build/theme.js', jsTasks.shopifyjs);
 };

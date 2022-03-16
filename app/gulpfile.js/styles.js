@@ -26,5 +26,15 @@ function shop() {
 	]).pipe(dest(shopify));
 }
 
+function shopifyCSS() {
+	return src([esbuild + 'theme.css'])
+		.pipe(plumber())
+		.pipe(dest(styles))
+		.pipe(cssnano())
+		.pipe(rename({ suffix: '.min' }))
+		.pipe(dest(shopify));
+}
+
 exports.css = css;
 exports.shop = shop;
+exports.shopifycss = shopifyCSS;

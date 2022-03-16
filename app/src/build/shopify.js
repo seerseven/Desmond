@@ -163,18 +163,5 @@ var shopifyElements = function enableElements() {
 
 // src/js/base/init.js
 var themeInit = function initTheme() {
-  VANTA.CELLS({
-    el: "#element",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200,
-    minWidth: 200,
-    scale: 1,
-    color1: 3063486,
-    color2: 15893045,
-    size: 2.9,
-    speed: 2.2
-  });
   return initTheme;
 }();

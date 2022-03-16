@@ -1,0 +1,65 @@
+// Global
+@forward 'base/base';
+
+// Templates
+// @forward 'templates/template-collection';
+// @forward 'templates/template-giftcard';
+// @forward 'templates/customer';
+
+// Components
+@forward 'components/component-accordion';
+@forward 'components/component-article-card';
+@forward 'components/component-card';
+@forward 'components/component-collection-hero';
+@forward 'components/component-deferred-media';
+@forward 'components/component-discounts';
+@forward 'components/component-facets';
+@forward 'components/component-image-with-text';
+@forward 'components/component-list-menu';
+@forward 'components/component-list-payment';
+@forward 'components/component-list-social';
+@forward 'components/component-loading-overlay';
+@forward 'components/component-menu-drawer';
+@forward 'components/component-modal-video';
+@forward 'components/component-model-viewer-ui';
+@forward 'components/component-newsletter';
+@forward 'components/component-pagination';
+@forward 'components/component-pickup-availability';
+@forward 'components/component-predictive-search';
+@forward 'components/component-price';
+@forward 'components/component-product-model';
+@forward 'components/component-rating';
+@forward 'components/component-rte';
+@forward 'components/component-search';
+@forward 'components/component-slider';
+@forward 'components/component-slideshow';
+@forward 'components/component-totals';
+
+// Sections
+@forward 'sections/section-blog-post';
+@forward 'sections/section-collection-list';
+@forward 'sections/section-contact-form';
+@forward 'sections/section-email-signup-banner';
+@forward 'sections/section-featured-blog';
+@forward 'sections/section-featured-product';
+@forward 'sections/section-footer';
+@forward 'sections/section-image-banner';
+@forward 'sections/section-main-blog';
+@forward 'sections/section-main-page';
+@forward 'sections/section-main-product';
+@forward 'sections/section-multicolumn';
+@forward 'sections/section-password';
+@forward 'sections/section-product-recommendations';
+@forward 'sections/section-rich-text';
+
+// Outliers
+@forward 'other/collage';
+@forward 'other/collapsible-content';
+@forward 'other/disclosure';
+@forward 'other/newsletter-section';
+@forward 'other/video-section';
+
+//Cart
+@forward 'cart/component-cart-items';
+@forward 'cart/component-cart-notification';
+@forward 'cart/component-cart';

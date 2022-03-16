@@ -1,21 +1,17 @@
-<link rel="stylesheet" href="{{ 'component-rte.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'section-rich-text.css' | asset_url }}" media="print" onload="this.media='all'">
-
-<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
-<noscript>{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}</noscript>
-
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+.section-{{section.id}}-padding {
+  padding-top: {{section.settings.padding_top | times: 0.75 | round: 0}}px;
+  padding-bottom: {{section.settings.padding_bottom | times: 0.75 | round: 0}}px;
+}
+
+@media screen and(min-width: 750px) {
+  .section-{{section.id}}-padding {
+    padding-top: {{section.settings.padding_top}}px;
+    padding-bottom: {{section.settings.padding_bottom}}px;
   }
+}
+
 {%- endstyle -%}
 
 <div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
@@ -28,7 +24,7 @@
           {%- when 'text' -%}
             <div class="rich-text__text rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
           {%- when 'button' -%}
-            <a{% if block.settings.button_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ block.settings.button_link }}"{% endif %} class="button{% if block.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %}" {{ block.shopify_attributes }}>
+            <a {% if block.settings.button_link == blank %} role="link" aria-disabled="true" {% else %} href="{{ block.settings.button_link }}" {% endif %} class="button{% if block.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %}" {{ block.shopify_attributes }}>
               {{ block.settings.button_label | escape }}
             </a>
         {%- endcase -%}
@@ -38,6 +34,7 @@
 </div>
 
 {% schema %}
+
 {
   "name": "t:sections.rich-text.name",
   "tag": "section",
@@ -50,38 +47,31 @@
         {
           "value": "accent-1",
           "label": "t:sections.rich-text.settings.color_scheme.options__1.label"
-        },
-        {
+        }, {
           "value": "accent-2",
           "label": "t:sections.rich-text.settings.color_scheme.options__2.label"
-        },
-        {
+        }, {
           "value": "background-1",
           "label": "t:sections.rich-text.settings.color_scheme.options__3.label"
-        },
-        {
+        }, {
           "value": "background-2",
           "label": "t:sections.rich-text.settings.color_scheme.options__4.label"
-        },
-        {
+        }, {
           "value": "inverse",
           "label": "t:sections.rich-text.settings.color_scheme.options__5.label"
         }
       ],
       "default": "background-1",
       "label": "t:sections.rich-text.settings.color_scheme.label"
-    },
-    {
+    }, {
       "type": "checkbox",
       "id": "full_width",
       "default": true,
       "label": "t:sections.rich-text.settings.full_width.label"
-    },
-    {
+    }, {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
+    }, {
       "type": "range",
       "id": "padding_top",
       "min": 0,
@@ -90,8 +80,7 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_top",
       "default": 40
-    },
-    {
+    }, {
       "type": "range",
       "id": "padding_bottom",
       "min": 0,
@@ -113,20 +102,17 @@
           "id": "heading",
           "default": "Talk about your brand",
           "label": "t:sections.rich-text.blocks.heading.settings.heading.label"
-        },
-        {
+        }, {
           "type": "select",
           "id": "heading_size",
           "options": [
             {
               "value": "h2",
               "label": "t:sections.all.heading_size.options__1.label"
-            },
-            {
+            }, {
               "value": "h1",
               "label": "t:sections.all.heading_size.options__2.label"
-            },
-            {
+            }, {
               "value": "h0",
               "label": "t:sections.all.heading_size.options__3.label"
             }
@@ -135,8 +121,7 @@
           "label": "t:sections.all.heading_size.label"
         }
       ]
-    },
-    {
+    }, {
       "type": "text",
       "name": "t:sections.rich-text.blocks.text.name",
       "limit": 1,
@@ -148,8 +133,7 @@
           "label": "t:sections.rich-text.blocks.text.settings.text.label"
         }
       ]
-    },
-    {
+    }, {
       "type": "button",
       "name": "t:sections.rich-text.blocks.button.name",
       "limit": 1,
@@ -159,13 +143,11 @@
           "id": "button_label",
           "default": "Button label",
           "label": "t:sections.rich-text.blocks.button.settings.button_label.label"
-        },
-        {
+        }, {
           "type": "url",
           "id": "button_link",
           "label": "t:sections.rich-text.blocks.button.settings.button_link.label"
-        },
-        {
+        }, {
           "type": "checkbox",
           "id": "button_style_secondary",
           "default": false,
@@ -180,15 +162,14 @@
       "blocks": [
         {
           "type": "heading"
-        },
-        {
+        }, {
           "type": "text"
-        },
-        {
+        }, {
           "type": "button"
         }
       ]
     }
   ]
 }
+
 {% endschema %}
