@@ -1,7 +1,8 @@
 export default [
-  "src/js/desmond.js",
-  "src/js/shopify.js",
-  "src/sass/desmond.scss",
+  "src/js/modules/shopify.js",
+  "src/js/modules/theme.js",
+  "src/sass/shopify.scss",
   "src/sass/notion.scss",
-  "src/sass/vendor.scss",
+  "src/sass/mdb.scss",
+  "src/sass/theme.scss",
 ];

@@ -53,7 +53,7 @@ exports.default = function () {
 	watch('src/build/*.css', styles);
 	watch('src/build/*.js', jsmods);
 	watch(['src/js/libs/*.js', '!src/js/libs/shopify.js'], jslibs);
-	watch('src/assets/**/*', media);
+	watch('src/assets/img/**/*', assets.img);
 };
 
 // 	const get = require('./git.js');

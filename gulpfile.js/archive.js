@@ -12,6 +12,10 @@ const vault = 'state/tholos/archives';
 const themevault = 'state/tholos/themes';
 
 const NONODE = '!app/node_modules/**';
+const NOMOD = '!./node_modules/**';
+const NOAPP = '!./app/**';
+const NONPM = '!./npm/**';
+const NOSTATE = '!./state/**';
 const NOTHEME = '!app/shopify/themes/**';
 const NOLOCK = '!app/package-lock.json';
 const nodemon = 'app/node_modules/@seerseven/desmond/src/*.js';
@@ -63,6 +67,7 @@ var app = 'APP-';
 var npm = 'NPM-';
 var shop = 'THEME-V00-';
 var arch = 'ARCHIVE-';
+var des = 'DES-';
 var zp = '.zip';
 
 //Folder Names with Timestamp
@@ -79,6 +84,9 @@ function dirName(val) {
 	if (val === 'arch') {
 		var full = base + arch + caps;
 	}
+	if (val === 'des') {
+		var full = base + des + caps;
+	}
 	return full;
 }
 function zipName(val) {
@@ -94,19 +102,24 @@ function zipName(val) {
 	if (val === 'arch') {
 		var full = arch + caps + zp;
 	}
+	if (val === 'des') {
+		var full = des + caps + zp;
+	}
 	return full;
 }
 var appName = dirName('app');
 var npmName = dirName('npm');
 var shopName = dirName('shop');
+var desName = dirName('des');
 var appZipName = zipName('app');
 var npmZipName = zipName('npm');
 var shopZipName = zipName('shop');
 var archZipName = zipName('arch');
+var desZipName = zipName('des');
 
 //Make New Dirctories for Backup Files
 function mkdir(cb) {
-	const folders = [appName, npmName];
+	const folders = [appName, npmName, desName];
 	folders.forEach((dir) => {
 		if (!fs.existsSync(dir)) {
 			fs.mkdirSync(dir);
@@ -114,6 +127,30 @@ function mkdir(cb) {
 		}
 	});
 	cb();
+}
+
+function desDir(cb) {
+	const folders = [desName];
+	folders.forEach((dir) => {
+		if (!fs.existsSync(dir)) {
+			fs.mkdirSync(dir);
+			console.log('📁  folder created:', dir);
+		}
+	});
+	cb();
+}
+
+//Git STEP 1 COPY Files2
+function desCopy() {
+	return src(['./**/*', NOMOD, NOAPP, NONPM, NOSTATE]).pipe(dest(desName));
+}
+function desZip() {
+	return src([desName + '/**/*', desName + '/.*/**/*'])
+		.pipe(zip(desZipName))
+		.pipe(dest(tholos));
+}
+function desClean() {
+	return src(desName).pipe(clean());
 }
 
 //Git STEP 1 COPY Files2
@@ -205,6 +242,10 @@ function burn() {
 function merge() {
 	return src(nodemon).pipe(dest('npm/src'));
 }
+exports.desdir = desDir;
+exports.desclean = desClean;
+exports.deszip = desZip;
+exports.descopy = desCopy;
 
 exports.nodeclean = nodeClean;
 exports.nodezip = nodeZip;
