@@ -1,2 +1,5 @@
-# Desmond
-Personal Devkit Framework
+<!-- ------------------------------------------ -->
+
+# Desmond Theme V0.01
+
+- Initial Commit

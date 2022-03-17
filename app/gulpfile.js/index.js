@@ -55,11 +55,3 @@ exports.default = function () {
 	watch(['src/js/libs/*.js', '!src/js/libs/shopify.js'], jslibs);
 	watch('src/assets/img/**/*', assets.img);
 };
-
-// 	const get = require('./git.js');
-// 	Get Tasks
-// 	exports.save = get.save;
-// 	exports.send = get.send;
-// 	task('deploy', series(get.save, get.push));
-// 	const deploy = task('deploy');
-// 	watch('shopify/assets/build.min.js', { delay: 3500 }, deploy);

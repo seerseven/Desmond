@@ -1,6 +1,6 @@
 'use strict';
 
-const { series, parallel, watch, src, dest } = require('gulp');
+const { series, parallel, watch, src, dest, task } = require('gulp');
 const arc = require('./archive.js');
 const ver = require('./logger.js');
 const shop = require('./shopify.js');
@@ -55,3 +55,11 @@ exports.vault = series(
 );
 
 exports.vers = parallel(ver.core, ver.npm, ver.master);
+
+task('deploy', series(dep.save, dep.send));
+const deploy = task('deploy');
+
+exports.default = function () {
+	watch('./README.md', deploy);
+	watch('app/node_modules/@seerseven/desmond/src/*.js', arc.merge);
+};
