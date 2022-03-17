@@ -8,7 +8,7 @@ const clean = require('gulp-clean');
 //Main Variables
 const v = {
 	build: 'src/build/',
-	jsLibs: 'src/js/libs',
+	jsLibs: 'src/js/libs/',
 	srcDist: 'src/dist',
 	paraDist: 'parallax/assets',
 	shopDist: 'shopify/assets',
@@ -19,30 +19,15 @@ const v = {
 		'!shopify/assets/desmond.js',
 		'!shopify/assets/desmond.min.js',
 	],
+	fQuery: ['jquery.js', 'jqueryUI.js'],
+	fLibs: ['three.js', 'vanta.js', 'aos.js', 'rellax.js'],
+	fCore: ['jquery.js', 'jqueryUI.js', 'popper.js', 'mdball.js'],
+	fBuild: ['shopify.js', 'core.js', 'libs.js', 'theme.js'],
 };
-
-const f = {
-	query: function () {
-		var fQuery = ['jquery.js', 'jqueryUI.js'];
-		fQuery = fQuery.map((i) => v.jsLibs + i);
-		return fQuery;
-	},
-	libs: function () {
-		var fLibs = ['three.js', 'vanta.js', 'aos.js', 'rellax.js'];
-		fLibs = fLibs.map((i) => v.jsLibs + i);
-		return fLibs;
-	},
-	core: function () {
-		var fCore = ['jquery.js', 'jqueryUI.js', 'popper.js', 'mdball.js'];
-		fCore = fCore.map((i) => v.jsLibs + i);
-		return fCore;
-	},
-	build: function () {
-		var fBuild = ['shopify.js', 'core.js', 'libs.js', 'theme.js'];
-		fBuild = fBuild.map((i) => v.srcDist + i);
-		return fBuild;
-	},
-};
+v.fQuery = v.fQuery.map((i) => v.jsLibs + i);
+v.fLibs = v.fLibs.map((i) => v.jsLibs + i);
+v.fCore = v.fCore.map((i) => v.jsLibs + i);
+v.fBuild = v.fBuild.map((i) => v.srcDist + i);
 
 const js = {
 	shopify: function () {
@@ -55,7 +40,7 @@ const js = {
 			.pipe(dest(v.shopDist));
 	},
 	query: function () {
-		return src(f.query)
+		return src(v.fQuery)
 			.pipe(plumber())
 			.pipe(concat('jQuery.js'))
 			.pipe(uglify())
@@ -63,7 +48,7 @@ const js = {
 			.pipe(dest(v.paraDist));
 	},
 	libs: function () {
-		return src(f.libs)
+		return src(v.fLibs)
 			.pipe(plumber())
 			.pipe(concat('libs.js'))
 			.pipe(dest(v.srcDist))
@@ -72,7 +57,7 @@ const js = {
 			.pipe(dest(v.shopDist));
 	},
 	core: function () {
-		return src(f.core)
+		return src(v.fCore)
 			.pipe(plumber())
 			.pipe(concat('core.js'))
 			.pipe(dest(v.srcDist))
@@ -89,7 +74,7 @@ const js = {
 			.pipe(dest(v.shopDist));
 	},
 	build: function () {
-		return src(f.build)
+		return src(v.fBuild)
 			.pipe(plumber())
 			.pipe(concat('desmond.js'))
 			.pipe(dest(v.shopDist))

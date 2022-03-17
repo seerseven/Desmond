@@ -31,7 +31,6 @@ const css = {
 	shopify: function () {
 		return src([v.build + 'shopify.css'])
 			.pipe(plumber())
-			.pipe(postcss())
 			.pipe(dest(v.srcDist))
 			.pipe(cssnano())
 			.pipe(rename({ suffix: '.min' }))

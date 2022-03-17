@@ -6,20 +6,20 @@ const gitignore = require('gulp-gitignore');
 //Define Src and Dest Filepaths
 const app = './';
 
-function gitSave() {
-	return src([app + '*'])
-		.pipe(gitignore())
-		.pipe(git.add())
-		.pipe(git.commit('bump version'));
-}
+const get = {
+	save: function () {
+		return src([app + '*'])
+			.pipe(gitignore())
+			.pipe(git.add())
+			.pipe(git.commit('bump version'));
+	},
+	send: function (done) {
+		git.push('origin', 'master', function (err) {
+			if (err) throw err;
+		});
+		done();
+	},
+};
 
-function gitSend(done) {
-	git.push('origin', 'master', function (err) {
-		if (err) throw err;
-	});
-	done();
-}
-
-exports.gitSave = gitSave;
-exports.gitSend = gitSend;
-exports.deploy = series(gitSave, gitSend);
+exports.save = get.save;
+exports.send = get.send;

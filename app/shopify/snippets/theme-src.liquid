@@ -1,6 +1,11 @@
-<script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
 {{ 'shopify.min.css' | asset_url | stylesheet_tag }}
+{{ 'mdb.min.css' | asset_url | stylesheet_tag }}
+{{ 'theme.min.css' | asset_url | stylesheet_tag }}
 
+<script src="{{ 'shopify.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'core.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'libs.min.js' | asset_url }}" defer="defer"></script>
+<!-- <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script> -->
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">

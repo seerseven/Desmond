@@ -53,7 +53,7 @@ var imgs = {
 	gif: v.images + '/gif/*.gif',
 };
 //Main Tasks
-const tasks = {
+const assets = {
 	vid: function () {
 		return src(v.video).pipe(shell([v.ff + file.input + ' ' + file.output]));
 	},
@@ -77,5 +77,5 @@ const tasks = {
 };
 
 //Exports
-exports.img = tasks.img;
-exports.vid = tasks.vid;
+exports.img = assets.img;
+exports.vid = assets.vid;

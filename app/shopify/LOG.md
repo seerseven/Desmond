@@ -1,5 +1,23 @@
 <!-- ------------------------------------------ -->
 
+# Desmond Theme V0.03
+
+- Added Theme CSS & JS Files
+
+- Liquid Files
+  -theme.js
+  -core.js
+
+  - shopify.js
+  - libs.js
+  - shopify.css
+  - mdb.css
+  - theme.css
+
+  - Tested and works 100%
+
+<!-- ------------------------------------------ -->
+
 # Desmond Theme V0.02
 
 - Removed all js & css links a refs on each page

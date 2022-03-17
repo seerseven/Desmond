@@ -5,19 +5,20 @@ const bump = require('gulp-bump');
 const plumber = require('gulp-plumber');
 const prompt = require('gulp-prompt');
 
+//Require
 const css = require('./styles.js');
 const js = require('./scripts.js');
-const mediaTasks = require('./assets.js');
-const gitTasks = require('./git.js');
-const sassTasks = require('./sass.js');
+const assets = require('./assets.js');
+const sass = require('./sass.js');
 
-exports.img = mediaTasks.img;
-exports.vid = mediaTasks.vid;
-exports.save = gitTasks.gitSave;
-exports.send = gitTasks.gitSend;
-exports.scss = sassTasks.scss;
-exports.cts = sassTasks.cts;
-exports.list = sassTasks.list;
+//Sass Tasks
+exports.scss = sass.scss;
+exports.cts = sass.cts;
+exports.list = sass.list;
+
+//Assets Tasks
+exports.img = assets.img;
+exports.vid = assets.vid;
 
 //CSS TASKS
 exports.csshopify = css.shopify;
@@ -36,24 +37,29 @@ exports.jstheme = js.theme;
 exports.jsbuild = js.build;
 exports.jsclean = js.clean;
 
-task('css', parallel(css.shopify, css.mdb, css.theme));
+//Tasks
+task('css', parallel(css.shopify, css.theme));
+task('js:libs', parallel(js.libs, js.core));
+task('js:mods', parallel(js.shopify, js.theme));
+task('assets', series(assets.img, assets.vid));
 
+//Consts
 const styles = task('css');
-
-exports.media = series(mediaTasks.img, mediaTasks.vid);
-
-// exports.default = function () {
-// 	// series(mediaTasks.img, mediaTasks.vid);
-// 	watch('src/build/*.css', series(cssTasks.css));
-// 	watch('src/build/*.js', jsTasks.js);
-// 	watch('src/vendors/*.js', parallel(jsTasks.lib));
-// 	watch(
-// 		'theme/assets/*.min.*',
-// 		{ delay: 3500 },
-// 		series(gitTasks.gitSave, gitTasks.gitSend)
-// 	);
-// };
+const jslibs = task('js:libs');
+const jsmods = task('js:mods');
+const media = task('assets');
 
 exports.default = function () {
 	watch('src/build/*.css', styles);
+	watch('src/build/*.js', jsmods);
+	watch(['src/js/libs/*.js', '!src/js/libs/shopify.js'], jslibs);
+	watch('src/assets/**/*', media);
 };
+
+// 	const get = require('./git.js');
+// 	Get Tasks
+// 	exports.save = get.save;
+// 	exports.send = get.send;
+// 	task('deploy', series(get.save, get.push));
+// 	const deploy = task('deploy');
+// 	watch('shopify/assets/build.min.js', { delay: 3500 }, deploy);
