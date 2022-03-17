@@ -8,10 +8,21 @@ const app = './';
 
 const get = {
 	save: function () {
-		return src([app + '*'])
-			.pipe(gitignore())
+		return src([
+			'./*',
+			'!./node_modules/**',
+			'!./state/**',
+			'!app/node_modules/**',
+			'!./package-lock.json',
+			'!./app/package-lock.json',
+		])
 			.pipe(git.add())
-			.pipe(git.commit('gulp commit'));
+			.pipe(
+				git.commit(undefined, {
+					args: '-m "gulp commit"',
+					disableMessageRequirement: true,
+				})
+			);
 	},
 	send: function (done) {
 		git.push('origin', 'master', function (err) {
