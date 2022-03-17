@@ -35,6 +35,7 @@ const js = {
 			.pipe(plumber())
 			.pipe(dest(v.jsLibs))
 			.pipe(dest(v.srcDist))
+			.pipe(dest(v.shopDist))
 			.pipe(uglify())
 			.pipe(rename({ suffix: '.min' }))
 			.pipe(dest(v.shopDist));
@@ -52,6 +53,7 @@ const js = {
 			.pipe(plumber())
 			.pipe(concat('libs.js'))
 			.pipe(dest(v.srcDist))
+			.pipe(dest(v.shopDist))
 			.pipe(uglify())
 			.pipe(rename({ suffix: '.min' }))
 			.pipe(dest(v.shopDist));
@@ -61,6 +63,7 @@ const js = {
 			.pipe(plumber())
 			.pipe(concat('core.js'))
 			.pipe(dest(v.srcDist))
+			.pipe(dest(v.shopDist))
 			.pipe(uglify())
 			.pipe(rename({ suffix: '.min' }))
 			.pipe(dest(v.shopDist));
@@ -69,6 +72,7 @@ const js = {
 		return src([v.build + 'theme.js'])
 			.pipe(plumber())
 			.pipe(dest(v.srcDist))
+			.pipe(dest(v.shopDist))
 			.pipe(uglify())
 			.pipe(rename({ suffix: '.min' }))
 			.pipe(dest(v.shopDist));

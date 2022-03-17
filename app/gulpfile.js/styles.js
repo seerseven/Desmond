@@ -32,6 +32,7 @@ const css = {
 		return src([v.build + 'shopify.css'])
 			.pipe(plumber())
 			.pipe(dest(v.srcDist))
+			.pipe(dest(v.shopDist))
 			.pipe(cssnano())
 			.pipe(rename({ suffix: '.min' }))
 			.pipe(dest(v.shopDist));
@@ -41,6 +42,7 @@ const css = {
 			.pipe(plumber())
 			.pipe(postcss())
 			.pipe(dest(v.srcDist))
+			.pipe(dest(v.shopDist))
 			.pipe(cssnano())
 			.pipe(rename({ suffix: '.min' }))
 			.pipe(dest(v.shopDist));
@@ -58,6 +60,7 @@ const css = {
 			.pipe(plumber())
 			.pipe(postcss())
 			.pipe(dest(v.srcDist))
+			.pipe(dest(v.shopDist))
 			.pipe(cssnano())
 			.pipe(rename({ suffix: '.min' }))
 			.pipe(dest(v.shopDist))

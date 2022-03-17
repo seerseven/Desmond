@@ -15,13 +15,13 @@
     "defaults"
   ],
   "scripts": {
-    "serve": "concurrently \"desmond serve\" \"gulp\" \"cd.. && gulp\"",
+    "serve": "concurrently \"desmond serve\" \"gulp\" \"cd shopify && shopify theme serve\" \"cd.. && gulp\"",
     "watch": "desmond watch",
     "build": "desmond build",
     "lint": "desmond lint"
   },
   "devDependencies": {
-    "@seerseven/desmond": "^1.0.11",
+    "@seerseven/desmond": "^1.0.18",
     "autoprefixer": "^10.4.2",
     "concurrently": "^7.0.0",
     "css-declaration-sorter": "^6.1.4",

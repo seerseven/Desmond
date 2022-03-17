@@ -90,9 +90,7 @@ task(
 		parallel(arc.deszip, arc.nodezip, arc.appzip),
 		parallel(arc.desclean, arc.nodeclean, arc.appclean),
 		arc.arc,
-		arc.burn,
-		dep.save,
-		dep.send
+		arc.burn
 	)
 );
 const vault = task('vault');

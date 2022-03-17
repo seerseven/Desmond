@@ -1653,22 +1653,6 @@
 .bg-gradient {
   background-image: var(--bs-gradient) !important;
 }
-.ratio {
-  position: relative;
-  width: 100%;
-}
-.ratio:before {
-  display: block;
-  padding-top: var(--bs-aspect-ratio);
-  content: "";
-}
-.ratio > * {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
 .ratio-1x1 {
   --bs-aspect-ratio: 100%;
 }
