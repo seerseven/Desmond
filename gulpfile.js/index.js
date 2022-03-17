@@ -7,100 +7,55 @@ const shop = require('./shopify.js');
 const dep = require('./git.js');
 const npm = require('./npm.js');
 
-exports.desdir = arc.desdir;
-exports.desclean = arc.desclean;
-exports.deszip = arc.deszip;
-exports.descopy = arc.descopy;
+//Archive Desmond Core Files
+exports.dcopy = arc.dcopy;
+exports.dzip = arc.dzip;
+exports.drem = arc.drem;
 
+//Archive Main APP Folder
+exports.tcopy = arc.tcopy;
+exports.tzip = arc.tzip;
+exports.trem = arc.trem;
+
+//Archive NPM Package Folder
+exports.ncopy = arc.ncopy;
+exports.nzip = arc.nzip;
+exports.nrem = arc.nrem;
+
+//Archive Shopify Theme
+exports.scopy = arc.scopy;
+exports.szip = arc.szip;
+exports.srem = arc.srem;
+
+//Archive ALL at Once
 exports.merge = arc.merge;
-exports.dir = arc.mkdir;
+exports.zip = arc.zip;
+exports.rem = arc.rem;
+
+//Version Bump Package.JSON Files
 exports.verCore = ver.core;
 exports.verNpm = ver.npm;
 exports.verMaster = ver.master;
-exports.arc = arc.arc;
-exports.burn = arc.burn;
-exports.nodecopy = arc.nodecopy;
 
-exports.appcopy = arc.appcopy;
-exports.appzip = arc.appzip;
-exports.appclean = arc.appclean;
-
-exports.shopdir = arc.shopifydir;
-exports.shopcopy = arc.shopifycopy;
-exports.shopzip = arc.shopifyzip;
-exports.shopclean = arc.shopifyclean;
-exports.shoparc = arc.shopifyarc;
-exports.shopburn = arc.shopifyburn;
+//Git Add, Commit & Push
 exports.pushtheme = shop.pushtheme;
 exports.save = dep.save;
 exports.send = dep.send;
 
+//Git Add, Commit & Push
 exports.node = npm.node;
 exports.json = npm.json;
 
-exports.theme = series(
-	arc.shopifydir,
-	arc.shopifycopy,
-	arc.shopifyzip,
-	arc.shopifyclean,
-	arc.shopifyarc,
-	arc.shopifyburn,
-	shop.pushtheme
-);
-
-exports.vault = series(
-	parallel(ver.core, ver.npm, ver.master),
-	arc.mkdir,
-	parallel(arc.descopy, arc.nodecopy, arc.appcopy),
-	parallel(arc.deszip, arc.nodezip, arc.appzip),
-	parallel(arc.desclean, arc.nodeclean, arc.appclean),
-	arc.arc,
-	arc.burn,
-	dep.save,
-	dep.send
-);
-
-exports.vers = parallel(ver.core, ver.npm, ver.master);
+exports.vers = ver.version;
 
 task('deploy', series(dep.save, dep.send));
-const deploy = task('deploy');
-
-task(
-	'theme',
-	series(
-		arc.shopifydir,
-		arc.shopifycopy,
-		arc.shopifyzip,
-		arc.shopifyclean,
-		arc.shopifyarc,
-		arc.shopifyburn,
-		shop.pushtheme,
-		dep.save,
-		dep.send
-	)
-);
-const theme = task('theme');
-
-task(
-	'vault',
-	series(
-		parallel(ver.core, ver.npm, ver.master),
-		arc.mkdir,
-		parallel(arc.descopy, arc.nodecopy, arc.appcopy),
-		parallel(arc.deszip, arc.nodezip, arc.appzip),
-		parallel(arc.desclean, arc.nodeclean, arc.appclean),
-		arc.arc,
-		arc.burn
-	)
-);
-const vault = task('vault');
-
+task('theme', series(arc.shopifytheme, shop.pushtheme));
+task('vault', series(ver.version, arc.copy, arc.zip, arc.rem));
 task('npm', series(arc.merge, ver.npm, npm.node));
-const node = task('npm');
 
 exports.default = function () {
-	watch('./README.md', deploy);
-	watch('app/shopify/LOG.md', theme);
-	watch('state/LOG.md', vault);
-	watch('app/node_modules/@seerseven/desmond/src/*.js', node);
+	watch('./README.md', task('deploy'));
+	watch('app/shopify/LOG.md', task('theme'));
+	watch('state/LOG.md', task('vault'));
+	watch('app/node_modules/@seerseven/desmond/src/*.js', task('npm'));
 };

@@ -31,3 +31,5 @@ function master() {
 exports.core = core;
 exports.npm = npm;
 exports.master = master;
+
+exports.version = parallel(core, npm, master);

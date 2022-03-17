@@ -117,151 +117,123 @@ var shopZipName = zipName('shop');
 var archZipName = zipName('arch');
 var desZipName = zipName('des');
 
-//Make New Dirctories for Backup Files
-function mkdir(cb) {
-	const folders = [appName, npmName, desName];
-	folders.forEach((dir) => {
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir);
-			console.log('📁  folder created:', dir);
-		}
-	});
-	cb();
-}
+const desmond = {
+	copy: function () {
+		const folders = [desName];
+		folders.forEach((dir) => {
+			if (!fs.existsSync(dir)) {
+				fs.mkdirSync(dir);
+			}
+		});
+		return src(['./**/*', NOMOD, NOAPP, NONPM, NOSTATE]).pipe(dest(desName));
+	},
+	zip: function () {
+		return src([desName + '/**/*', desName + '/.*/**/*'])
+			.pipe(zip(desZipName))
+			.pipe(dest(vault));
+	},
+	rem: function () {
+		return src(desName).pipe(clean());
+	},
+};
 
-function desDir(cb) {
-	const folders = [desName];
-	folders.forEach((dir) => {
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir);
-			console.log('📁  folder created:', dir);
-		}
-	});
-	cb();
-}
+const theme = {
+	copy: function () {
+		const folders = [appName];
+		folders.forEach((dir) => {
+			if (!fs.existsSync(dir)) {
+				fs.mkdirSync(dir);
+			}
+		});
+		return src(['app/**/*', NONODE, 'app/.*/**/*']).pipe(dest(appName));
+	},
+	zip: function () {
+		return src([appName + '/**/*', appName + '/.*/**/*'])
+			.pipe(zip(appZipName))
+			.pipe(dest(vault));
+	},
+	rem: function () {
+		return src(appName).pipe(clean());
+	},
+};
 
-//Git STEP 1 COPY Files2
-function desCopy() {
-	return src(['./**/*', NOMOD, NOAPP, NONPM, NOSTATE]).pipe(dest(desName));
-}
-function desZip() {
-	return src([desName + '/**/*', desName + '/.*/**/*'])
-		.pipe(zip(desZipName))
-		.pipe(dest(tholos));
-}
-function desClean() {
-	return src(desName).pipe(clean());
-}
+const node = {
+	copy: function () {
+		const folders = [npmName];
+		folders.forEach((dir) => {
+			if (!fs.existsSync(dir)) {
+				fs.mkdirSync(dir);
+			}
+		});
+		return src('npm/**/*').pipe(dest(npmName));
+	},
+	zip: function () {
+		return src([npmName + '/**/*'])
+			.pipe(zip(npmZipName))
+			.pipe(dest(vault));
+	},
+	rem: function () {
+		return src(npmName).pipe(clean());
+	},
+};
 
-//Git STEP 1 COPY Files2
-function appCopy() {
-	return src(['app/**/*', NONODE, 'app/.*/**/*']).pipe(dest(appName));
-}
-function appZip() {
-	return src([appName + '/**/*', appName + '/.*/**/*'])
-		.pipe(zip(appZipName))
-		.pipe(dest(tholos));
-}
-function appClean() {
-	return src(appName).pipe(clean());
-}
+const shopify = {
+	copy: function () {
+		const folders = [shopName];
+		folders.forEach((dir) => {
+			if (!fs.existsSync(dir)) {
+				fs.mkdirSync(dir);
+			}
+		});
+		return src(['app/shopify/**/*', NOTHEME]).pipe(dest(shopName));
+	},
+	zip: function () {
+		return src([shopName + '/**/*'])
+			.pipe(zip(shopZipName))
+			.pipe(dest(themevault));
+	},
+	rem: function () {
+		return src(shopName).pipe(clean());
+	},
+};
 
-//NPM STEP 1 COPY Files2
-function nodeCopy() {
-	return src('npm/**/*').pipe(dest(npmName));
-}
-function nodeZip() {
-	return src([npmName + '/**/*'])
-		.pipe(zip(npmZipName))
-		.pipe(dest(tholos));
-}
-function nodeClean() {
-	return src(npmName).pipe(clean());
-}
+const archive = {
+	zip: function () {
+		return src([
+			'state/tholos/**/*',
+			'!state/tholos/archives/**',
+			'!state/tholos/themes/**',
+		])
+			.pipe(zip(archZipName))
+			.pipe(dest(vault));
+	},
+	rem: function () {
+		return src([npmName, appName, desName]).pipe(clean());
+	},
+	merge: function () {
+		return src(nodemon).pipe(dest('npm/src'));
+	},
+};
 
-//NPM STEP 1 COPY Files2
+exports.dcopy = desmond.copy;
+exports.dzip = desmond.zip;
+exports.drem = desmond.rem;
 
-function shopifyDir(cb) {
-	const folders = [shopName];
-	folders.forEach((dir) => {
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir);
-			console.log('📁  folder created:', dir);
-		}
-	});
-	cb();
-}
+exports.tcopy = theme.copy;
+exports.tzip = theme.zip;
+exports.trem = theme.rem;
 
-function shopifyCopy() {
-	return src(['app/shopify/**/*', NOTHEME]).pipe(dest(shopName));
-}
-function shopifyZip() {
-	return src([shopName + '/**/*'])
-		.pipe(zip(shopZipName))
-		.pipe(dest(tholos));
-}
-function shopifyClean() {
-	return src(shopName).pipe(clean());
-}
-function shopifyArc() {
-	return src([
-		'state/tholos/**/*',
-		'!state/tholos/archives/**',
-		'!state/tholos/themes/**',
-	]).pipe(dest(themevault));
-}
-function shopifyBurn() {
-	return src([
-		'state/tholos/**/*',
-		'!state/tholos/archives/**',
-		'!state/tholos/themes/**',
-	]).pipe(clean());
-}
+exports.ncopy = node.copy;
+exports.nzip = node.zip;
+exports.nrem = node.rem;
 
-//Once All Folders are Zipped
-//Compile One Master ZIP Archive
-function arc() {
-	return src([
-		'state/tholos/**/*',
-		'!state/tholos/archives/**',
-		'!state/tholos/themes/**',
-	])
-		.pipe(zip(archZipName))
-		.pipe(dest(vault));
-}
-function burn() {
-	return src([
-		'state/tholos/**/*',
-		'!state/tholos/archives/**',
-		'!state/tholos/themes/**',
-	]).pipe(clean());
-}
+exports.scopy = shopify.copy;
+exports.szip = shopify.zip;
+exports.srem = shopify.rem;
 
-//Merge Main Workspace with Git Master and Push to Origin
-//Git STEP 1 COPY Files2
-function merge() {
-	return src(nodemon).pipe(dest('npm/src'));
-}
-exports.desdir = desDir;
-exports.desclean = desClean;
-exports.deszip = desZip;
-exports.descopy = desCopy;
+exports.merge = archive.merge;
+exports.zip = archive.zip;
+exports.rem = archive.rem;
 
-exports.nodeclean = nodeClean;
-exports.nodezip = nodeZip;
-exports.nodecopy = nodeCopy;
-
-exports.shopifydir = shopifyDir;
-exports.shopifyclean = shopifyClean;
-exports.shopifyzip = shopifyZip;
-exports.shopifycopy = shopifyCopy;
-exports.shopifyarc = shopifyArc;
-exports.shopifyburn = shopifyBurn;
-
-exports.appcopy = appCopy;
-exports.appzip = appZip;
-exports.appclean = appClean;
-exports.mkdir = mkdir;
-exports.arc = arc;
-exports.burn = burn;
-exports.merge = merge;
+exports.copy = parallel(desmond.copy, theme.copy, node.copy);
+exports.shopifytheme = series(shopify.copy, shopify.zip, shopify.rem);
