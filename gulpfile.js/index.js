@@ -5,6 +5,7 @@ const arc = require('./archive.js');
 const ver = require('./logger.js');
 const shop = require('./shopify.js');
 const dep = require('./git.js');
+const npm = require('./npm.js');
 
 exports.desdir = arc.desdir;
 exports.desclean = arc.desclean;
@@ -34,6 +35,9 @@ exports.pushtheme = shop.pushtheme;
 exports.save = dep.save;
 exports.send = dep.send;
 
+exports.node = npm.node;
+exports.json = npm.json;
+
 exports.theme = series(
 	arc.shopifydir,
 	arc.shopifycopy,
@@ -59,7 +63,28 @@ exports.vers = parallel(ver.core, ver.npm, ver.master);
 task('deploy', series(dep.save, dep.send));
 const deploy = task('deploy');
 
+task(
+	'theme',
+	series(
+		arc.shopifydir,
+		arc.shopifycopy,
+		arc.shopifyzip,
+		arc.shopifyclean,
+		arc.shopifyarc,
+		arc.shopifyburn,
+		shop.pushtheme
+	)
+);
+const theme = task('theme');
+
+task('npm', series(arc.merge, ver.npm, npm.node, npm.json));
+const node = task('npm');
+
 exports.default = function () {
 	watch('./README.md', deploy);
-	watch('app/node_modules/@seerseven/desmond/src/*.js', arc.merge);
+	watch(
+		'app/node_modules/@seerseven/desmond/src/*.js',
+		series(arc.merge, ver.npm, npm.node)
+	);
+	watch('app/shopify/LOG.md', theme);
 };

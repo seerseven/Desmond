@@ -1,4 +1,6 @@
 {
+  "name": "@seerseven/desmond",
+  "version": "1.0.11",
   "author": {
     "name": "Seerseven",
     "email": "dev@seerseven.com"
@@ -29,13 +31,11 @@
   ],
   "license": "ISC",
   "main": "src/cli.js",
-  "name": "@seerseven/desmond",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "format": "prettier --write ."
   },
-  "type": "module",
-  "version": "1.0.3"
+  "type": "module"
 }
