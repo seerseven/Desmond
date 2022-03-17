@@ -21,7 +21,7 @@ args.forEach((value) => {
       break;
 
     case "watch":
-      LOGGER.desmond("is watching over your changes");
+      LOGGER.desmond("is watching you!!");
       try {
         build({
           development: true,

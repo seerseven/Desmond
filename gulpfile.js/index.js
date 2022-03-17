@@ -55,7 +55,9 @@ exports.vault = series(
 	parallel(arc.deszip, arc.nodezip, arc.appzip),
 	parallel(arc.desclean, arc.nodeclean, arc.appclean),
 	arc.arc,
-	arc.burn
+	arc.burn,
+	dep.save,
+	dep.send
 );
 
 exports.vers = parallel(ver.core, ver.npm, ver.master);
@@ -72,19 +74,35 @@ task(
 		arc.shopifyclean,
 		arc.shopifyarc,
 		arc.shopifyburn,
-		shop.pushtheme
+		shop.pushtheme,
+		dep.save,
+		dep.send
 	)
 );
 const theme = task('theme');
 
-task('npm', series(arc.merge, ver.npm, npm.node, npm.json));
+task(
+	'vault',
+	series(
+		parallel(ver.core, ver.npm, ver.master),
+		arc.mkdir,
+		parallel(arc.descopy, arc.nodecopy, arc.appcopy),
+		parallel(arc.deszip, arc.nodezip, arc.appzip),
+		parallel(arc.desclean, arc.nodeclean, arc.appclean),
+		arc.arc,
+		arc.burn,
+		dep.save,
+		dep.send
+	)
+);
+const vault = task('vault');
+
+task('npm', series(arc.merge, ver.npm, npm.node));
 const node = task('npm');
 
 exports.default = function () {
 	watch('./README.md', deploy);
-	watch(
-		'app/node_modules/@seerseven/desmond/src/*.js',
-		series(arc.merge, ver.npm, npm.node)
-	);
 	watch('app/shopify/LOG.md', theme);
+	watch('state/LOG.md', vault);
+	watch('app/node_modules/@seerseven/desmond/src/*.js', node);
 };

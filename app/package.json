@@ -1,6 +1,6 @@
 {
   "name": "desmond-core",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Modern development workflow, built with performance and best practices in mind..",
   "repository": "seerseven/desmond",
   "author": "Seerseven <dev@seerseven.com>",
@@ -15,7 +15,7 @@
     "defaults"
   ],
   "scripts": {
-    "serve": "concurrently \"desmond serve\" \"gulp\" ",
+    "serve": "concurrently \"desmond serve\" \"gulp\" \"cd.. && gulp\"",
     "watch": "desmond watch",
     "build": "desmond build",
     "lint": "desmond lint"
