@@ -1,8 +1,8 @@
 <!-- ------------------------------------------ -->
 
-### Watch Test
+# Desmond Theme V0.04
 
-- Tested and works 100%
+- General Edits and Reworking
 
 <!-- ------------------------------------------ -->
 
