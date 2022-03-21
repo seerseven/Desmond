@@ -5,6 +5,9 @@ const shell = require('gulp-shell');
 const clean = require('gulp-clean');
 const zip = require('gulp-zip');
 var fs = require('fs');
+const c = require('ansi-colors');
+const log = require('fancy-log');
+const { performance } = require('perf_hooks');
 
 function folderNamer() {
 	var months = [
@@ -58,28 +61,66 @@ var themeName = folderNamer();
 var folder = base + themeName;
 var zipper = themeName + zp;
 
+function start() {
+	const str = performance.now();
+	return str;
+}
+function end(a, n, x, s) {
+	const e = performance.now();
+	var done = e - s;
+	done = done.toFixed(2);
+	log(
+		c.bold[a](n),
+		c.bold.cyan.italic(`${x} in ${c.bold.yellow(`${done}`)} ms`)
+	);
+	return done;
+}
+
 const shopify = {
 	copy: function () {
+		const s = start();
 		const folders = [folder];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		});
-		return src(['app/shopify/**/*', NOTHEME]).pipe(dest(folder));
+		log(c.bold.cyan.italic('Theme Folder Created'));
+		return src(['app/shopify/**/*', NOTHEME])
+			.pipe(dest(folder))
+			.on('end', () => {
+				end('green', 'Shopify', 'Files Copied', s);
+			});
 	},
 	zip: function () {
+		const s = start();
 		return src([folder + '/**/*'])
 			.pipe(zip(zipper))
-			.pipe(dest(themevault));
+			.pipe(dest(themevault))
+			.on('end', () => {
+				end('blue', 'Shopify', 'Files Zipped & Archived', s);
+			});
 	},
 	clean: function () {
-		return src(folder).pipe(clean());
+		const s = start();
+		return src(folder)
+			.pipe(clean())
+			.on('end', () => {
+				end(
+					'magenta',
+					'Shopify',
+					'Files & Folders Removed | Directory Cleaned',
+					s
+				);
+			});
 	},
 	push: function () {
-		return src('app/shopify').pipe(
-			shell('cd app/shopify && echo y && echo y | shopify theme push')
-		);
+		const s = start();
+		return src('app/shopify')
+			.pipe(shell('cd app/shopify && echo y && echo y | shopify theme push'))
+			.on('end', () => {
+				end('yellow', 'Shopify', 'Theme Pushed', s);
+			});
 	},
 };
 

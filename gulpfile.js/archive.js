@@ -5,211 +5,254 @@ const clean = require('gulp-clean');
 const zip = require('gulp-zip');
 var fs = require('fs');
 const version = require('./bump.js');
+const c = require('ansi-colors');
+const log = require('fancy-log');
+const { performance } = require('perf_hooks');
 
 //Variables
-
-const tholos = 'state/tholos';
 const vault = 'state/tholos/archives';
-const themevault = 'state/tholos/themes';
-
 const NONODE = '!app/node_modules/**';
 const NOMOD = '!./node_modules/**';
 const NOAPP = '!./app/**';
 const NONPM = '!./npm/**';
 const NOSTATE = '!./state/**';
-const NOTHEME = '!app/shopify/themes/**';
-const NOLOCK = '!app/package-lock.json';
-const nodemon = 'app/node_modules/@seerseven/desmond/src/*.js';
-var months = [
-	'Jan',
-	'Feb',
-	'Mar',
-	'Apr',
-	'May',
-	'Jun',
-	'Jul',
-	'Aug',
-	'Sep',
-	'Oct',
-	'Nov',
-	'Dec',
-];
-var days = [
-	'Sunday',
-	'Monday',
-	'Tuesday',
-	'Wednesday',
-	'Thursday',
-	'Friday',
-	'Saturday',
-];
-var d = new Date();
-var day = days[d.getDay()];
-var hr = d.getHours();
-var min = d.getMinutes();
-
-var ampm = 'am';
-if (hr > 12) {
-	hr -= 12;
-	ampm = 'pm';
-}
-var strhr = hr.toString();
-var strmin = min.toString();
-var ti = strhr + strmin;
-var date = d.getDate();
-var month = months[d.getMonth()];
-var year = d.getFullYear();
-var x = '' + hr + ampm + '-' + date + month + year;
-var sh = '' + ti + ampm + '-' + date + month + year;
-var caps = x.toUpperCase();
-var shCaps = sh.toUpperCase();
-var base = 'state/tholos/';
-var appp = 'APP-';
-var npm = 'NPM-';
-var shop = 'THEME-V00-';
-var arch = 'ARCHIVE-';
-var des = 'DES-';
 var zp = '.zip';
+var base = 'state/tholos/';
+const f = {
+	app: 'APP-',
+	npm: 'NPM-',
+	arch: 'ARCHIVE-',
+	des: 'DES-',
+};
+function folderNamer() {
+	var months = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec',
+	];
+	var days = [
+		'Sunday',
+		'Monday',
+		'Tuesday',
+		'Wednesday',
+		'Thursday',
+		'Friday',
+		'Saturday',
+	];
+	var d = new Date();
+	var day = days[d.getDay()];
+	var hr = d.getHours();
+	var min = d.getMinutes();
 
-//Folder Names with Timestamp
+	var ampm = 'am';
+	if (hr > 12) {
+		hr -= 12;
+		ampm = 'pm';
+	}
+	var strhr = hr.toString();
+	var strmin = min.toString();
+	var ti = strhr + strmin;
+	var date = d.getDate();
+	var month = months[d.getMonth()];
+	var year = d.getFullYear();
+	var x = '' + hr + ampm + '-' + date + month + year;
+	var caps = x.toUpperCase();
+	return caps;
+}
+var timeDate = folderNamer();
 function dirName(val) {
-	if (val === 'appp') {
-		var full = base + appp + caps;
+	if (val === 'app') {
+		var full = base + f.app + timeDate;
 	}
 	if (val === 'npm') {
-		var full = base + npm + caps;
-	}
-	if (val === 'shop') {
-		var full = base + shop + shCaps;
+		var full = base + f.npm + timeDate;
 	}
 	if (val === 'arch') {
-		var full = base + arch + caps;
+		var full = base + f.arch + timeDate;
 	}
 	if (val === 'des') {
-		var full = base + des + caps;
+		var full = base + f.des + timeDate;
 	}
 	return full;
 }
 function zipName(val) {
 	if (val === 'appp') {
-		var full = appp + caps + zp;
+		var full = f.app + timeDate + zp;
 	}
 	if (val === 'npm') {
-		var full = npm + caps + zp;
-	}
-	if (val === 'shop') {
-		var full = shop + shCaps + zp;
+		var full = f.npm + timeDate + zp;
 	}
 	if (val === 'arch') {
-		var full = arch + caps + zp;
+		var full = f.arch + timeDate + zp;
 	}
 	if (val === 'des') {
-		var full = des + caps + zp;
+		var full = f.des + timeDate + zp;
 	}
 	return full;
 }
-var appName = dirName('appp');
+var appName = dirName('app');
 var npmName = dirName('npm');
-var shopName = dirName('shop');
 var desName = dirName('des');
-var appZipName = zipName('appp');
+var appZipName = zipName('app');
 var npmZipName = zipName('npm');
-var shopZipName = zipName('shop');
 var archZipName = zipName('arch');
 var desZipName = zipName('des');
 
+function start() {
+	const str = performance.now();
+	return str;
+}
+function end(a, n, x, s) {
+	const e = performance.now();
+	var done = e - s;
+	done = done.toFixed(2);
+	log(
+		c.bold[a](n),
+		c.bold.cyan.italic(`${x} in ${c.bold.yellow(`${done}`)} ms`)
+	);
+	return done;
+}
+
 const dez = {
 	copy: function () {
+		const s = start();
 		const folders = [desName];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		});
-		return src(['./**/*', NOMOD, NOAPP, NONPM, NOSTATE]).pipe(dest(desName));
+		log(c.bold.cyan.italic('Core Folder Created'));
+		return src(['./**/*', NOMOD, NOAPP, NONPM, NOSTATE])
+			.pipe(dest(desName))
+			.on('end', () => {
+				end('magenta', 'Core', 'Files Copied', s);
+			});
 	},
 	zip: function () {
+		const s = start();
 		return src([desName + '/**/*', desName + '/.*/**/*'])
 			.pipe(zip(desZipName))
-			.pipe(dest(vault));
+			.pipe(dest(vault))
+			.on('end', () => {
+				end('blue', 'Core', 'Files Zipped & Archived', s);
+			});
 	},
 	clean: function () {
-		return src(desName).pipe(clean());
+		const s = start();
+		return src(desName)
+			.pipe(clean())
+			.on('end', () => {
+				end('yellow', 'Core', 'Files & Folders Removed | Directory Cleaned', s);
+			});
 	},
 };
 
 const app = {
 	copy: function () {
+		const s = start();
 		const folders = [appName];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		});
-		return src(['app/**/*', NONODE, 'app/.*/**/*']).pipe(dest(appName));
+		log(c.bold.cyan.italic('App Folder Created'));
+		return src(['app/**/*', NONODE, 'app/.*/**/*'])
+			.pipe(dest(appName))
+			.on('end', () => {
+				end('magenta', 'App', 'Files Copied', s);
+			});
 	},
 	zip: function () {
+		const s = start();
 		return src([appName + '/**/*', appName + '/.*/**/*'])
 			.pipe(zip(appZipName))
-			.pipe(dest(vault));
+			.pipe(dest(vault))
+			.on('end', () => {
+				end('blue', 'App', 'Files Zipped & Archived', s);
+			});
 	},
 	clean: function () {
-		return src(appName).pipe(clean());
+		const s = start();
+		return src(appName)
+			.pipe(clean())
+			.on('end', () => {
+				end('yellow', 'App', 'Files & Folders Removed | Directory Cleaned', s);
+			});
 	},
 };
 
 const node = {
 	copy: function () {
+		const s = start();
 		const folders = [npmName];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		});
-		return src('npm/**/*').pipe(dest(npmName));
+		log(c.bold.cyan.italic('Node Folder Created'));
+		return src('npm/**/*')
+			.pipe(dest(npmName))
+			.on('end', () => {
+				end('magenta', 'Node', 'Files Copied', s);
+			});
 	},
 	zip: function () {
+		const s = start();
 		return src([npmName + '/**/*'])
 			.pipe(zip(npmZipName))
-			.pipe(dest(vault));
+			.pipe(dest(vault))
+			.on('end', () => {
+				end('blue', 'Node', 'Files Zipped & Archived', s);
+			});
 	},
 	clean: function () {
-		return src(npmName).pipe(clean());
-	},
-};
-
-const shopify = {
-	copy: function () {
-		const folders = [shopName];
-		folders.forEach((dir) => {
-			if (!fs.existsSync(dir)) {
-				fs.mkdirSync(dir);
-			}
-		});
-		return src(['app/shopify/**/*', NOTHEME]).pipe(dest(shopName));
-	},
-	zip: function () {
-		return src([shopName + '/**/*'])
-			.pipe(zip(shopZipName))
-			.pipe(dest(themevault));
-	},
-	clean: function () {
-		return src(shopName).pipe(clean());
+		const s = start();
+		return src(npmName)
+			.pipe(clean())
+			.on('end', () => {
+				end('yellow', 'App', 'Files & Folders Removed | Directory Cleaned', s);
+			});
 	},
 };
 
 const project = {
 	zip: function () {
+		const s = start();
 		return src([
 			'state/tholos/**/*',
 			'!state/tholos/archives/**',
 			'!state/tholos/themes/**',
 		])
 			.pipe(zip(archZipName))
-			.pipe(dest(vault));
+			.pipe(dest(vault))
+			.on('end', () => {
+				end('blue', 'Project', 'Files Zipped & Archived', s);
+			});
 	},
 	clean: function () {
-		return src([npmName, appName, desName]).pipe(clean());
+		const s = start();
+		return src([npmName, appName, desName])
+			.pipe(clean())
+			.on('end', () => {
+				end(
+					'yellow',
+					'Project',
+					'Files & Folders Removed | Directory Cleaned',
+					s
+				);
+			});
 	},
 };
 

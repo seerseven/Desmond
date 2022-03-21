@@ -4,20 +4,55 @@ const plumber = require('gulp-plumber');
 const shell = require('gulp-shell');
 const nodemon = 'app/node_modules/@seerseven/desmond/src/*.js';
 const ver = require('./bump.js');
+const c = require('ansi-colors');
+const log = require('fancy-log');
+const { performance } = require('perf_hooks');
+
+//Define Src and Dest Filepaths
+const app = './';
+function start() {
+	const str = performance.now();
+	return str;
+}
+function end(a, n, x, s) {
+	const e = performance.now();
+	var done = e - s;
+	done = done.toFixed(2);
+	log(
+		c.bold[a](n),
+		c.bold.cyan.italic(`${x} in ${c.bold.yellow(`${done}`)} ms`)
+	);
+	return done;
+}
 
 const npm = {
 	merge: function () {
-		return src(nodemon).pipe(dest('npm/src'));
+		const s = start();
+		return src(nodemon)
+			.pipe(dest('npm/src'))
+			.on('end', () => {
+				end('green', 'NPM', 'Files Merged', s);
+			});
 	},
 	publish: function () {
-		return src('./npm').pipe(shell('cd npm && npm publish'));
+		const s = start();
+		return src('./npm')
+			.pipe(shell('cd npm && npm publish'))
+			.on('end', () => {
+				end('magenta', 'NPM', 'Package Published', s);
+			});
 	},
 	install: function () {
-		return src('./app').pipe(
-			shell(
-				'cd C:/Users/Seerseven/Mithrasatori/Desmond/app && npm install --save-dev --no-audit @seerseven/desmond@latest'
+		const s = start();
+		return src('./app')
+			.pipe(
+				shell(
+					'cd C:/Users/Seerseven/Mithrasatori/Desmond/app && npm install --save-dev --no-audit @seerseven/desmond@latest'
+				)
 			)
-		);
+			.on('end', () => {
+				end('red', 'NPM', 'Package Installed', s);
+			});
 	},
 	hey: function () {
 		return src('./').pipe(shell('echo hello world'));
