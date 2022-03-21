@@ -27,7 +27,9 @@ function master() {
 		.pipe(bump({ type: 'patch' }))
 		.pipe(dest('./'));
 }
-
+core.displayName = '[App] : Bump App Package Version #';
+master.displayName = '[Desmond] : Bump Desmond Package Version #';
+npm.displayName = '[Npm] : Bump NPM Package Version #';
 exports.core = core;
 exports.npm = npm;
 exports.master = master;

@@ -49,21 +49,55 @@ exports.hey = npm.hey;
 
 exports.vers = ver.version;
 
-task('deploy', series(dep.save, dep.send));
-
-const deploy = task('deploy');
-deploy.description = 'Build the project';
-exports.deploy = deploy;
-
+// task('deploy', series(dep.save, dep.send));
 task('theme', series(arc.shopifytheme, shop.pushtheme));
 task('vault', series(ver.version, arc.copy, arc.zip, arc.rem));
 task('npm', series(arc.merge, ver.npm, npm.node));
 
-exports.default = function () {
+// Watch files
+function watcher() {
 	// Watch the Main README.md for changes / Git Commit Changes / Git Push Changes
 	watch('./README.md', task('deploy'));
-	// Watch the Shopify Log.md for changes / Zip Shopify Theme / Archive Shopify Theme
+	// Watch the Shopify Log.md for changes / Zip Shopify Theme / Archive Shopify
 	watch('app/shopify/LOG.md', task('theme'));
 	watch('state/LOG.md', task('vault'));
 	watch('app/node_modules/@seerseven/desmond/src/*.js', task('npm'));
-};
+}
+watcher.displayName = 'Watcher : Watch Files for Changes';
+
+// export tasks
+exports.deploy = dep.deploy;
+exports.default = series(watcher);
+
+// const deploy = series(dep.save, dep.send);
+
+// function deploy() {
+// 	get.save();
+// 	get.send();
+// }
+
+// task('theme', series(arc.shopifytheme, shop.pushtheme));
+// task('vault', series(ver.version, arc.copy, arc.zip, arc.rem));
+// task('npm', series(arc.merge, ver.npm, npm.node));
+
+// // Watch files
+// function watchFiles() {
+// 	// Watch the Main README.md for changes / Git Commit Changes / Git Push Changes
+// 	watch('./README.md', task('deploy'));
+// 	// Watch the Shopify Log.md for changes / Zip Shopify Theme / Archive Shopify
+// 	watch('app/shopify/LOG.md', task('theme'));
+// 	watch('state/LOG.md', task('vault'));
+// 	watch('app/node_modules/@seerseven/desmond/src/*.js', task('npm'));
+// }
+
+// function bump(cb) {
+// 	series(ver.master, ver.core, ver.npm);
+// 	cb();
+// }
+// bump.displayName = '[Bump] : Bump Version Number of All Package.jsons';
+
+// // define complex tasks
+// const watcher = series(bump);
+
+// // export tasks
+// exports.default = watcher;

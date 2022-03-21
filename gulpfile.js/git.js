@@ -31,6 +31,8 @@ const get = {
 		done();
 	},
 };
-
+get.save.displayName = '[Save] : Git Add, Commit All';
+get.send.displayName = '[send] : Gip Push Origin Master';
 exports.save = get.save;
 exports.send = get.send;
+exports.deploy = series(get.save, get.send);
