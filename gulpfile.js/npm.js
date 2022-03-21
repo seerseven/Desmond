@@ -7,6 +7,9 @@ const npm = {
 	node: function () {
 		return src('./npm').pipe(shell('cd npm && npm publish'));
 	},
+	hey: function () {
+		return src('./').pipe(shell('echo hello world'));
+	},
 	json: function () {
 		return src('./app').pipe(
 			shell(
@@ -17,4 +20,5 @@ const npm = {
 };
 
 exports.node = npm.node;
+exports.hey = npm.hey;
 exports.json = npm.json;

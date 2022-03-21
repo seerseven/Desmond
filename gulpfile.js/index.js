@@ -45,16 +45,24 @@ exports.send = dep.send;
 //Git Add, Commit & Push
 exports.node = npm.node;
 exports.json = npm.json;
+exports.hey = npm.hey;
 
 exports.vers = ver.version;
 
 task('deploy', series(dep.save, dep.send));
+
+const deploy = task('deploy');
+deploy.description = 'Build the project';
+exports.deploy = deploy;
+
 task('theme', series(arc.shopifytheme, shop.pushtheme));
 task('vault', series(ver.version, arc.copy, arc.zip, arc.rem));
 task('npm', series(arc.merge, ver.npm, npm.node));
 
 exports.default = function () {
+	// Watch the Main README.md for changes / Git Commit Changes / Git Push Changes
 	watch('./README.md', task('deploy'));
+	// Watch the Shopify Log.md for changes / Zip Shopify Theme / Archive Shopify Theme
 	watch('app/shopify/LOG.md', task('theme'));
 	watch('state/LOG.md', task('vault'));
 	watch('app/node_modules/@seerseven/desmond/src/*.js', task('npm'));
