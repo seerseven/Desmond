@@ -4,6 +4,7 @@ const { series, parallel, watch, src, dest, task } = require('gulp');
 const clean = require('gulp-clean');
 const zip = require('gulp-zip');
 var fs = require('fs');
+const version = require('./bump.js');
 
 //Variables
 
@@ -63,7 +64,7 @@ var sh = '' + ti + ampm + '-' + date + month + year;
 var caps = x.toUpperCase();
 var shCaps = sh.toUpperCase();
 var base = 'state/tholos/';
-var app = 'APP-';
+var appp = 'APP-';
 var npm = 'NPM-';
 var shop = 'THEME-V00-';
 var arch = 'ARCHIVE-';
@@ -72,8 +73,8 @@ var zp = '.zip';
 
 //Folder Names with Timestamp
 function dirName(val) {
-	if (val === 'app') {
-		var full = base + app + caps;
+	if (val === 'appp') {
+		var full = base + appp + caps;
 	}
 	if (val === 'npm') {
 		var full = base + npm + caps;
@@ -90,8 +91,8 @@ function dirName(val) {
 	return full;
 }
 function zipName(val) {
-	if (val === 'app') {
-		var full = app + caps + zp;
+	if (val === 'appp') {
+		var full = appp + caps + zp;
 	}
 	if (val === 'npm') {
 		var full = npm + caps + zp;
@@ -107,17 +108,17 @@ function zipName(val) {
 	}
 	return full;
 }
-var appName = dirName('app');
+var appName = dirName('appp');
 var npmName = dirName('npm');
 var shopName = dirName('shop');
 var desName = dirName('des');
-var appZipName = zipName('app');
+var appZipName = zipName('appp');
 var npmZipName = zipName('npm');
 var shopZipName = zipName('shop');
 var archZipName = zipName('arch');
 var desZipName = zipName('des');
 
-const desmond = {
+const dez = {
 	copy: function () {
 		const folders = [desName];
 		folders.forEach((dir) => {
@@ -132,12 +133,12 @@ const desmond = {
 			.pipe(zip(desZipName))
 			.pipe(dest(vault));
 	},
-	rem: function () {
+	clean: function () {
 		return src(desName).pipe(clean());
 	},
 };
 
-const theme = {
+const app = {
 	copy: function () {
 		const folders = [appName];
 		folders.forEach((dir) => {
@@ -152,7 +153,7 @@ const theme = {
 			.pipe(zip(appZipName))
 			.pipe(dest(vault));
 	},
-	rem: function () {
+	clean: function () {
 		return src(appName).pipe(clean());
 	},
 };
@@ -172,7 +173,7 @@ const node = {
 			.pipe(zip(npmZipName))
 			.pipe(dest(vault));
 	},
-	rem: function () {
+	clean: function () {
 		return src(npmName).pipe(clean());
 	},
 };
@@ -192,12 +193,12 @@ const shopify = {
 			.pipe(zip(shopZipName))
 			.pipe(dest(themevault));
 	},
-	rem: function () {
+	clean: function () {
 		return src(shopName).pipe(clean());
 	},
 };
 
-const archive = {
+const project = {
 	zip: function () {
 		return src([
 			'state/tholos/**/*',
@@ -207,33 +208,49 @@ const archive = {
 			.pipe(zip(archZipName))
 			.pipe(dest(vault));
 	},
-	rem: function () {
+	clean: function () {
 		return src([npmName, appName, desName]).pipe(clean());
-	},
-	merge: function () {
-		return src(nodemon).pipe(dest('npm/src'));
 	},
 };
 
-exports.dcopy = desmond.copy;
-exports.dzip = desmond.zip;
-exports.drem = desmond.rem;
+dez.copy.displayName = 'Des(copy)      : Copy Desmond Files for Backup';
+dez.zip.displayName = 'Des(zip)       : Zip Desmond Files & Archive';
+dez.clean.displayName = 'Des(clean)     : Clean File Leftovers';
+app.copy.displayName = 'App(Copy)      : Copy App Files for Backup';
+app.zip.displayName = 'App(zip)       : Zip App Files & Archive';
+app.clean.displayName = 'App(clean)     : Clean File Leftovers';
+node.copy.displayName = 'Npm(copy)      : Copy NPM Files for Backup';
+node.zip.displayName = 'Npm(zip)       : Zip NPM Files & Archive';
+node.clean.displayName = 'Npm(clean)     : Clean File Leftovers';
+project.zip.displayName = 'Project(zip)   : Zip Project Folders & Archive';
+project.clean.displayName = 'Project(clean) : Clean Project File Leftovers';
 
-exports.tcopy = theme.copy;
-exports.tzip = theme.zip;
-exports.trem = theme.rem;
+exports.dezcopy = dez.copy;
+exports.dezzip = dez.zip;
+exports.dezclean = dez.clean;
 
-exports.ncopy = node.copy;
-exports.nzip = node.zip;
-exports.nrem = node.rem;
+exports.appcopy = app.copy;
+exports.appzip = app.zip;
+exports.appclean = app.clean;
 
-exports.scopy = shopify.copy;
-exports.szip = shopify.zip;
-exports.srem = shopify.rem;
+exports.nodecopy = node.copy;
+exports.nodezip = node.zip;
+exports.nodeclean = node.clean;
 
-exports.merge = archive.merge;
-exports.zip = archive.zip;
-exports.rem = archive.rem;
+exports.projectzip = project.zip;
+exports.projectclean = project.clean;
 
-exports.copy = parallel(desmond.copy, theme.copy, node.copy);
-exports.shopifytheme = series(shopify.copy, shopify.zip, shopify.rem);
+exports.desmond = series(dez.copy, dez.zip, dez.clean);
+exports.app = series(app.copy, app.zip, app.clean);
+exports.npm = series(node.copy, node.zip, node.clean);
+exports.theme = series(
+	parallel(dez.copy, app.copy, node.copy),
+	project.zip,
+	project.clean
+);
+exports.project = series(
+	version.bump,
+	parallel(dez.copy, app.copy, node.copy),
+	project.zip,
+	project.clean
+);

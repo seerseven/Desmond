@@ -3,9 +3,6 @@ const git = require('gulp-git');
 const push = require('gulp-git-push');
 const gitignore = require('gulp-gitignore');
 
-//Define Src and Dest Filepaths
-const app = './';
-
 const get = {
 	save: function () {
 		return src([
@@ -31,8 +28,8 @@ const get = {
 		done();
 	},
 };
-get.save.displayName = '[Commit] : Git Add, Commit All';
-get.send.displayName = '[Push] : Gip Push Origin Master';
-exports.save = get.save;
-exports.send = get.send;
+get.save.displayName = 'Commit : Git Add, Commit All';
+get.send.displayName = 'Push   : Gip Push Origin Master';
+exports.commit = series(get.save);
+exports.shove = series(get.send);
 exports.deploy = series(get.save, get.send);

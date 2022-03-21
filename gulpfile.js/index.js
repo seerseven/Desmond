@@ -1,103 +1,40 @@
 'use strict';
 
-const { series, parallel, watch, src, dest, task } = require('gulp');
-const arc = require('./archive.js');
-const ver = require('./logger.js');
+const { series } = require('gulp');
+const zip = require('./archive.js');
+const ver = require('./bump.js');
 const shop = require('./shopify.js');
-const gitt = require('./git.js');
-const npm = require('./npm.js');
+const watch = require('./watch.js');
+const git = require('./git.js');
+const npx = require('./npm.js');
 
-//Archive Desmond Core Files
-exports.dcopy = arc.dcopy;
-exports.dzip = arc.dzip;
-exports.drem = arc.drem;
+//Misc Tasks
+exports.bump = ver.bump;
+exports.app = ver.app;
+exports.npm = ver.npm;
+exports.des = ver.des;
 
-//Archive Main APP Folder
-exports.tcopy = arc.tcopy;
-exports.tzip = arc.tzip;
-exports.trem = arc.trem;
+//NPM Tasks
+exports.merge = npx.merge;
+exports.publish = npx.publish;
+exports.install = npx.install;
+exports.package = npx.package;
+exports.npmpackage = npx.npmpackage;
 
-//Archive NPM Package Folder
-exports.ncopy = arc.ncopy;
-exports.nzip = arc.nzip;
-exports.nrem = arc.nrem;
+//Shopify Tasks
+exports.dawn = shop.shove;
+exports.shopify = shop.theme;
 
-//Archive Shopify Theme
-exports.scopy = arc.scopy;
-exports.szip = arc.szip;
-exports.srem = arc.srem;
+//Commit & Push Tasks
+exports.commit = git.commit;
+exports.shove = git.shove;
+exports.deploy = git.deploy;
 
-//Archive ALL at Once
-exports.merge = arc.merge;
-exports.zip = arc.zip;
-exports.rem = arc.rem;
+//Archive Tasks
+exports.theme = zip.app;
+exports.node = zip.npm;
+exports.desmond = zip.desmond;
+exports.archive = zip.project;
 
-//Version Bump Package.JSON Files
-exports.verCore = ver.core;
-exports.verNpm = ver.npm;
-exports.verMaster = ver.master;
-
-//Git Add, Commit & Push
-exports.pushtheme = shop.pushtheme;
-exports.save = gitt.save;
-exports.send = gitt.send;
-
-//Git Add, Commit & Push
-exports.node = npm.node;
-exports.json = npm.json;
-exports.hey = npm.hey;
-
-exports.vers = ver.version;
-
-// task('deploy', series(dep.save, dep.send));
-task('theme', series(arc.shopifytheme, shop.pushtheme));
-task('vault', series(ver.version, arc.copy, arc.zip, arc.rem));
-task('npm', series(arc.merge, ver.npm, npm.node));
-
-// Watch files
-function watcher() {
-	// Watch the Main README.md for changes / Git Commit Changes / Git Push Changes
-	watch('./README.md', dep.deploy);
-	// Watch the Shopify Log.md for changes / Zip Shopify Theme / Archive Shopify
-	watch('app/shopify/LOG.md', task('theme'));
-	watch('state/LOG.md', task('vault'));
-	watch('app/node_modules/@seerseven/desmond/src/*.js', task('npm'));
-}
-watcher.displayName = 'Watcher : Watch Files for Changes';
-
-// export tasks
-exports.deploy = gitt.deploy;
-exports.default = series(watcher);
-
-// const deploy = series(dep.save, dep.send);
-
-// function deploy() {
-// 	get.save();
-// 	get.send();
-// }
-
-// task('theme', series(arc.shopifytheme, shop.pushtheme));
-// task('vault', series(ver.version, arc.copy, arc.zip, arc.rem));
-// task('npm', series(arc.merge, ver.npm, npm.node));
-
-// // Watch files
-// function watchFiles() {
-// 	// Watch the Main README.md for changes / Git Commit Changes / Git Push Changes
-// 	watch('./README.md', task('deploy'));
-// 	// Watch the Shopify Log.md for changes / Zip Shopify Theme / Archive Shopify
-// 	watch('app/shopify/LOG.md', task('theme'));
-// 	watch('state/LOG.md', task('vault'));
-// 	watch('app/node_modules/@seerseven/desmond/src/*.js', task('npm'));
-// }
-
-// function bump(cb) {
-// 	series(ver.master, ver.core, ver.npm);
-// 	cb();
-// }
-// bump.displayName = '[Bump] : Bump Version Number of All Package.jsons';
-
-// // define complex tasks
-// const watcher = series(bump);
-
-// // export tasks
-// exports.default = watcher;
+//Build & Default Tasks
+exports.default = watch.files;

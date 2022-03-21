@@ -1,6 +1,6 @@
 {
   "name": "desmond-core",
-  "version": "1.0.11",
+  "version": "1.0.19",
   "description": "Modern development workflow, built with performance and best practices in mind..",
   "repository": "seerseven/desmond",
   "author": "Seerseven <dev@seerseven.com>",
@@ -21,7 +21,7 @@
     "lint": "desmond lint"
   },
   "devDependencies": {
-    "@seerseven/desmond": "^1.0.18",
+    "@seerseven/desmond": "^1.0.33",
     "autoprefixer": "^10.4.2",
     "concurrently": "^7.0.0",
     "css-declaration-sorter": "^6.1.4",
