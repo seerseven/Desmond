@@ -4,7 +4,7 @@ const { series, parallel, watch, src, dest, task } = require('gulp');
 const arc = require('./archive.js');
 const ver = require('./logger.js');
 const shop = require('./shopify.js');
-const dep = require('./git.js');
+const gitt = require('./git.js');
 const npm = require('./npm.js');
 
 //Archive Desmond Core Files
@@ -39,8 +39,8 @@ exports.verMaster = ver.master;
 
 //Git Add, Commit & Push
 exports.pushtheme = shop.pushtheme;
-exports.save = dep.save;
-exports.send = dep.send;
+exports.save = gitt.save;
+exports.send = gitt.send;
 
 //Git Add, Commit & Push
 exports.node = npm.node;
@@ -57,7 +57,7 @@ task('npm', series(arc.merge, ver.npm, npm.node));
 // Watch files
 function watcher() {
 	// Watch the Main README.md for changes / Git Commit Changes / Git Push Changes
-	watch('./README.md', task('deploy'));
+	watch('./README.md', dep.deploy);
 	// Watch the Shopify Log.md for changes / Zip Shopify Theme / Archive Shopify
 	watch('app/shopify/LOG.md', task('theme'));
 	watch('state/LOG.md', task('vault'));
@@ -66,7 +66,7 @@ function watcher() {
 watcher.displayName = 'Watcher : Watch Files for Changes';
 
 // export tasks
-exports.deploy = dep.deploy;
+exports.deploy = gitt.deploy;
 exports.default = series(watcher);
 
 // const deploy = series(dep.save, dep.send);
