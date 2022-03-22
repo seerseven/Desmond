@@ -24,13 +24,11 @@ const get = {
 					args: '-m "gulp commit"',
 					disableMessageRequirement: true,
 				}),
-				chalk.logger('Git: Commit', 'Save All Changes...', chalk.ghex)
-			)
-			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'All Changes Saved to Local Repo... ', chalk.ghex, s);
-				chalk.frey();
-			});
+				chalk.logger('Git: Commit', 'Save All Changes...', chalk.ghex),
+				chalk.frey(),
+				chalk.end(v, 'All Changes Saved to Local Repo... ', chalk.ghex, s),
+				chalk.frey()
+			);
 	},
 	send: function (done) {
 		const s = chalk.start();
