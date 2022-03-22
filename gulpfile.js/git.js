@@ -32,6 +32,7 @@ const get = {
 			});
 	},
 	send: function (done) {
+		const s = chalk.start();
 		git.push('origin', 'master', function (err) {
 			if (err) throw err;
 		});
