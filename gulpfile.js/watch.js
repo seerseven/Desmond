@@ -4,6 +4,7 @@ const ver = require('./bump.js');
 const shop = require('./shopify.js');
 const git = require('./git.js');
 const npx = require('./npm.js');
+const chalk = require('./chalk.js');
 
 //Watch Tasks
 const task = {
@@ -12,6 +13,12 @@ const task = {
 	npmpackage: series(ver.npm, npx.package),
 	archive: series(zip.project),
 };
+
+function watcherWoman() {
+	const s = chalk.start();
+	chalk.watcher();
+	return src('app/shopify');
+}
 
 // Watch files
 function watchFiles() {
@@ -27,3 +34,4 @@ function watchFiles() {
 watchFiles.displayName = 'Watchfiles : Watch Files for Changes';
 
 exports.files = series(watchFiles);
+exports.status = series(watcherWoman);

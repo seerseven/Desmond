@@ -2,9 +2,14 @@ const { src, series } = require('gulp');
 const git = require('gulp-git');
 const push = require('gulp-git-push');
 const gitignore = require('gulp-gitignore');
+const chalk = require('./chalk.js');
+const cmd = require('./chalk.js');
+const v = ' Git: ';
 
 const get = {
 	save: function () {
+		chalk.desmond(chalk.ghex);
+		const s = chalk.start();
 		return src([
 			'./*',
 			'!./node_modules/**',
@@ -19,13 +24,25 @@ const get = {
 					args: '-m "gulp commit"',
 					disableMessageRequirement: true,
 				})
-			);
+			)
+			.on('end', () => {
+				chalk.frey();
+				chalk.end(v, 'App Version... ', chalk.dhex, s);
+				chalk.frey();
+			});
 	},
 	send: function (done) {
-		git.push('origin', 'master', function (err) {
-			if (err) throw err;
-		});
+		git
+			.push('origin', 'master', function (err) {
+				if (err) throw err;
+			})
+			.on('end', () => {
+				chalk.frey();
+				chalk.end(v, 'App Version... ', chalk.dhex, s);
+				chalk.frey();
+			});
 		done();
+		chalk.desmond(chalk.ghex);
 	},
 };
 get.save.displayName = 'Commit : Git Add, Commit All';

@@ -5,9 +5,8 @@ const shell = require('gulp-shell');
 const clean = require('gulp-clean');
 const zip = require('gulp-zip');
 var fs = require('fs');
-const c = require('ansi-colors');
-const log = require('fancy-log');
-const { performance } = require('perf_hooks');
+const chalk = require('./chalk.js');
+const v = ' Shopify: ';
 
 function folderNamer() {
 	var months = [
@@ -61,66 +60,103 @@ var themeName = folderNamer();
 var folder = base + themeName;
 var zipper = themeName + zp;
 
-function start() {
-	const str = performance.now();
-	return str;
-}
-function end(a, n, x, s) {
-	const e = performance.now();
-	var done = e - s;
-	done = done.toFixed(2);
-	log(
-		c.bold[a](n),
-		c.bold.cyan.italic(`${x} in ${c.bold.yellow(`${done}`)} ms`)
-	);
-	return done;
-}
-
 const shopify = {
 	copy: function () {
-		const s = start();
+		chalk.desmond(chalk.shex);
+		const s = chalk.start();
 		const folders = [folder];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		});
-		log(c.bold.cyan.italic('Theme Folder Created'));
+		chalk.dir();
+		chalk.desmond(chalk.shex);
+		chalk.break();
+		chalk.frey();
 		return src(['app/shopify/**/*', NOTHEME])
 			.pipe(dest(folder))
 			.on('end', () => {
-				end('green', 'Shopify', 'Files Copied', s);
+				chalk.end(v, 'Files Copied... ', chalk.shex, s);
 			});
 	},
 	zip: function () {
-		const s = start();
+		chalk.frey();
+		const s = chalk.start();
 		return src([folder + '/**/*'])
 			.pipe(zip(zipper))
 			.pipe(dest(themevault))
 			.on('end', () => {
-				end('blue', 'Shopify', 'Files Zipped & Archived', s);
+				chalk.end(v, 'Zipped & Archived... ', chalk.shex, s);
 			});
 	},
 	clean: function () {
-		const s = start();
+		chalk.frey();
+		const s = chalk.start();
 		return src(folder)
 			.pipe(clean())
 			.on('end', () => {
-				end(
-					'magenta',
-					'Shopify',
-					'Files & Folders Removed | Directory Cleaned',
-					s
-				);
+				chalk.end(v, 'Files Deleted & Directory Cleansed... ', chalk.shex, s);
+				chalk.frey();
 			});
 	},
 	push: function () {
-		const s = start();
+		chalk.break();
+		chalk.desmond(chalk.shex);
+		const s = chalk.start();
 		return src('app/shopify')
 			.pipe(shell('cd app/shopify && echo y && echo y | shopify theme push'))
 			.on('end', () => {
-				end('yellow', 'Shopify', 'Theme Pushed', s);
+				chalk.desmond(chalk.shex);
+				chalk.end(v, 'Theme Pushed Successfully... ', chalk.shex, s);
+				chalk.desmond(chalk.shex);
 			});
+	},
+	unpub: function () {
+		chalk.break();
+		chalk.desmond(chalk.shex);
+		const s = chalk.start();
+		return src('app/shopify')
+			.pipe(shell('cd app/shopify && shopify theme push --unpublished'))
+			.on('end', () => {
+				chalk.desmond(chalk.shex);
+				chalk.end(v, 'Theme Pushed Successfully... ', chalk.shex, s);
+				chalk.desmond(chalk.shex);
+			});
+	},
+	pull: function () {
+		chalk.break();
+		chalk.desmond(chalk.shex);
+		const s = chalk.start();
+		return src('app/shopify')
+			.pipe(shell('cd app/shopify && echo y && echo y | shopify theme pull'))
+			.on('end', () => {
+				chalk.desmond(chalk.shex);
+				chalk.end(v, 'Theme Pulled Successfully... ', chalk.shex, s);
+				chalk.desmond(chalk.shex);
+			});
+	},
+	serve: function () {
+		chalk.empty();
+		chalk.desmond(chalk.shex);
+		const s = chalk.start();
+		return src('app/shopify')
+			.pipe(shell('shopify login --store seerseven.myshopify.com'))
+			.pipe(shell('cd app/shopify && shopify theme serve'))
+			.on('end', () => {
+				chalk.end(v, 'Logged into Shopify Local Theme... ', chalk.shex, s);
+				chalk.desmond(chalk.shex);
+			});
+	},
+	links: function () {
+		chalk.empty();
+		const s = chalk.start();
+		chalk.url();
+		return src('app/shopify').on('end', () => {
+			chalk.desmond(chalk.shex);
+			chalk.end(v, 'Displayed Links... ', chalk.shex, s);
+			chalk.desmond(chalk.shex);
+		});
 	},
 };
 
@@ -131,7 +167,17 @@ shopify.clean.displayName = 'Shopify(clean) : Clean Theme File Leftovers';
 shopify.push.displayName = 'Shopify(shove)  : Push Local Changes to Live Theme';
 
 exports.copy = series(shopify.copy);
+exports.links = series(shopify.links);
+exports.serve = series(shopify.serve);
+exports.pull = series(shopify.pull);
+exports.unpub = series(shopify.unpub);
 exports.zip = series(shopify.zip);
 exports.clean = series(shopify.clean);
-exports.shove = series(shopify.push);
-exports.theme = series(shopify.copy, shopify.zip, shopify.clean, shopify.push);
+exports.shove = series(shopify.push, shopify.links);
+exports.theme = series(
+	shopify.copy,
+	shopify.zip,
+	shopify.clean,
+	shopify.push,
+	shopify.links
+);

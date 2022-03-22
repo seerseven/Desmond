@@ -5,7 +5,7 @@ const clean = require('gulp-clean');
 const zip = require('gulp-zip');
 var fs = require('fs');
 const version = require('./bump.js');
-const c = require('ansi-colors');
+const c = require('chalk');
 const log = require('fancy-log');
 const { performance } = require('perf_hooks');
 
