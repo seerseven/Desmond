@@ -8,7 +8,6 @@ const v = ' Git: ';
 
 const get = {
 	save: function () {
-		chalk.desmond(chalk.ghex);
 		const s = chalk.start();
 		chalk.logger(' Git: Add *', 'Stage All Changes...', chalk.ghex);
 		return src([
@@ -28,9 +27,9 @@ const get = {
 				chalk.logger('Git: Commit', 'Save All Changes...', chalk.ghex)
 			)
 			.on('end', () => {
-				// chalk.frey();
-				// chalk.end(v, 'All Changes Saved to Local Repo... ', chalk.ghex, s);
-				// chalk.frey();
+				chalk.frey();
+				chalk.end(v, 'All Changes Saved to Local Repo... ', chalk.ghex, s);
+				chalk.frey();
 			});
 	},
 	send: function (done) {
