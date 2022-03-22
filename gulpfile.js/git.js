@@ -10,6 +10,7 @@ const get = {
 	save: function () {
 		chalk.desmond(chalk.ghex);
 		const s = chalk.start();
+		chalk.logger(' Git: Add *', 'Stage All Changes...', chalk.ghex);
 		return src([
 			'./*',
 			'!./node_modules/**',
@@ -18,18 +19,18 @@ const get = {
 			'!./package-lock.json',
 			'!./app/package-lock.json',
 		])
-			.pipe(git.add(), chalk.logger('Git', 'Stage All Files...', chalk.ghex))
+			.pipe(git.add())
 			.pipe(
 				git.commit(undefined, {
 					args: '-m "gulp commit"',
 					disableMessageRequirement: true,
 				}),
-				chalk.logger('Git', 'Commit All Changes...', chalk.ghex)
+				chalk.logger('Git: Commit', 'Save All Changes...', chalk.ghex)
 			)
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'All Changes Saved to Local Repo... ', chalk.ghex, s);
-				chalk.frey();
+				// chalk.frey();
+				// chalk.end(v, 'All Changes Saved to Local Repo... ', chalk.ghex, s);
+				// chalk.frey();
 			});
 	},
 	send: function (done) {
@@ -44,8 +45,8 @@ const get = {
 		chalk.desmond(chalk.ghex);
 	},
 };
-get.save.displayName = 'Commit : Git Add, Commit All';
-get.send.displayName = 'Push   : Gip Push Origin Master';
+// get.save.displayName = 'Commit : Git Add, Commit All';
+// get.send.displayName = 'Push   : Gip Push Origin Master';
 exports.commit = series(get.save);
 exports.shove = series(get.send);
 exports.deploy = series(get.save, get.send);
