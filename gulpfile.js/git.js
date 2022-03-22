@@ -27,7 +27,7 @@ const get = {
 			)
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v, 'App Version... ', chalk.dhex, s);
+				chalk.end(v, 'Git Add & Commit... ', chalk.dhex, s);
 				chalk.frey();
 			});
 	},
@@ -38,7 +38,7 @@ const get = {
 			})
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v, 'App Version... ', chalk.dhex, s);
+				chalk.end(v, 'Git Push Origin Master... ', chalk.dhex, s);
 				chalk.frey();
 			});
 		done();
