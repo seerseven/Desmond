@@ -7,6 +7,9 @@ const ver = require('./bump.js');
 const chalk = require('./chalk.js');
 const cmd = require('./chalk.js');
 const v = ' NPM: ';
+const { exec } = require('child_process');
+
+function child() {}
 
 //Define Src and Dest Filepaths
 
@@ -45,6 +48,11 @@ const npm = {
 				chalk.frey();
 			});
 	},
+	child: function () {
+		return exec(
+			'wt -p "Command Prompt" C:/Users/Seerseven/Mithrasatori/Desmond/npm.bat ; split-pane -p "Command Prompt" C:/Users/Seerseven/Mithrasatori/Desmond/shopify.bat  '
+		);
+	},
 };
 
 npm.merge.displayName = 'Merge : Merge @seerseven Package from Node_Modules';
@@ -54,6 +62,7 @@ npm.install.displayName = 'Install : Install @seerseven NPM Package';
 exports.publish = series(chalk.br, npm.publish);
 exports.install = series(chalk.br, npm.install);
 exports.merge = series(chalk.br, npm.merge);
+exports.child = series(npm.child);
 
 exports.package = series(ver.npm, npm.merge, npm.publish);
 exports.npmpackage = series(ver.npm, npm.merge, npm.publish, npm.install);

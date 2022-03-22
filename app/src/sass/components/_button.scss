@@ -11,63 +11,62 @@
 ///   ...add others if you want.
 ///
 
-
 button,
 .button {
-  cursor: pointer;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  text-align: center;
-  text-decoration: none;
-  border: 0;
-  border-radius: rem(3px);
-  padding: rem(12px) rem(18px);
-  font-family: $font-heading-family;
-  font-style: $font-heading-style;
-  font-weight: $font-heading-weight;
-  font-size: rem(20px);
-  user-select: none;
-  appearance: none;
-  transition: transform 200ms ease-in;
+	cursor: pointer;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+	text-align: center;
+	text-decoration: none;
+	border: 0;
+	border-radius: rem(3px);
+	padding: rem(12px) rem(18px);
+	font-family: $font-heading-family;
+	font-style: $font-heading-style;
+	font-weight: $font-heading-weight;
+	font-size: rem(20px);
+	user-select: none;
+	appearance: none;
+	transition: transform 200ms ease-in;
 
-  &:hover,
-  &.-primary:hover {
-    text-decoration: none;
-  }
+	&:hover,
+	&.-primary:hover {
+		text-decoration: none;
+	}
 
-  /// Color variants
-  &,
-  &.-primary {
-    background-color: $color-base-solid-button;
-    color: $color-base-background-primary;
-  }
+	/// Color variants
+	&,
+	&.-primary {
+		background-color: $color-base-solid-button;
+		color: $color-base-background-primary;
+	}
 
-  &.-secondary {
-    background-color: transparent;
-    color: $color-base-outline-button;
-    border: 1px solid $color-base-outline-button;
-  }
+	&.-secondary {
+		background-color: transparent;
+		color: $color-base-outline-button;
+		border: 1px solid $color-base-outline-button;
+	}
 
-  /// Size variants
-  &.-small {
-    min-width: 6rem;
-  }
+	/// Size variants
+	&.-small {
+		min-width: 6rem;
+	}
 
-  &.-large {
-    min-width: 20rem;
-  }
+	&.-large {
+		min-width: 20rem;
+	}
 
-  /// State variation
-  &.-loading {
-    cursor: not-allowed;
-    opacity: 0.8;
-  }
+	/// State variation
+	&.-loading {
+		cursor: not-allowed;
+		opacity: 0.8;
+	}
 
-  &:disabled,
-  &[aria-disabled='true'] {
-    cursor: not-allowed;
-    background-color: gray;
-  }
+	&:disabled,
+	&[aria-disabled='true'] {
+		cursor: not-allowed;
+		background-color: gray;
+	}
 }

@@ -152,11 +152,13 @@ const shopify = {
 		chalk.empty();
 		const s = chalk.start();
 		chalk.url();
-		return src('app/shopify').on('end', () => {
-			chalk.desmond(chalk.shex);
-			chalk.end(v, 'Displayed Links... ', chalk.shex, s);
-			chalk.desmond(chalk.shex);
-		});
+		return src('app/shopify');
+	},
+	devlinks: function () {
+		chalk.empty();
+		const s = chalk.start();
+		chalk.dev();
+		return src('app/shopify');
 	},
 };
 
@@ -168,12 +170,14 @@ shopify.push.displayName = 'Shopify(shove)  : Push Local Changes to Live Theme';
 
 exports.copy = series(shopify.copy);
 exports.links = series(shopify.links);
+exports.devlinks = series(shopify.devlinks);
 exports.serve = series(shopify.serve);
 exports.pull = series(shopify.pull);
 exports.unpub = series(shopify.unpub);
 exports.zip = series(shopify.zip);
 exports.clean = series(shopify.clean);
 exports.shove = series(shopify.push, shopify.links);
+exports.deslinks = series(shopify.devlinks, shopify.links);
 exports.theme = series(
 	shopify.copy,
 	shopify.zip,

@@ -25,6 +25,7 @@ exports.npmpackage = npx.npmpackage;
 
 //Shopify Tasks
 exports.links = shop.links;
+exports.devlinks = shop.devlinks;
 exports.themepull = shop.pull;
 exports.themenew = shop.unpub;
 exports.themeserve = shop.serve;
@@ -43,4 +44,5 @@ exports.zipdes = zip.des;
 exports.archive = zip.project;
 
 //Build & Default Tasks
-exports.default = series(shop.links, watch.status, watch.files);
+exports.default = series(watch.status, watch.files);
+exports.dev = npx.child;

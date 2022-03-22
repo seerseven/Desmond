@@ -1,10 +1,10 @@
 {
   "name": "desmond-master",
-  "version": "1.0.28",
+  "version": "1.0.21",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"gulp\" \"node cron.js\""
+    "start": "gulp -L"
   },
   "author": "",
   "license": "ISC",

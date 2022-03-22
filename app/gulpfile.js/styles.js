@@ -4,6 +4,12 @@ const cssnano = require('gulp-cssnano');
 const rename = require('gulp-rename');
 const postcss = require('gulp-postcss');
 const concat = require('gulp-concat-css');
+const notify = require('gulp-notify');
+const noop = require('gulp-noop');
+const chalk = require('./chalk.js');
+const log = require('./chalk.js');
+const c = require('./chalk.js');
+const z = ' CSS: ';
 
 const v = {
 	build: 'src/build/',
@@ -29,26 +35,39 @@ const f = {
 
 const css = {
 	shopify: function () {
-		return src([v.build + 'shopify.css'])
+		c.logger(' CSS ', 'COMPILE SHOPIFY CSS', c.blue);
+		const s = chalk.start();
+		log.cmd('Compile SASS to CSS', c.pink);
+		return src([v.build + 'shopify/shopify.css'])
 			.pipe(plumber())
-			.pipe(dest(v.srcDist))
+			.pipe(dest(v.srcDist), log.cmd('Dist Unminified CSS', c.yell))
 			.pipe(dest(v.shopDist))
-			.pipe(cssnano())
+			.pipe(cssnano(), log.cmd('Rename, Minify & Build', c.teal))
 			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist));
+			.pipe(dest(v.shopDist))
+			.on('end', () => {
+				chalk.end(z, 'SHOPIFY.MIN.CSS', c.cyan, s);
+				chalk.desmond(chalk.bhex);
+			});
 	},
 	mdb: function () {
-		return src([v.build + 'mdb.css'])
+		c.logger(' CSS ', 'COMPILE MDB CSS', c.blue);
+		const s = chalk.start();
+		log.cmd('Compile SASS to CSS', c.pink);
+		return src([v.build + 'vendors/mdb.css'])
 			.pipe(plumber())
-			.pipe(postcss())
-			.pipe(dest(v.srcDist))
+			.pipe(dest(v.srcDist), log.cmd('Dist Unminified CSS', c.yell))
 			.pipe(dest(v.shopDist))
-			.pipe(cssnano())
+			.pipe(cssnano(), log.cmd('Rename, Minify & Build', c.teal))
 			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist));
+			.pipe(dest(v.shopDist))
+			.on('end', () => {
+				chalk.end(z, 'MDB.MIN.CSS', c.cyan, s);
+				chalk.desmond(chalk.bhex);
+			});
 	},
 	notion: function () {
-		return src([v.build + 'notion.css'])
+		return src([v.build + 'vendors/notion.css'])
 			.pipe(plumber())
 			.pipe(postcss())
 			.pipe(cssnano())
@@ -56,15 +75,22 @@ const css = {
 			.pipe(dest(v.paraDist));
 	},
 	theme: function () {
-		return src([v.build + 'theme.css'])
+		c.logger(' CSS ', 'COMPILE THEME CSS', c.blue);
+		const s = chalk.start();
+		log.cmd('Compile SASS to CSS', c.pink);
+		return src([v.build + 'theme/theme.css'])
 			.pipe(plumber())
-			.pipe(postcss())
-			.pipe(dest(v.srcDist))
+			.pipe(postcss(), log.cmd('Process POST to CSS', c.purp))
+			.pipe(dest(v.srcDist), log.cmd('Dist Unminified CSS', c.yell))
 			.pipe(dest(v.shopDist))
-			.pipe(cssnano())
+			.pipe(cssnano(), log.cmd('Rename, Minify & Build', c.teal))
 			.pipe(rename({ suffix: '.min' }))
 			.pipe(dest(v.shopDist))
-			.pipe(dest(v.paraDist));
+			.pipe(dest(v.paraDist))
+			.on('end', () => {
+				chalk.end(z, 'THEME.MIN.CSS', c.cyan, s);
+				chalk.desmond(chalk.bhex);
+			});
 	},
 	build: function () {
 		return src(f.build)
@@ -86,3 +112,21 @@ exports.notion = css.notion;
 exports.theme = css.theme;
 exports.build = css.build;
 exports.clean = css.clean;
+
+exports.css = parallel(css.shopify, css.theme);
+
+// var _gulpsrc = gulp.src;
+// gulp.src = function () {
+// 	return _gulpsrc.apply(gulp, arguments).pipe(
+// 		plumber({
+// 			errorHandler: function (err) {
+// 				notify.onError({
+// 					title: 'Gulp Error',
+// 					message: 'Error: <%= error.message %>',
+// 					sound: 'Bottle',
+// 				})(err);
+// 				this.emit('end');
+// 			},
+// 		})
+// 	);
+// };

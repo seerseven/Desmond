@@ -1,6 +1,6 @@
 {
   "name": "desmond-core",
-  "version": "1.0.30",
+  "version": "1.0.21",
   "description": "Modern development workflow, built with performance and best practices in mind..",
   "repository": "seerseven/desmond",
   "author": "Seerseven <dev@seerseven.com>",
@@ -15,14 +15,15 @@
     "defaults"
   ],
   "scripts": {
-    "serve": "concurrently \"desmond serve\" \"gulp\" \"cd shopify && shopify theme serve\" \"cd.. && gulp\"",
+    "serve": "concurrently \"desmond serve\" \"gulp -L\"",
     "watch": "desmond watch",
     "build": "desmond build",
     "lint": "desmond lint"
   },
   "devDependencies": {
-    "@seerseven/desmond": "^1.0.33",
+    "@seerseven/desmond": "^1.0.21",
     "autoprefixer": "^10.4.2",
+    "chalk": "^4.1.0",
     "concurrently": "^7.0.0",
     "css-declaration-sorter": "^6.1.4",
     "del": "^6.0.0",
@@ -39,6 +40,8 @@
     "gulp-gitignore": "^0.1.0",
     "gulp-hub": "^4.2.0",
     "gulp-imagemin": "^7.1.0",
+    "gulp-noop": "^1.0.1",
+    "gulp-notify": "^4.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^9.0.1",
     "gulp-prompt": "^1.2.0",

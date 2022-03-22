@@ -1,14 +1,13 @@
 const { task, series, watch, src, dest, parallel } = require('gulp');
 const plumber = require('gulp-plumber');
 const chalk = require('chalk');
-const log = require('fancy-log');
-const { performance } = require('perf_hooks');
 
 // Cyan = Bump Color
 const bump = '#1cb1dc';
 
 const app = '#d3b352';
-
+const des = '#6db91c';
+const grey = '#3f4549';
 const npm = '#fd2169';
 const arc = '#c26912';
 
@@ -16,8 +15,11 @@ const arc = '#c26912';
 const shop = '#13af73';
 const pink = '#fd2169';
 
+const lpink = '#ef6cf1';
+
 const git = '#7952d3';
 const dep = '#2b0f6b';
+const lpurp = '#7b5be2';
 
 //Duration = Yellow
 const milliseconds = '#ffc000';
@@ -35,17 +37,18 @@ const startnow = start();
 function end(taskName, taskDescription, taskColor, s, type = 1) {
 	const e = performance.now();
 	var ms = e - s;
-	var done = ms.toFixed(2);
-	// var done = ms / 1000.0;
+	var sec = ms.toFixed(2);
+	var done = sec / 1000.0;
+	done = done.toFixed(2);
 	if (type === 1) {
 		console.log(
-			`${chalk.white.bgHex(taskColor).bold(taskName)}`,
+			`${chalk.hex('#7e7e7e').bgHex('#000000').bold('   ✓')}`,
 			`${chalk
 				.hex(text)
 				.italic(
-					`${taskDescription} ${chalk.gray.dim(`finished in:`)} ${chalk
+					`${taskDescription} ${chalk.white.dim(`compiled in:`)} ${chalk
 						.hex(milliseconds)
-						.bgBlack.bold(`${done}ms`)}`
+						.bgBlack.bold(`${done}s`)}`
 				)}`
 		);
 	}
@@ -125,6 +128,26 @@ function logger(taskName, taskDesc, taskColor, type = 1) {
 	);
 }
 
+function cmd(taskDesc, taskColor, type = 1) {
+	if (type === 1) {
+		console.log(
+			`${chalk.hex('#7e7e7e').bgHex('#000000').bold('   ✓')}`,
+			`${chalk.hex(taskColor).italic.bold(taskDesc)}`
+		);
+	}
+	if (type === 2) {
+		console.log(
+			`${chalk.white.bgHex('#000000').bold('------')}`,
+			`${chalk.hex(taskColor).italic.bold(taskDesc)}`
+		);
+	}
+	// console.log(
+	// 	`${chalk.gray.dim(
+	// 		'-------------------------------------------------------'
+	// 	)}`
+	// );
+}
+
 function hguides() {
 	return console.log(
 		`${chalk.hex(bump)(
@@ -156,12 +179,12 @@ function vbreak() {
 
 function watcher() {
 	linebreak();
-	desmond(shop);
+	desmond();
 	console.log(
 		`${chalk.white.bgHex(shop).bold(' Desmond: ')}`,
 		`${chalk.hex(shop).italic.bold(`is Watching for Changes!!`)}`
 	);
-	desmond(shop);
+	desmond();
 }
 
 const urls = {
@@ -232,6 +255,7 @@ function links() {
 const devurls = {
 	git: 'https://github.com/',
 	npm: 'https://www.npmjs.com/',
+	shop: 'https://tinyurl.com/shop-partners',
 };
 
 function dev() {
@@ -275,6 +299,50 @@ function dev() {
 	empty();
 }
 
+function devlinks() {
+	console.log(
+		`${chalk.black('--')}`,
+		`${chalk.white.bgHex(git).bold(' Github: ')}`,
+		`${chalk.hex(mill).italic.bold(`${devurls.git}`)}`
+	);
+	frey();
+	console.log(
+		`${chalk.black('--')}`,
+		`${chalk.white.bgHex(pink).bold(' NpmJS: ')}`,
+		`${chalk.hex(mill).italic.bold(`${devurls.npm}`)}`
+	);
+	frey();
+	console.log(
+		`${chalk.black('--')}`,
+		`${chalk.white.bgHex(bump).bold(' Localhost: ')}`,
+		`${chalk.hex(mill).italic.bold(`${urls.local}`)}`
+	);
+	frey();
+	console.log(
+		`${chalk.black('--')}`,
+		`${chalk.white.bgHex(des).bold(' Shopify: ')}`,
+		`${chalk.hex(mill).italic.bold(`${urls.admin}`)}`
+	);
+	frey();
+	console.log(
+		`${chalk.black('--')}`,
+		`${chalk.white.bgHex(shop).bold(' Partners: ')}`,
+		`${chalk.hex(mill).italic.bold(`${devurls.shop}`)}`
+	);
+	// frey();
+	// console.log(
+	// 	`${chalk.black('--')}`,
+	// 	`${chalk.white.bgHex(bump).bold(' Preview: ')}`,
+	// 	`${chalk.hex(text).italic.bold(`${urls.preview}`)}`
+	// );
+	// frey();
+	// console.log(
+	// 	`${chalk.black('--')}`,
+	// 	`${chalk.white.bgHex(bump).bold(' Editor: ')}`,
+	// 	`${chalk.hex(text).italic.bold(`${urls.customize}`)}`
+	// );
+}
+
 exports.end = end;
 exports.start = start;
 exports.bhex = bump;
@@ -284,9 +352,11 @@ exports.ghex = git;
 exports.dhex = dep;
 exports.shex = shop;
 exports.thex = app;
+exports.fhex = text;
 exports.now = startnow;
 exports.dir = mkdir;
 exports.logger = logger;
+exports.cmd = cmd;
 exports.break = linebreak;
 exports.br = series(br);
 exports.empty = empty;
@@ -294,4 +364,18 @@ exports.frey = frey;
 exports.desmond = desmond;
 exports.url = links;
 exports.dev = dev;
+exports.devlinks = devlinks;
 exports.watcher = watcher;
+
+exports.cyan = bump;
+exports.pink = npm;
+exports.lpink = lpink;
+exports.lpurp = lpurp;
+exports.oj = arc;
+exports.purp = git;
+exports.dpurp = dep;
+exports.teal = shop;
+exports.yell = app;
+exports.blue = text;
+exports.grey = grey;
+exports.des = des;

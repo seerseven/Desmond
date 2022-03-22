@@ -1,6 +1,6 @@
 'use strict';
 
-const { series, parallel, watch, src, dest, task } = require('gulp');
+const { series, parallel, src, dest, task } = require('gulp');
 const bump = require('gulp-bump');
 const plumber = require('gulp-plumber');
 const prompt = require('gulp-prompt');
@@ -8,8 +8,9 @@ const prompt = require('gulp-prompt');
 //Require
 const css = require('./styles.js');
 const js = require('./scripts.js');
-const assets = require('./assets.js');
+const ass = require('./assets.js');
 const sass = require('./sass.js');
+const watch = require('./watch.js');
 
 //Sass Tasks
 exports.scss = sass.scss;
@@ -17,8 +18,12 @@ exports.cts = sass.cts;
 exports.list = sass.list;
 
 //Assets Tasks
-exports.img = assets.img;
-exports.vid = assets.vid;
+exports.img = ass.img;
+exports.vid = ass.vid;
+exports.mvtheme = ass.mvtheme;
+exports.mvshop = ass.mvshop;
+exports.mvven = ass.mvven;
+exports.cleanbuild = ass.cleanbuild;
 
 //CSS TASKS
 exports.csshopify = css.shopify;
@@ -37,21 +42,8 @@ exports.jstheme = js.theme;
 exports.jsbuild = js.build;
 exports.jsclean = js.clean;
 
-//Tasks
-task('css', parallel(css.shopify, css.theme));
-task('js:libs', parallel(js.libs, js.core));
-task('js:mods', parallel(js.shopify, js.theme));
-task('assets', series(assets.img, assets.vid));
-
 //Consts
-const styles = task('css');
-const jslibs = task('js:libs');
-const jsmods = task('js:mods');
-const media = task('assets');
-
-exports.default = function () {
-	watch('src/build/*.css', styles);
-	watch('src/build/*.js', jsmods);
-	watch(['src/js/libs/*.js', '!src/js/libs/shopify.js'], jslibs);
-	watch('src/assets/img/**/*', assets.img);
-};
+exports.default = series(ass.desmond, watch.files);
+exports.sortfiles = ass.sortbuild;
+exports.desmond = ass.desmond;
+exports.child = watch.child;

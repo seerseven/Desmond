@@ -4,6 +4,10 @@ const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const plumber = require('gulp-plumber');
 const clean = require('gulp-clean');
+const chalk = require('./chalk.js');
+const log = require('./chalk.js');
+const c = require('./chalk.js');
+const z = ' JSX: ';
 
 //Main Variables
 const v = {
@@ -31,14 +35,21 @@ v.fBuild = v.fBuild.map((i) => v.srcDist + i);
 
 const js = {
 	shopify: function () {
-		return src([v.build + 'shopify.js'])
+		c.logger(' JSX ', 'COMPILE SHOPIFY JS  ( module )', c.yell);
+		const s = chalk.start();
+		log.cmd('Compile MODULES to JS', c.lpurp);
+		return src([v.build + 'shopify/shopify.js'])
 			.pipe(plumber())
-			.pipe(dest(v.jsLibs))
+			.pipe(dest(v.jsLibs), log.cmd('Dist Unminified JS', c.lpink))
 			.pipe(dest(v.srcDist))
 			.pipe(dest(v.shopDist))
-			.pipe(uglify())
+			.pipe(uglify(), log.cmd('Rename, Minify & Build', c.teal))
 			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist));
+			.pipe(dest(v.shopDist))
+			.on('end', () => {
+				chalk.end(z, 'SHOPIFY.MIN.JS', c.cyan, s);
+				chalk.desmond(c.yell);
+			});
 	},
 	query: function () {
 		return src(v.fQuery)
@@ -49,33 +60,54 @@ const js = {
 			.pipe(dest(v.paraDist));
 	},
 	libs: function () {
+		c.logger(' JSX ', 'COMPILE LIBS JS  ( lib )', c.oj);
+		const s = chalk.start();
+		log.cmd('Compile MODULES to JS', c.lpurp);
 		return src(v.fLibs)
 			.pipe(plumber())
-			.pipe(concat('libs.js'))
-			.pipe(dest(v.srcDist))
+			.pipe(concat('libs.js'), log.cmd('Concatenate JS Libraries', c.pink))
+			.pipe(dest(v.srcDist), log.cmd('Dist Unminified JS', c.lpink))
 			.pipe(dest(v.shopDist))
-			.pipe(uglify())
+			.pipe(uglify(), log.cmd('Rename, Minify & Build', c.teal))
 			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist));
+			.pipe(dest(v.shopDist))
+			.on('end', () => {
+				chalk.end(z, 'LIBS.MIN.JS', c.cyan, s);
+				chalk.desmond(c.oj);
+			});
 	},
 	core: function () {
+		c.logger(' JSX ', 'COMPILE CORE JS  ( lib )', c.oj);
+		const s = chalk.start();
+		log.cmd('Compile LIBS to JS', c.lpurp);
 		return src(v.fCore)
 			.pipe(plumber())
-			.pipe(concat('core.js'))
-			.pipe(dest(v.srcDist))
+			.pipe(concat('core.js'), log.cmd('Concatenate JS Libraries', c.pink))
+			.pipe(dest(v.srcDist), log.cmd('Dist Unminified JS', c.lpink))
 			.pipe(dest(v.shopDist))
-			.pipe(uglify())
+			.pipe(uglify(), log.cmd('Rename, Minify & Build', c.teal))
 			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist));
+			.pipe(dest(v.shopDist))
+			.on('end', () => {
+				chalk.end(z, 'CORE.MIN.JS', c.cyan, s);
+				chalk.desmond(c.oj);
+			});
 	},
 	theme: function () {
-		return src([v.build + 'theme.js'])
+		c.logger(' JSX ', 'COMPILE THEME JS  ( module )', c.yell);
+		const s = chalk.start();
+		log.cmd('Compile MODULES to JS', c.lpurp);
+		return src([v.build + 'theme/theme.js'])
 			.pipe(plumber())
-			.pipe(dest(v.srcDist))
+			.pipe(dest(v.srcDist), log.cmd('Dist Unminified JS', c.lpink))
 			.pipe(dest(v.shopDist))
-			.pipe(uglify())
+			.pipe(uglify(), log.cmd('Rename, Minify & Build', c.teal))
 			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist));
+			.pipe(dest(v.shopDist))
+			.on('end', () => {
+				chalk.end(z, 'THEME.MIN.JS', c.cyan, s);
+				chalk.desmond(c.yell);
+			});
 	},
 	build: function () {
 		return src(v.fBuild)
@@ -98,3 +130,6 @@ exports.core = js.core;
 exports.theme = js.theme;
 exports.build = js.build;
 exports.clean = js.clean;
+
+exports.jsmods = parallel(js.shopify, js.theme);
+exports.jslibs = parallel(js.libs, js.core);
