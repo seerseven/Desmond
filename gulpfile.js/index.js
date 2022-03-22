@@ -32,8 +32,8 @@ exports.themepush = shop.shove;
 exports.shopify = shop.theme;
 
 //Commit & Push Tasks
-exports.commit = git.commit;
-exports.shove = git.shove;
+exports.save = git.commit;
+exports.send = git.shove;
 exports.deploy = git.deploy;
 
 //Archive Tasks

@@ -27,7 +27,7 @@ const get = {
 			)
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v, 'Git Add & Commit... ', chalk.dhex, s);
+				chalk.end(v, 'Git Add & Commit... ', chalk.ghex, s);
 				chalk.frey();
 			});
 	},
@@ -37,7 +37,7 @@ const get = {
 			if (err) throw err;
 		});
 		chalk.frey();
-		chalk.end(v, 'Git Push Origin Master... ', chalk.dhex, s);
+		chalk.end(v, 'Git Push Origin Master... ', chalk.ghex, s);
 		chalk.frey();
 		done();
 		chalk.desmond(chalk.ghex);
