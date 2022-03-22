@@ -18,16 +18,17 @@ const get = {
 			'!./package-lock.json',
 			'!./app/package-lock.json',
 		])
-			.pipe(git.add())
+			.pipe(git.add(), chalk.logger('Git', 'Stage All Files...', chalk.ghex))
 			.pipe(
 				git.commit(undefined, {
 					args: '-m "gulp commit"',
 					disableMessageRequirement: true,
-				})
+				}),
+				chalk.logger('Git', 'Commit All Changes...', chalk.ghex)
 			)
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v, 'Git Add & Commit... ', chalk.ghex, s);
+				chalk.end(v, 'All Changes Saved to Local Repo... ', chalk.ghex, s);
 				chalk.frey();
 			});
 	},

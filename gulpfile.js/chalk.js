@@ -46,6 +46,13 @@ function end(taskName, taskDescription, taskColor, s) {
 	);
 }
 
+function logger(taskName, taskDesc, taskColor) {
+	return console.log(
+		`${chalk.white.bgHex(taskColor).bold(taskName)}`,
+		`${chalk.hex(taskColor).italic.bold(taskDesc)}`
+	);
+}
+
 function mkdir() {
 	console.log(
 		`${chalk.white.bgHex(shop).bold(' Desmond: ')}`,
@@ -200,6 +207,7 @@ exports.dhex = dep;
 exports.shex = shop;
 exports.now = startnow;
 exports.dir = mkdir;
+exports.logger = logger;
 exports.break = linebreak;
 exports.br = series(br);
 exports.empty = empty;
