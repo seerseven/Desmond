@@ -9,7 +9,7 @@ const v = ' Git: ';
 const get = {
 	save: function () {
 		const s = chalk.start();
-		chalk.logger(' Git: Add *', 'Stage All Changes...', chalk.ghex);
+		chalk.logger(' Add ', 'All Files & Changes...', chalk.ghex);
 		return src([
 			'./*',
 			'!./node_modules/**',
@@ -24,9 +24,9 @@ const get = {
 					args: '-m "gulp commit"',
 					disableMessageRequirement: true,
 				}),
-				chalk.logger('Git: Commit', 'Save All Changes...', chalk.ghex),
+				chalk.logger(' Commit ', 'All Files & Changes...', chalk.ghex),
 				chalk.frey(),
-				chalk.end(v, 'All Changes Saved to Local Repo... ', chalk.ghex, s),
+				chalk.end(v, 'Saved Changes to Local Repo... ', chalk.ghex, s),
 				chalk.frey()
 			);
 	},
