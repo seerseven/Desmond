@@ -84,12 +84,16 @@ function desmond(x) {
 }
 
 function logger(taskName, taskDesc, taskColor) {
-	return console.log(
+	console.log(
 		`${chalk
 			.hex(taskColor)
-			.dim('-------------------------------------------------------')}`,
+			.dim('-------------------------------------------------------')}`
+	);
+	console.log(
 		`${chalk.white.bgHex(taskColor).bold(taskName)}`,
-		`${chalk.hex(taskColor).italic.bold(taskDesc)}`,
+		`${chalk.hex(taskColor).italic.bold(taskDesc)}`
+	);
+	console.log(
 		`${chalk
 			.hex(taskColor)
 			.dim('-------------------------------------------------------')}`
