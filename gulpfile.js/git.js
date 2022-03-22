@@ -32,14 +32,14 @@ const get = {
 	},
 	send: function (done) {
 		const s = chalk.start();
+		chalk.logger(' Push ', 'All Files & Changes...', chalk.ghex);
 		git.push('origin', 'master', function (err) {
 			if (err) throw err;
 		});
 		chalk.frey();
-		chalk.end(v, 'Git Push Origin Master... ', chalk.ghex, s);
+		chalk.end(v, 'Branch is Up to Date with Origin/Master... ', chalk.ghex, s);
 		chalk.frey();
 		done();
-		chalk.desmond(chalk.ghex);
 	},
 };
 // get.save.displayName = 'Commit : Git Add, Commit All';

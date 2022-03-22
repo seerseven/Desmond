@@ -5,9 +5,6 @@ const clean = require('gulp-clean');
 const zip = require('gulp-zip');
 var fs = require('fs');
 const version = require('./bump.js');
-const c = require('chalk');
-const log = require('fancy-log');
-const { performance } = require('perf_hooks');
 
 //Variables
 const vault = 'state/tholos/archives';
@@ -18,6 +15,11 @@ const NONPM = '!./npm/**';
 const NOSTATE = '!./state/**';
 var zp = '.zip';
 var base = 'state/tholos/';
+const chalk = require('./chalk.js');
+const v = ' Archive:Core ';
+const v1 = ' Archive:App ';
+const v2 = ' Archive:Npm ';
+const v3 = ' Archive:Pro ';
 const f = {
 	app: 'APP-',
 	npm: 'NPM-',
@@ -85,7 +87,7 @@ function dirName(val) {
 	return full;
 }
 function zipName(val) {
-	if (val === 'appp') {
+	if (val === 'app') {
 		var full = f.app + timeDate + zp;
 	}
 	if (val === 'npm') {
@@ -107,129 +109,159 @@ var npmZipName = zipName('npm');
 var archZipName = zipName('arch');
 var desZipName = zipName('des');
 
-function start() {
-	const str = performance.now();
-	return str;
-}
-function end(a, n, x, s) {
-	const e = performance.now();
-	var done = e - s;
-	done = done.toFixed(2);
-	log(
-		c.bold[a](n),
-		c.bold.cyan.italic(`${x} in ${c.bold.yellow(`${done}`)} ms`)
-	);
-	return done;
-}
-
 const dez = {
 	copy: function () {
-		const s = start();
+		const s = chalk.start();
 		const folders = [desName];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		});
-		log(c.bold.cyan.italic('Core Folder Created'));
+		chalk.logger(' Desmond: ', 'Created Backup Core Folder', '#6db91c', 2);
+		chalk.empty();
 		return src(['./**/*', NOMOD, NOAPP, NONPM, NOSTATE])
 			.pipe(dest(desName))
 			.on('end', () => {
-				end('magenta', 'Core', 'Files Copied', s);
+				chalk.frey();
+				chalk.end(v, 'Desmond(core) Files Copied... ', '#6db91c', s, 2);
+				chalk.frey();
 			});
 	},
 	zip: function () {
-		const s = start();
+		const s = chalk.start();
 		return src([desName + '/**/*', desName + '/.*/**/*'])
 			.pipe(zip(desZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
-				end('blue', 'Core', 'Files Zipped & Archived', s);
+				chalk.frey();
+				chalk.end(v, 'Core Files Zipped & Archived... ', '#6db91c', s, 2);
+				chalk.frey();
 			});
 	},
 	clean: function () {
-		const s = start();
+		const s = chalk.start();
 		return src(desName)
 			.pipe(clean())
 			.on('end', () => {
-				end('yellow', 'Core', 'Files & Folders Removed | Directory Cleaned', s);
+				chalk.frey();
+				chalk.end(
+					v,
+					'Directory Cleansed, Residuals Deleted... ',
+					'#6db91c',
+					s,
+					2
+				);
+				chalk.frey();
+				chalk.empty();
+				chalk.desmond('#6db91c');
 			});
 	},
 };
 
 const app = {
 	copy: function () {
-		const s = start();
+		const s = chalk.start();
 		const folders = [appName];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		});
-		log(c.bold.cyan.italic('App Folder Created'));
+		chalk.logger(' Desmond: ', 'Created Backup App Folder', chalk.thex, 2);
+		chalk.empty();
 		return src(['app/**/*', NONODE, 'app/.*/**/*'])
 			.pipe(dest(appName))
 			.on('end', () => {
-				end('magenta', 'App', 'Files Copied', s);
+				chalk.frey();
+				chalk.end(v1, 'Desmond(app) Files Copied... ', chalk.thex, s, 2);
+				chalk.frey();
 			});
 	},
 	zip: function () {
-		const s = start();
+		const s = chalk.start();
 		return src([appName + '/**/*', appName + '/.*/**/*'])
 			.pipe(zip(appZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
-				end('blue', 'App', 'Files Zipped & Archived', s);
+				chalk.frey();
+				chalk.end(v1, 'App Files Zipped & Archived... ', chalk.thex, s, 2);
+				chalk.frey();
 			});
 	},
 	clean: function () {
-		const s = start();
+		const s = chalk.start();
 		return src(appName)
 			.pipe(clean())
 			.on('end', () => {
-				end('yellow', 'App', 'Files & Folders Removed | Directory Cleaned', s);
+				chalk.frey();
+				chalk.end(
+					v1,
+					'Directory Cleansed, Residuals Deleted... ',
+					chalk.thex,
+					s,
+					2
+				);
+				chalk.frey();
+				chalk.empty();
+				chalk.desmond(chalk.thex);
 			});
 	},
 };
 
 const node = {
 	copy: function () {
-		const s = start();
+		const s = chalk.start();
 		const folders = [npmName];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		});
-		log(c.bold.cyan.italic('Node Folder Created'));
+		chalk.logger(' Desmond: ', 'Created Backup NPM Folder', '#e4329b', 2);
+		chalk.empty();
 		return src('npm/**/*')
 			.pipe(dest(npmName))
 			.on('end', () => {
-				end('magenta', 'Node', 'Files Copied', s);
+				chalk.frey();
+				chalk.end(v2, 'Desmond(npm) Files Copied... ', '#e4329b', s, 2);
+				chalk.frey();
 			});
 	},
 	zip: function () {
-		const s = start();
+		const s = chalk.start();
 		return src([npmName + '/**/*'])
 			.pipe(zip(npmZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
-				end('blue', 'Node', 'Files Zipped & Archived', s);
+				chalk.frey();
+				chalk.end(v2, 'NPM Files Zipped & Archived... ', '#e4329b', s, 2);
+				chalk.frey();
 			});
 	},
 	clean: function () {
-		const s = start();
+		const s = chalk.start();
 		return src(npmName)
 			.pipe(clean())
 			.on('end', () => {
-				end('yellow', 'App', 'Files & Folders Removed | Directory Cleaned', s);
+				chalk.frey();
+				chalk.end(
+					v2,
+					'Directory Cleansed, Residuals Deleted... ',
+					'#e4329b',
+					s,
+					2
+				);
+				chalk.frey();
+				chalk.empty();
+				chalk.desmond('#e4329b');
 			});
 	},
 };
 
 const project = {
 	zip: function () {
-		const s = start();
+		const s = chalk.start();
 		return src([
 			'state/tholos/**/*',
 			'!state/tholos/archives/**',
@@ -238,20 +270,33 @@ const project = {
 			.pipe(zip(archZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
-				end('blue', 'Project', 'Files Zipped & Archived', s);
+				chalk.frey();
+				chalk.end(
+					v3,
+					'Project Folders Zipped & Archived... ',
+					chalk.ahex,
+					s,
+					1
+				);
+				chalk.frey();
 			});
 	},
 	clean: function () {
-		const s = start();
+		const s = chalk.start();
 		return src([npmName, appName, desName])
 			.pipe(clean())
 			.on('end', () => {
-				end(
-					'yellow',
-					'Project',
-					'Files & Folders Removed | Directory Cleaned',
-					s
+				chalk.frey();
+				chalk.end(
+					v3,
+					'Directory Cleansed, Residuals Deleted... ',
+					chalk.ahex,
+					s,
+					1
 				);
+				chalk.frey();
+				chalk.empty();
+				chalk.desmond(chalk.ahex);
 			});
 	},
 };
@@ -283,14 +328,9 @@ exports.nodeclean = node.clean;
 exports.projectzip = project.zip;
 exports.projectclean = project.clean;
 
-exports.desmond = series(dez.copy, dez.zip, dez.clean);
-exports.app = series(app.copy, app.zip, app.clean);
-exports.npm = series(node.copy, node.zip, node.clean);
-exports.theme = series(
-	parallel(dez.copy, app.copy, node.copy),
-	project.zip,
-	project.clean
-);
+exports.des = series(chalk.br, dez.copy, dez.zip, dez.clean);
+exports.app = series(chalk.br, app.copy, app.zip, app.clean);
+exports.npm = series(chalk.br, node.copy, node.zip, node.clean);
 exports.project = series(
 	version.bump,
 	parallel(dez.copy, app.copy, node.copy),

@@ -37,9 +37,9 @@ exports.send = git.shove;
 exports.deploy = git.deploy;
 
 //Archive Tasks
-exports.theme = zip.app;
-exports.node = zip.npm;
-exports.desmond = zip.desmond;
+exports.zipapp = zip.app;
+exports.zipnpm = zip.npm;
+exports.zipdes = zip.des;
 exports.archive = zip.project;
 
 //Build & Default Tasks

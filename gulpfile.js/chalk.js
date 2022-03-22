@@ -7,7 +7,10 @@ const { performance } = require('perf_hooks');
 // Cyan = Bump Color
 const bump = '#1cb1dc';
 
+const app = '#d3b352';
+
 const npm = '#fd2169';
+const arc = '#c26912';
 
 //Green = Shopify Color
 const shop = '#13af73';
@@ -29,21 +32,35 @@ function start() {
 	return str;
 }
 const startnow = start();
-function end(taskName, taskDescription, taskColor, s) {
+function end(taskName, taskDescription, taskColor, s, type = 1) {
 	const e = performance.now();
 	var ms = e - s;
 	var done = ms.toFixed(2);
 	// var done = ms / 1000.0;
-	console.log(
-		`${chalk.white.bgHex(taskColor).bold(taskName)}`,
-		`${chalk
-			.hex(text)
-			.italic(
-				`${taskDescription} ${chalk.gray.dim(`finished in:`)} ${chalk
-					.hex(milliseconds)
-					.bgBlack.bold(`${done}ms`)}`
-			)}`
-	);
+	if (type === 1) {
+		console.log(
+			`${chalk.white.bgHex(taskColor).bold(taskName)}`,
+			`${chalk
+				.hex(text)
+				.italic(
+					`${taskDescription} ${chalk.gray.dim(`finished in:`)} ${chalk
+						.hex(milliseconds)
+						.bgBlack.bold(`${done}ms`)}`
+				)}`
+		);
+	}
+	if (type === 2) {
+		console.log(
+			`${chalk.hex('#000000').bgHex(taskColor).bold(taskName)}`,
+			`${chalk
+				.hex(text)
+				.italic(
+					`${taskDescription} ${chalk.gray.dim(`finished in:`)} ${chalk
+						.hex(milliseconds)
+						.bgBlack.bold(`${done}ms`)}`
+				)}`
+		);
+	}
 }
 
 function mkdir() {
@@ -83,16 +100,24 @@ function desmond(x) {
 	);
 }
 
-function logger(taskName, taskDesc, taskColor) {
+function logger(taskName, taskDesc, taskColor, type = 1) {
 	console.log(
 		`${chalk
 			.hex(taskColor)
 			.dim('-------------------------------------------------------')}`
 	);
-	console.log(
-		`${chalk.white.bgHex(taskColor).bold(taskName)}`,
-		`${chalk.hex(taskColor).italic.bold(taskDesc)}`
-	);
+	if (type === 1) {
+		console.log(
+			`${chalk.white.bgHex(taskColor).bold(taskName)}`,
+			`${chalk.hex(taskColor).italic.bold(taskDesc)}`
+		);
+	}
+	if (type === 2) {
+		console.log(
+			`${chalk.hex('#000000').bgHex(taskColor).bold(taskName)}`,
+			`${chalk.hex(taskColor).italic.bold(taskDesc)}`
+		);
+	}
 	console.log(
 		`${chalk
 			.hex(taskColor)
@@ -212,9 +237,11 @@ exports.end = end;
 exports.start = start;
 exports.bhex = bump;
 exports.nhex = npm;
+exports.ahex = arc;
 exports.ghex = git;
 exports.dhex = dep;
 exports.shex = shop;
+exports.thex = app;
 exports.now = startnow;
 exports.dir = mkdir;
 exports.logger = logger;
