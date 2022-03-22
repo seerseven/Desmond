@@ -32,15 +32,12 @@ const get = {
 			});
 	},
 	send: function (done) {
-		git
-			.push('origin', 'master', function (err) {
-				if (err) throw err;
-			})
-			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'Git Push Origin Master... ', chalk.dhex, s);
-				chalk.frey();
-			});
+		git.push('origin', 'master', function (err) {
+			if (err) throw err;
+		});
+		chalk.frey();
+		chalk.end(v, 'Git Push Origin Master... ', chalk.dhex, s);
+		chalk.frey();
 		done();
 		chalk.desmond(chalk.ghex);
 	},
