@@ -1,18 +1,12 @@
 'use strict';
-
 const { series } = require('gulp');
-// const gulpLoadPlugins = require('gulp-load-plugins');
-// const p = gulpLoadPlugins({
-// 	config: 'C:/Users/Seerseven/Mithrasatori/Desmond/package.json',
-// });
-
-const zip = require('./archive.js');
-const ver = require('./bump.js');
-const shop = require('./shopify.js');
+const zip = require('./gulp/archive.js');
+const ver = require('./gulp/bump.js');
+const shop = require('./gulp/shopify.js');
 const watch = require('./watch.js');
-const chalk = require('./chalk.js');
-const git = require('./git.js');
-const npx = require('./npm.js');
+const chalk = require('./gulp/chalk.js');
+const git = require('./gulp/git.js');
+const npx = require('./gulp/npm.js');
 
 //Misc Tasks
 exports.bump = ver.bump;

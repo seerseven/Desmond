@@ -27,12 +27,11 @@ const text = '#00a2ff';
 
 //Define Src and Dest Filepaths
 
-function start() {
+function begin() {
 	const str = performance.now();
 	return str;
 }
-const startnow = start();
-function end(taskName, taskDescription, taskColor, s, type = 1) {
+function end(taskName, taskDescription, taskColor, type = 1, s = start) {
 	const e = performance.now();
 	var ms = e - s;
 	var done = ms.toFixed(2);
@@ -276,7 +275,7 @@ function dev() {
 }
 
 exports.end = end;
-exports.start = start;
+exports.start = begin;
 exports.bhex = bump;
 exports.nhex = npm;
 exports.ahex = arc;
@@ -284,7 +283,6 @@ exports.ghex = git;
 exports.dhex = dep;
 exports.shex = shop;
 exports.thex = app;
-exports.now = startnow;
 exports.dir = mkdir;
 exports.logger = logger;
 exports.break = linebreak;

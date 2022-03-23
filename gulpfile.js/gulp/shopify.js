@@ -1,13 +1,10 @@
 // Gulp Dependecies
 const { task, series, watch, src, dest, parallel } = require('gulp');
-const plumber = require('gulp-plumber');
-const shell = require('gulp-shell');
-const clean = require('gulp-clean');
-const zip = require('gulp-zip');
+const $ = require('../config/require.js');
 var fs = require('fs');
-const chalk = require('./chalk.js');
+const c = require('./chalk.js');
 const v = ' Shopify: ';
-
+const start = c.start();
 function folderNamer() {
 	var months = [
 		'Jan',
@@ -62,102 +59,102 @@ var zipper = themeName + zp;
 
 const shopify = {
 	copy: function () {
-		chalk.desmond(chalk.shex);
-		const s = chalk.start();
+		c.desmond(c.shex);
+		start;
 		const folders = [folder];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
 				fs.mkdirSync(dir);
 			}
 		});
-		chalk.dir();
-		chalk.desmond(chalk.shex);
-		chalk.break();
-		chalk.frey();
+		c.dir();
+		c.desmond(c.shex);
+		c.break();
+		c.frey();
 		return src(['app/shopify/**/*', NOTHEME])
 			.pipe(dest(folder))
 			.on('end', () => {
-				chalk.end(v, 'Files Copied... ', chalk.shex, s);
+				c.end(v, 'Files Copied... ', c.shex);
 			});
 	},
 	zip: function () {
-		chalk.frey();
-		const s = chalk.start();
+		c.frey();
+		start;
 		return src([folder + '/**/*'])
-			.pipe(zip(zipper))
+			.pipe($.zip(zipper))
 			.pipe(dest(themevault))
 			.on('end', () => {
-				chalk.end(v, 'Zipped & Archived... ', chalk.shex, s);
+				c.end(v, 'Zipped & Archived... ', c.shex);
 			});
 	},
 	clean: function () {
-		chalk.frey();
-		const s = chalk.start();
+		c.frey();
+		start;
 		return src(folder)
-			.pipe(clean())
+			.pipe($.clean())
 			.on('end', () => {
-				chalk.end(v, 'Files Deleted & Directory Cleansed... ', chalk.shex, s);
-				chalk.frey();
+				c.end(v, 'Files Deleted & Directory Cleansed... ', c.shex);
+				c.frey();
 			});
 	},
 	push: function () {
-		chalk.break();
-		chalk.desmond(chalk.shex);
-		const s = chalk.start();
+		c.break();
+		c.desmond(c.shex);
+		start;
 		return src('app/shopify')
 			.pipe(shell('cd app/shopify && echo y && echo y | shopify theme push'))
 			.on('end', () => {
-				chalk.desmond(chalk.shex);
-				chalk.end(v, 'Theme Pushed Successfully... ', chalk.shex, s);
-				chalk.desmond(chalk.shex);
+				c.desmond(c.shex);
+				c.end(v, 'Theme Pushed Successfully... ', c.shex);
+				c.desmond(c.shex);
 			});
 	},
 	unpub: function () {
-		chalk.break();
-		chalk.desmond(chalk.shex);
-		const s = chalk.start();
+		c.break();
+		c.desmond(c.shex);
+		start;
 		return src('app/shopify')
-			.pipe(shell('cd app/shopify && shopify theme push --unpublished'))
+			.pipe($.shell('cd app/shopify && shopify theme push --unpublished'))
 			.on('end', () => {
-				chalk.desmond(chalk.shex);
-				chalk.end(v, 'Theme Pushed Successfully... ', chalk.shex, s);
-				chalk.desmond(chalk.shex);
+				c.desmond(c.shex);
+				c.end(v, 'Theme Pushed Successfully... ', c.shex);
+				c.desmond(c.shex);
 			});
 	},
 	pull: function () {
-		chalk.break();
-		chalk.desmond(chalk.shex);
-		const s = chalk.start();
+		c.break();
+		c.desmond(c.shex);
+		start;
 		return src('app/shopify')
-			.pipe(shell('cd app/shopify && echo y && echo y | shopify theme pull'))
+			.pipe($.shell('cd app/shopify && echo y && echo y | shopify theme pull'))
 			.on('end', () => {
-				chalk.desmond(chalk.shex);
-				chalk.end(v, 'Theme Pulled Successfully... ', chalk.shex, s);
-				chalk.desmond(chalk.shex);
+				c.desmond(c.shex);
+				c.end(v, 'Theme Pulled Successfully... ', c.shex);
+				c.desmond(c.shex);
 			});
 	},
 	serve: function () {
-		chalk.empty();
-		chalk.desmond(chalk.shex);
-		const s = chalk.start();
+		c.empty();
+		c.desmond(c.shex);
+		start;
 		return src('app/shopify')
-			.pipe(shell('shopify login --store seerseven.myshopify.com'))
-			.pipe(shell('cd app/shopify && shopify theme serve'))
+			.pipe($.shell('shopify login --store seerseven.myshopify.com'))
+			.pipe($.shell('cd app/shopify && shopify theme serve'))
 			.on('end', () => {
-				chalk.end(v, 'Logged into Shopify Local Theme... ', chalk.shex, s);
-				chalk.desmond(chalk.shex);
+				c.end(v, 'Logged into Shopify Local Theme... ', c.shex);
+				c.desmond(c.shex);
 			});
 	},
 	links: function () {
-		chalk.empty();
-		const s = chalk.start();
-		chalk.url();
+		c.empty();
+		start;
+		c.url();
 		return src('app/shopify');
 	},
 	devlinks: function () {
-		chalk.empty();
-		const s = chalk.start();
-		chalk.dev();
+		c.empty();
+		start;
+		c.dev();
 		return src('app/shopify');
 	},
 };

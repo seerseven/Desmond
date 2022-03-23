@@ -1,12 +1,12 @@
 'use strict';
 
 const { series, parallel, watch, src, dest, task } = require('gulp');
-const $ = require('./require.js');
-const chalk = require('./chalk.js');
+const $ = require('../config/require.js');
+const c = require('./chalk.js');
 var fs = require('fs');
 
 //Variables
-const start = chalk.start();
+const start = c.start();
 const vault = 'state/tholos/archives';
 const NONODE = '!app/node_modules/**';
 const NOMOD = '!./node_modules/**';
@@ -118,14 +118,14 @@ const dez = {
 				fs.mkdirSync(dir);
 			}
 		});
-		chalk.logger(' Desmond: ', 'Created Backup Core Folder', '#6db91c', 2);
-		chalk.empty();
+		c.logger(' Desmond: ', 'Created Backup Core Folder', '#6db91c', 2);
+		c.empty();
 		return src(['./**/*', NOMOD, NOAPP, NONPM, NOSTATE])
 			.pipe(dest(desName))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'Desmond(core) Files Copied... ', '#6db91c', start, 2);
-				chalk.frey();
+				c.frey();
+				c.end(v, 'Desmond(core) Files Copied... ', '#6db91c', 2);
+				c.frey();
 			});
 	},
 	zip: function () {
@@ -134,9 +134,9 @@ const dez = {
 			.pipe($.zip(desZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'Core Files Zipped & Archived... ', '#6db91c', start, 2);
-				chalk.frey();
+				c.frey();
+				c.end(v, 'Core Files Zipped & Archived... ', '#6db91c', 2);
+				c.frey();
 			});
 	},
 	clean: function () {
@@ -144,17 +144,11 @@ const dez = {
 		return src(desName)
 			.pipe($.clean())
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(
-					v,
-					'Directory Cleansed, Residuals Deleted... ',
-					'#6db91c',
-					start,
-					2
-				);
-				chalk.frey();
-				chalk.empty();
-				chalk.desmond('#6db91c');
+				c.frey();
+				c.end(v, 'Directory Cleansed, Residuals Deleted... ', '#6db91c', 2);
+				c.frey();
+				c.empty();
+				c.desmond('#6db91c');
 			});
 	},
 };
@@ -168,14 +162,14 @@ const app = {
 				fs.mkdirSync(dir);
 			}
 		});
-		chalk.logger(' Desmond: ', 'Created Backup App Folder', chalk.thex, 2);
-		chalk.empty();
+		c.logger(' Desmond: ', 'Created Backup App Folder', c.thex, 2);
+		c.empty();
 		return src(['app/**/*', NONODE, 'app/.*/**/*'])
 			.pipe(dest(appName))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v1, 'Desmond(app) Files Copied... ', chalk.thex, start, 2);
-				chalk.frey();
+				c.frey();
+				c.end(v1, 'Desmond(app) Files Copied... ', c.thex, 2);
+				c.frey();
 			});
 	},
 	zip: function () {
@@ -184,9 +178,9 @@ const app = {
 			.pipe($.zip(appZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v1, 'App Files Zipped & Archived... ', chalk.thex, start, 2);
-				chalk.frey();
+				c.frey();
+				c.end(v1, 'App Files Zipped & Archived... ', c.thex, 2);
+				c.frey();
 			});
 	},
 	clean: function () {
@@ -194,17 +188,11 @@ const app = {
 		return src(appName)
 			.pipe($.clean())
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(
-					v1,
-					'Directory Cleansed, Residuals Deleted... ',
-					chalk.thex,
-					start,
-					2
-				);
-				chalk.frey();
-				chalk.empty();
-				chalk.desmond(chalk.thex);
+				c.frey();
+				c.end(v1, 'Directory Cleansed, Residuals Deleted... ', c.thex, 2);
+				c.frey();
+				c.empty();
+				c.desmond(c.thex);
 			});
 	},
 };
@@ -218,14 +206,14 @@ const node = {
 				fs.mkdirSync(dir);
 			}
 		});
-		chalk.logger(' Desmond: ', 'Created Backup NPM Folder', '#e4329b', 2);
-		chalk.empty();
+		c.logger(' Desmond: ', 'Created Backup NPM Folder', '#e4329b', 2);
+		c.empty();
 		return src('npm/**/*')
 			.pipe(dest(npmName))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v2, 'Desmond(npm) Files Copied... ', '#e4329b', start, 2);
-				chalk.frey();
+				c.frey();
+				c.end(v2, 'Desmond(npm) Files Copied... ', '#e4329b', 2);
+				c.frey();
 			});
 	},
 	zip: function () {
@@ -234,9 +222,9 @@ const node = {
 			.pipe($.zip(npmZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v2, 'NPM Files Zipped & Archived... ', '#e4329b', start, 2);
-				chalk.frey();
+				c.frey();
+				c.end(v2, 'NPM Files Zipped & Archived... ', '#e4329b', 2);
+				c.frey();
 			});
 	},
 	clean: function () {
@@ -244,17 +232,11 @@ const node = {
 		return src(npmName)
 			.pipe($.clean())
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(
-					v2,
-					'Directory Cleansed, Residuals Deleted... ',
-					'#e4329b',
-					s,
-					2
-				);
-				chalk.frey();
-				chalk.empty();
-				chalk.desmond('#e4329b');
+				c.frey();
+				c.end(v2, 'Directory Cleansed, Residuals Deleted... ', '#e4329b', 2);
+				c.frey();
+				c.empty();
+				c.desmond('#e4329b');
 			});
 	},
 };
@@ -270,15 +252,9 @@ const project = {
 			.pipe($.zip(archZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(
-					v3,
-					'Project Folders Zipped & Archived... ',
-					chalk.ahex,
-					s,
-					1
-				);
-				chalk.frey();
+				c.frey();
+				c.end(v3, 'Project Folders Zipped & Archived... ', c.ahex);
+				c.frey();
 			});
 	},
 	clean: function () {
@@ -286,17 +262,11 @@ const project = {
 		return src([npmName, appName, desName])
 			.pipe($.clean())
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(
-					v3,
-					'Directory Cleansed, Residuals Deleted... ',
-					chalk.ahex,
-					s,
-					1
-				);
-				chalk.frey();
-				chalk.empty();
-				chalk.desmond(chalk.ahex);
+				c.frey();
+				c.end(v3, 'Directory Cleansed, Residuals Deleted... ', c.ahex);
+				c.frey();
+				c.empty();
+				c.desmond(c.ahex);
 			});
 	},
 };
@@ -316,9 +286,9 @@ exports.nodeclean = node.clean;
 exports.projectzip = project.zip;
 exports.projectclean = project.clean;
 
-exports.des = series(chalk.br, dez.copy, dez.zip, dez.clean);
-exports.app = series(chalk.br, app.copy, app.zip, app.clean);
-exports.npm = series(chalk.br, node.copy, node.zip, node.clean);
+exports.des = series(c.br, dez.copy, dez.zip, dez.clean);
+exports.app = series(c.br, app.copy, app.zip, app.clean);
+exports.npm = series(c.br, node.copy, node.zip, node.clean);
 exports.project = series(
 	parallel(dez.copy, app.copy, node.copy),
 	project.zip,

@@ -1,10 +1,10 @@
 const { series, parallel, watch, src, dest } = require('gulp');
-const zip = require('./archive.js');
-const ver = require('./bump.js');
-const shop = require('./shopify.js');
-const git = require('./git.js');
-const npx = require('./npm.js');
-const chalk = require('./chalk.js');
+const zip = require('./gulp/archive.js');
+const ver = require('./gulp/bump.js');
+const shop = require('./gulp/shopify.js');
+const git = require('./gulp/git.js');
+const npx = require('./gulp/npm.js');
+const chalk = require('./gulp/chalk.js');
 
 //Watch Tasks
 const task = {
@@ -22,13 +22,9 @@ function watcherWoman() {
 
 // Watch files
 function watchFiles() {
-	// Watch Main README.md / Commit Changes / Push Changes
 	watch('./README.md', task.deploy);
-	// Watch Shopify Log.md / Zip Theme / Archive Theme
 	watch('app/shopify/LOG.md', task.theme);
-	// Watch State Log.md / Archive Project
 	watch('state/LOG.md', task.backup);
-	// Watch Node_Modules / Merge / Publish
 	watch('app/node_modules/@seerseven/desmond/src/*.js', task.node);
 }
 watchFiles.displayName = 'Watchfiles : Watch Files for Changes';

@@ -1,48 +1,45 @@
 // Gulp Dependecies
 const { task, series, watch, src, dest, parallel } = require('gulp');
-const plumber = require('gulp-plumber');
-const shell = require('gulp-shell');
-const nodemon = 'app/node_modules/@seerseven/desmond/src/*.js';
+const $ = require('../config/require.js');
 const ver = require('./bump.js');
-const chalk = require('./chalk.js');
-const cmd = require('./chalk.js');
+const c = require('./chalk.js');
+const start = c.start();
+const nodemon = 'app/node_modules/@seerseven/desmond/src/*.js';
 const v = ' NPM: ';
-
-//Define Src and Dest Filepaths
 
 const npm = {
 	merge: function () {
-		const s = chalk.start();
+		start;
 		return src(nodemon)
 			.pipe(dest('npm/src'))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'Files Merged... ', chalk.nhex, s);
-				chalk.frey();
+				c.frey();
+				c.end(v, 'Files Merged... ', c.nhex);
+				c.frey();
 			});
 	},
 	publish: function () {
-		const s = chalk.start();
+		start;
 		return src('./npm')
-			.pipe(shell('cd npm && npm publish'))
+			.pipe($.shell('cd npm && npm publish'))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'Package Published... ', chalk.nhex, s);
-				chalk.frey();
+				c.frey();
+				c.end(v, 'Package Published... ', c.nhex);
+				c.frey();
 			});
 	},
 	install: function () {
-		const s = chalk.start();
+		start;
 		return src('./app')
 			.pipe(
-				shell(
+				$.shell(
 					'cd app && npm install -f --save-dev --no-audit @seerseven/desmond@latest'
 				)
 			)
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'Package Installed... ', chalk.nhex, s);
-				chalk.frey();
+				c.frey();
+				c.end(v, 'Package Installed... ', c.nhex);
+				c.frey();
 			});
 	},
 };
@@ -51,9 +48,9 @@ npm.merge.displayName = 'Merge : Merge @seerseven Package from Node_Modules';
 npm.publish.displayName = 'Publish : Publish @seerseven Package to NPM';
 npm.install.displayName = 'Install : Install @seerseven NPM Package';
 
-exports.publish = series(chalk.br, npm.publish);
-exports.install = series(chalk.br, npm.install);
-exports.merge = series(chalk.br, npm.merge);
+exports.publish = series(c.br, npm.publish);
+exports.install = series(c.br, npm.install);
+exports.merge = series(c.br, npm.merge);
 
 exports.package = series(ver.npm, npm.merge, npm.publish);
 exports.npmpackage = series(ver.npm, npm.merge, npm.publish, npm.install);

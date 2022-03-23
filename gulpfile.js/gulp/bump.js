@@ -1,72 +1,67 @@
 'use strict';
 const { series, parallel, watch, src, dest, task } = require('gulp');
-const $ = require('./require.js');
-const chalk = require('./chalk.js');
-const cmd = require('./chalk.js');
+const $ = require('../config/require.js');
+const c = require('./chalk.js');
 const v = ' Bump: ';
-const app = './';
-
 const bump = {
 	app: function () {
-		chalk.desmond(chalk.bhex);
-		const s = chalk.start();
-
+		c.desmond(c.bhex);
+		const start = c.start();
 		return src('app/package.json')
 			.pipe($.plumber())
 			.pipe($.bump({ type: 'patch' }))
 			.pipe(dest('app'))
 			.on('end', () => {
-				chalk.empty();
-				chalk.frey();
-				chalk.end(v, 'App Version... ', chalk.bhex, s);
-				chalk.frey();
+				c.empty();
+				c.frey();
+				c.end(v, 'App Version... ', c.bhex);
+				c.frey();
 			});
 	},
 	npm: function () {
-		const s = chalk.start();
+		start;
 		return src('npm/package.json')
 			.pipe($.plumber())
 			.pipe($.bump({ type: 'patch' }))
 			.pipe(dest('npm'))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'Npm Version... ', chalk.bhex, s);
-				chalk.frey();
+				c.frey();
+				c.end(v, 'Npm Version... ', c.bhex);
+				c.frey();
 			});
 	},
 	des: function () {
-		const s = chalk.start();
+		start;
 		return src('./package.json')
 			.pipe($.plumber())
 			.pipe($.bump({ type: 'patch' }))
 			.pipe(dest('./'))
 			.on('end', () => {
-				chalk.frey();
-				chalk.end(v, 'Core Version... ', chalk.bhex, s);
-				chalk.frey();
-				chalk.empty();
+				c.frey();
+				c.end(v, 'Core Version... ', c.bhex);
+				c.frey();
+				c.empty();
 			});
 	},
 	all: function () {
-		const s = chalk.start();
+		start;
 		return (
-			chalk.break(),
+			c.break(),
 			bump.app(),
 			bump.npm(),
 			bump.des().on('end', () => {
-				chalk.end(v, 'All Package Versions... ', chalk.bhex, s);
-				chalk.desmond(chalk.bhex);
+				c.end(v, 'All Package Versions... ', c.bhex);
+				c.desmond(c.bhex);
 			})
 		);
 	},
 };
-
 bump.app.displayName = 'App : Bump App Package Version #';
 bump.npm.displayName = 'Npm : Bump NPM Package Version #';
 bump.des.displayName = 'Des : Bump Desmond Package Version #';
 bump.all.displayName = 'Bump : All Package Version Numbers';
 
-exports.app = series(cmd.br, bump.app);
-exports.npm = series(cmd.br, bump.npm);
-exports.des = series(cmd.br, bump.des);
-exports.bump = series(cmd.br, bump.all);
+exports.app = series(c.br, bump.app);
+exports.npm = series(c.br, bump.npm);
+exports.des = series(c.br, bump.des);
+exports.bump = series(c.br, bump.all);

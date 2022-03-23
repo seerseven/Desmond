@@ -1,14 +1,13 @@
 const { src, series } = require('gulp');
-const $ = require('./require.js');
-const chalk = require('./chalk.js');
-const cmd = require('./chalk.js');
+const $ = require('../config/require.js');
+const c = require('./chalk.js');
 const v = ' Git: ';
-const start = chalk.start();
+const start = c.start();
 
 const git = {
 	save: function () {
 		start;
-		chalk.logger(' Add ', 'All Files & Changes...', chalk.ghex);
+		c.logger(' Add ', 'All Files & Changes...', c.ghex);
 		return src([
 			'./*',
 			'!./node_modules/**',
@@ -22,27 +21,27 @@ const git = {
 				$.git.commit(undefined, {
 					args: '-m "gulp commit"',
 					disableMessageRequirement: true,
-				}),
-				chalk.logger(' Commit ', 'All Files & Changes...', chalk.ghex),
-				chalk.frey(),
-				chalk.end(v, 'Saved Changes to Local Repo... ', chalk.ghex, start),
-				chalk.frey()
-			);
+				})
+			)
+			.on('end', () => {
+				c.logger(' Commit ', 'All Files & Changes...', c.ghex),
+					c.frey(),
+					c.end(v, 'Saved Changes to Local Repo... ', c.ghex),
+					c.frey();
+			});
 	},
 	send: function (done) {
 		start;
-		chalk.logger(' Push ', 'All Files & Changes...', chalk.ghex);
-		$.git.push('origin', 'master', function (err) {
-			if (err) throw err;
-		});
-		chalk.frey();
-		chalk.end(
-			v,
-			'Branch is Up to Date with Origin/Master... ',
-			chalk.ghex,
-			start
-		);
-		chalk.frey();
+		c.logger(' Push ', 'All Files & Changes...', c.ghex);
+		$.git
+			.push('origin', 'master', function (err) {
+				if (err) throw err;
+			})
+			.on('end', () => {
+				c.frey();
+				c.end(v, 'Branch is Up to Date with Origin/Master... ', c.ghex);
+				c.frey();
+			});
 		done();
 	},
 };
