@@ -3,10 +3,12 @@ const { series, parallel, watch, src, dest, task } = require('gulp');
 const $ = require('../config/require.js');
 const c = require('./chalk.js');
 const v = ' Bump: ';
+const start = c.start();
+const s = start;
 const bump = {
 	app: function () {
 		c.desmond(c.bhex);
-		const start = c.start();
+		start;
 		return src('app/package.json')
 			.pipe($.plumber())
 			.pipe($.bump({ type: 'patch' }))

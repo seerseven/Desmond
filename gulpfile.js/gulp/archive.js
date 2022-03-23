@@ -4,9 +4,10 @@ const { series, parallel, watch, src, dest, task } = require('gulp');
 const $ = require('../config/require.js');
 const c = require('./chalk.js');
 var fs = require('fs');
-
-//Variables
 const start = c.start();
+const s = start;
+//Variables
+
 const vault = 'state/tholos/archives';
 const NONODE = '!app/node_modules/**';
 const NOMOD = '!./node_modules/**';

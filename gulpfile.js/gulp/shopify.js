@@ -5,6 +5,7 @@ var fs = require('fs');
 const c = require('./chalk.js');
 const v = ' Shopify: ';
 const start = c.start();
+const s = start;
 function folderNamer() {
 	var months = [
 		'Jan',

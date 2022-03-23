@@ -4,6 +4,7 @@ const $ = require('../config/require.js');
 const ver = require('./bump.js');
 const c = require('./chalk.js');
 const start = c.start();
+const s = start;
 const nodemon = 'app/node_modules/@seerseven/desmond/src/*.js';
 const v = ' NPM: ';
 

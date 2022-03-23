@@ -31,7 +31,7 @@ function begin() {
 	const str = performance.now();
 	return str;
 }
-function end(taskName, taskDescription, taskColor, type = 1, s = start) {
+function end(taskName, taskDescription, taskColor, type = 1, s) {
 	const e = performance.now();
 	var ms = e - s;
 	var done = ms.toFixed(2);

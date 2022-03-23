@@ -3,7 +3,7 @@ const $ = require('../config/require.js');
 const c = require('./chalk.js');
 const v = ' Git: ';
 const start = c.start();
-
+const s = start;
 const git = {
 	save: function () {
 		start;
