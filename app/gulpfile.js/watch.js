@@ -18,14 +18,6 @@ const task = {
 	sort: ass.sortbuild,
 };
 
-const { exec } = require('child_process');
-
-function child() {
-	return exec(
-		'wt -p "Command Prompt" C:/Users/Seerseven/Mithrasatori/Desmond/npm.bat ; split-pane -p "Command Prompt" C:/Users/Seerseven/Mithrasatori/Desmond/shopify.bat '
-	);
-}
-
 // Watch files
 function watchFiles() {
 	watch(['src/build/*.css', 'src/build/*.js'], task.sort);
@@ -46,7 +38,6 @@ function watchFiles() {
 watchFiles.displayName = 'Watchfiles : Watch Files for Changes';
 
 exports.files = series(watchFiles);
-exports.child = series(child);
 // gulp.on('task_stop', function(evt) {
 //   if (evt.task == 'foo') {
 //     // do stuff after task foo has finished

@@ -1,12 +1,12 @@
 'use strict';
 
 const { series, parallel, watch, src, dest, task } = require('gulp');
-const clean = require('gulp-clean');
-const zip = require('gulp-zip');
+const $ = require('./require.js');
+const chalk = require('./chalk.js');
 var fs = require('fs');
-const version = require('./bump.js');
 
 //Variables
+const start = chalk.start();
 const vault = 'state/tholos/archives';
 const NONODE = '!app/node_modules/**';
 const NOMOD = '!./node_modules/**';
@@ -15,7 +15,7 @@ const NONPM = '!./npm/**';
 const NOSTATE = '!./state/**';
 var zp = '.zip';
 var base = 'state/tholos/';
-const chalk = require('./chalk.js');
+
 const v = ' Archive:Core ';
 const v1 = ' Archive:App ';
 const v2 = ' Archive:Npm ';
@@ -111,7 +111,7 @@ var desZipName = zipName('des');
 
 const dez = {
 	copy: function () {
-		const s = chalk.start();
+		start;
 		const folders = [desName];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
@@ -124,32 +124,32 @@ const dez = {
 			.pipe(dest(desName))
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v, 'Desmond(core) Files Copied... ', '#6db91c', s, 2);
+				chalk.end(v, 'Desmond(core) Files Copied... ', '#6db91c', start, 2);
 				chalk.frey();
 			});
 	},
 	zip: function () {
-		const s = chalk.start();
+		start;
 		return src([desName + '/**/*', desName + '/.*/**/*'])
-			.pipe(zip(desZipName))
+			.pipe($.zip(desZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v, 'Core Files Zipped & Archived... ', '#6db91c', s, 2);
+				chalk.end(v, 'Core Files Zipped & Archived... ', '#6db91c', start, 2);
 				chalk.frey();
 			});
 	},
 	clean: function () {
-		const s = chalk.start();
+		start;
 		return src(desName)
-			.pipe(clean())
+			.pipe($.clean())
 			.on('end', () => {
 				chalk.frey();
 				chalk.end(
 					v,
 					'Directory Cleansed, Residuals Deleted... ',
 					'#6db91c',
-					s,
+					start,
 					2
 				);
 				chalk.frey();
@@ -161,7 +161,7 @@ const dez = {
 
 const app = {
 	copy: function () {
-		const s = chalk.start();
+		start;
 		const folders = [appName];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
@@ -174,32 +174,32 @@ const app = {
 			.pipe(dest(appName))
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v1, 'Desmond(app) Files Copied... ', chalk.thex, s, 2);
+				chalk.end(v1, 'Desmond(app) Files Copied... ', chalk.thex, start, 2);
 				chalk.frey();
 			});
 	},
 	zip: function () {
-		const s = chalk.start();
+		start;
 		return src([appName + '/**/*', appName + '/.*/**/*'])
-			.pipe(zip(appZipName))
+			.pipe($.zip(appZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v1, 'App Files Zipped & Archived... ', chalk.thex, s, 2);
+				chalk.end(v1, 'App Files Zipped & Archived... ', chalk.thex, start, 2);
 				chalk.frey();
 			});
 	},
 	clean: function () {
-		const s = chalk.start();
+		start;
 		return src(appName)
-			.pipe(clean())
+			.pipe($.clean())
 			.on('end', () => {
 				chalk.frey();
 				chalk.end(
 					v1,
 					'Directory Cleansed, Residuals Deleted... ',
 					chalk.thex,
-					s,
+					start,
 					2
 				);
 				chalk.frey();
@@ -211,7 +211,7 @@ const app = {
 
 const node = {
 	copy: function () {
-		const s = chalk.start();
+		start;
 		const folders = [npmName];
 		folders.forEach((dir) => {
 			if (!fs.existsSync(dir)) {
@@ -224,25 +224,25 @@ const node = {
 			.pipe(dest(npmName))
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v2, 'Desmond(npm) Files Copied... ', '#e4329b', s, 2);
+				chalk.end(v2, 'Desmond(npm) Files Copied... ', '#e4329b', start, 2);
 				chalk.frey();
 			});
 	},
 	zip: function () {
-		const s = chalk.start();
+		start;
 		return src([npmName + '/**/*'])
-			.pipe(zip(npmZipName))
+			.pipe($.zip(npmZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
 				chalk.frey();
-				chalk.end(v2, 'NPM Files Zipped & Archived... ', '#e4329b', s, 2);
+				chalk.end(v2, 'NPM Files Zipped & Archived... ', '#e4329b', start, 2);
 				chalk.frey();
 			});
 	},
 	clean: function () {
-		const s = chalk.start();
+		start;
 		return src(npmName)
-			.pipe(clean())
+			.pipe($.clean())
 			.on('end', () => {
 				chalk.frey();
 				chalk.end(
@@ -261,13 +261,13 @@ const node = {
 
 const project = {
 	zip: function () {
-		const s = chalk.start();
+		start;
 		return src([
 			'state/tholos/**/*',
 			'!state/tholos/archives/**',
 			'!state/tholos/themes/**',
 		])
-			.pipe(zip(archZipName))
+			.pipe($.zip(archZipName))
 			.pipe(dest(vault))
 			.on('end', () => {
 				chalk.frey();
@@ -282,9 +282,9 @@ const project = {
 			});
 	},
 	clean: function () {
-		const s = chalk.start();
+		start;
 		return src([npmName, appName, desName])
-			.pipe(clean())
+			.pipe($.clean())
 			.on('end', () => {
 				chalk.frey();
 				chalk.end(
@@ -300,18 +300,6 @@ const project = {
 			});
 	},
 };
-
-dez.copy.displayName = 'Des(copy)      : Copy Desmond Files for Backup';
-dez.zip.displayName = 'Des(zip)       : Zip Desmond Files & Archive';
-dez.clean.displayName = 'Des(clean)     : Clean File Leftovers';
-app.copy.displayName = 'App(Copy)      : Copy App Files for Backup';
-app.zip.displayName = 'App(zip)       : Zip App Files & Archive';
-app.clean.displayName = 'App(clean)     : Clean File Leftovers';
-node.copy.displayName = 'Npm(copy)      : Copy NPM Files for Backup';
-node.zip.displayName = 'Npm(zip)       : Zip NPM Files & Archive';
-node.clean.displayName = 'Npm(clean)     : Clean File Leftovers';
-project.zip.displayName = 'Project(zip)   : Zip Project Folders & Archive';
-project.clean.displayName = 'Project(clean) : Clean Project File Leftovers';
 
 exports.dezcopy = dez.copy;
 exports.dezzip = dez.zip;
@@ -332,8 +320,19 @@ exports.des = series(chalk.br, dez.copy, dez.zip, dez.clean);
 exports.app = series(chalk.br, app.copy, app.zip, app.clean);
 exports.npm = series(chalk.br, node.copy, node.zip, node.clean);
 exports.project = series(
-	version.bump,
 	parallel(dez.copy, app.copy, node.copy),
 	project.zip,
 	project.clean
 );
+
+// dez.copy.displayName = 'Des(copy)      : Copy Desmond Files for Backup';
+// dez.zip.displayName = 'Des(zip)       : Zip Desmond Files & Archive';
+// dez.clean.displayName = 'Des(clean)     : Clean File Leftovers';
+// app.copy.displayName = 'App(Copy)      : Copy App Files for Backup';
+// app.zip.displayName = 'App(zip)       : Zip App Files & Archive';
+// app.clean.displayName = 'App(clean)     : Clean File Leftovers';
+// node.copy.displayName = 'Npm(copy)      : Copy NPM Files for Backup';
+// node.zip.displayName = 'Npm(zip)       : Zip NPM Files & Archive';
+// node.clean.displayName = 'Npm(clean)     : Clean File Leftovers';
+// project.zip.displayName = 'Project(zip)   : Zip Project Folders & Archive';
+// project.clean.displayName = 'Project(clean) : Clean Project File Leftovers';

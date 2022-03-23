@@ -22,7 +22,6 @@ export const build = async ({
       watch: development && {
         onRebuild(error, result) {
           if (error) LOGGER.error("watch failed: ", error);
-          else LOGGER.desmond("rebuilt your files..");
         },
       },
       sourcemap: !development,

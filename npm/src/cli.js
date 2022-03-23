@@ -9,8 +9,6 @@ const LOGGER = logger();
 args.forEach((value) => {
   switch (value) {
     case "serve":
-      LOGGER.gulp("is starting...");
-      LOGGER.desmond("is watching over your changes");
       try {
         build({
           development: true,

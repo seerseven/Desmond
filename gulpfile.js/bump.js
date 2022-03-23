@@ -1,8 +1,6 @@
 'use strict';
-
 const { series, parallel, watch, src, dest, task } = require('gulp');
-const bumpVersion = require('gulp-bump');
-const plumber = require('gulp-plumber');
+const $ = require('./require.js');
 const chalk = require('./chalk.js');
 const cmd = require('./chalk.js');
 const v = ' Bump: ';
@@ -14,8 +12,8 @@ const bump = {
 		const s = chalk.start();
 
 		return src('app/package.json')
-			.pipe(plumber())
-			.pipe(bumpVersion({ type: 'patch' }))
+			.pipe($.plumber())
+			.pipe($.bump({ type: 'patch' }))
 			.pipe(dest('app'))
 			.on('end', () => {
 				chalk.empty();
@@ -27,8 +25,8 @@ const bump = {
 	npm: function () {
 		const s = chalk.start();
 		return src('npm/package.json')
-			.pipe(plumber())
-			.pipe(bumpVersion({ type: 'patch' }))
+			.pipe($.plumber())
+			.pipe($.bump({ type: 'patch' }))
 			.pipe(dest('npm'))
 			.on('end', () => {
 				chalk.frey();
@@ -39,8 +37,8 @@ const bump = {
 	des: function () {
 		const s = chalk.start();
 		return src('./package.json')
-			.pipe(plumber())
-			.pipe(bumpVersion({ type: 'patch' }))
+			.pipe($.plumber())
+			.pipe($.bump({ type: 'patch' }))
 			.pipe(dest('./'))
 			.on('end', () => {
 				chalk.frey();

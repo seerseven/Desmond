@@ -46,4 +46,3 @@ exports.jsclean = js.clean;
 exports.default = series(ass.desmond, watch.files);
 exports.sortfiles = ass.sortbuild;
 exports.desmond = ass.desmond;
-exports.child = watch.child;
