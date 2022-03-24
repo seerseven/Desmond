@@ -1,9 +1,5 @@
 'use strict';
-
 const { series, parallel, src, dest, task } = require('gulp');
-const bump = require('gulp-bump');
-const plumber = require('gulp-plumber');
-const prompt = require('gulp-prompt');
 
 //Require
 const css = require('./styles.js');

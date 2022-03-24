@@ -33,15 +33,12 @@ const git = {
 	send: function (done) {
 		start;
 		c.logger(' Push ', 'All Files & Changes...', c.ghex);
-		$.git
-			.push('origin', 'master', function (err) {
-				if (err) throw err;
-			})
-			.on('end', () => {
-				c.frey();
-				c.end(v, 'Branch is Up to Date with Origin/Master... ', c.ghex);
-				c.frey();
-			});
+		$.git.push('origin', 'master', function (err) {
+			if (err) throw err;
+		}),
+			c.frey();
+		c.end(v, 'Branch is Up to Date with Origin/Master... ', c.ghex);
+		c.frey();
 		done();
 	},
 };
