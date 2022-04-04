@@ -427,6 +427,40 @@ const js = {
 	},
 };
 
+const git = {
+	save: function (type) {
+		if (type === 1) {
+			theStart('GIT', 'ADD', '& COMMIT CHANGES', x.git, x.gitl, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('LOCAL CHANGES SAVED', x.git, x.gitl);
+		}
+	},
+	push: function (type) {
+		if (type === 1) {
+			theStart('GIT', 'PUSH', 'CHANGES TO REMOTE', x.git, x.gitl, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('BRANCH UP-TO-DATE W/ ORIGIN/MASTER', x.git, x.gitl);
+		}
+	},
+	pull: function (type) {
+		if (type === 1) {
+			theStart(
+				'SASS',
+				'CONVERT',
+				'.CSS FILES to .SCSS',
+				x.dsass,
+				x.sass,
+				x.mith
+			);
+		}
+		if (type === 0) {
+			thealtEnd('CSS FILES CONVERTED TO SCSS', x.dsass, x.sass);
+		}
+	},
+};
+
 const admin = {
 	clean: function (type) {
 		if (type === 1) {
@@ -595,6 +629,10 @@ exports.sassy = scss.sass;
 exports.schema = scss.schema;
 exports.cts = scss.cts;
 exports.files = scss.files;
+
+// GIT Tasks
+exports.save = git.save;
+exports.push = git.push;
 
 // JS Tasks
 exports.shopifyjs = js.shopify;

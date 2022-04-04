@@ -19,46 +19,29 @@ const s = conf.paths.input;
 const d = conf.paths.output;
 const o = conf.plugins.opts;
 const l = log;
+const u = undefined;
 
 module.exports = {
-	commit: function () {
-		return src(s.addall, l.sassy(1))
-			.pipe(p.plum(), l.sass())
+	save: function () {
+		return src(s.addall, l.save(1))
 			.pipe(p.git.add())
-			.pipe(p.git.commit(undefined, o.args))
-			.on(d.end, () => l.sassy(0));
+			.pipe(p.git.commit(u, o.args))
+			.on(d.end, () => l.save(0));
 	},
-	schema: function () {
-		return src(s.schema, l.schema(1))
-			.pipe(p.plum(), l.sass())
-			.pipe(p.sass(o.expand))
-			.pipe(p.rname(o.schema))
-			.pipe(dest(d.schema), l.scss())
-			.on(d.end, () => l.schema(0));
+	push: function (done) {
+		l.save(0);
+		p.git.push('origin', 'master', function (err) {
+			if (err) throw err;
+		}),
+			l.push(0);
+		done();
 	},
-	cts: function () {
-		return src(s.cts, l.cts(1))
-			.pipe(p.plum(), l.sass())
-			.pipe(p.sass(o.expand))
-			.pipe(p.rname(o.cts))
-			.pipe(dest(d.cts), l.scss())
-			.on(d.end, () => l.cts(0));
-	},
-	index: function () {
-		return src(s.files, l.files(1))
-			.pipe(p.plum(), l.sass())
-			.pipe(p.gendex)
-			.pipe(dest('src/sass/abstracts/functions'), l.scss())
-			.on(d.end, () => l.files(0));
-	},
-	listfiles: function () {
-		return src(s.files, l.files(1))
-			.pipe(p.plum(), l.sass())
-			.pipe(p.filelist)
-			.pipe(p.rname(o.json))
-			.pipe(dest(d.sass), l.scss())
-			.on(d.end, () => l.files(0));
-	},
+	// pull: function (done) {
+	// 	p.git.pull('origin', 'master', {args: '--rebase'}, function (err) {
+	//     if (err) throw err;
+	//   })
+	//   done();
+	// },
 };
 
 auto.generateTasks();

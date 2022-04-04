@@ -145,6 +145,8 @@ module.exports = {
 		dred: '#9b0d21',
 		purp: '#7b5be2',
 		dpurp: '#2b0f6b',
+		git: '#7b5be2',
+		gitl: '#7f718b',
 		bump: '#1cb1dc',
 		dblue: '#135366',
 		blue: '#1cb1dc',

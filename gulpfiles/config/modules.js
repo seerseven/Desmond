@@ -4,12 +4,16 @@ const css = require('../tasks/styles');
 const js = require('../tasks/scripts');
 const cln = require('../tasks/clean');
 const scss = require('../tasks/sass');
+const git = require('../tasks/github');
 module.exports = {
 	bump: {
 		version: series(bump.themebump, bump.npmbump),
 	},
 	scss: {
 		cts: scss.cts,
+	},
+	git: {
+		save: git.save,
 	},
 	css: {
 		all: parallel(css.shopifycss, css.mdbcss, css.themecss),
