@@ -36,12 +36,11 @@ module.exports = {
 		setTimeout(l.push(0), 5000);
 		p.git.push('origin', 'master', function (err) {
 			if (err) throw err;
-		}),
-			done();
+		});
+		done();
 	},
 	// pushend: function () {
-	// 	p.wait(3000);
-	// 	return src(s.addall).on(d.end, () => );
+	// 	return src(s.addall).on(d.end, () => l.push(0));
 	// },
 	// pull: function (done) {
 	// 	p.git.pull('origin', 'master', {args: '--rebase'}, function (err) {
