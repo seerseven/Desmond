@@ -25,7 +25,8 @@ module.exports = {
 	gitsave: function () {
 		return src(s.addall, l.save(1))
 			.pipe(p.git.add())
-			.pipe(p.git.commit(u, o.args));
+			.pipe(p.git.commit(u, o.args))
+			.pipe(p.wait(1000));
 	},
 	saveend: function () {
 		return src(s.addall).on(d.end, () => l.save(0));
@@ -34,7 +35,8 @@ module.exports = {
 		l.push(1);
 		p.git.push('origin', 'master', function (err) {
 			if (err) throw err;
-		});
+		}),
+			p.wait(1000);
 		done();
 	},
 	pushend: function () {
