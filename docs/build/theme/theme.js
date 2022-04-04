@@ -1,4 +1,4 @@
-// src/js/abstracts/mixins/element.js
+// src/js/modules/abstracts/mixins/element.js
 var qry = {
   add: function(cls, sel) {
     $(sel).addClass(cls);
@@ -191,7 +191,7 @@ var dom = {
   }
 };
 
-// src/js/base/header.js
+// src/js/modules/base/header.js
 var header = {
   init: function() {
     header.enable();
@@ -622,7 +622,7 @@ var header = {
   }
 };
 
-// src/js/components/darkmode.js
+// src/js/modules/components/darkmode.js
 var darkmode = {
   init: function() {
     darkmode.enable();
@@ -760,7 +760,7 @@ var darkmode = {
   }
 };
 
-// src/js/desmond.js
+// src/js/modules/theme.js
 header.init();
 darkmode.init();
 dom.edit("id", "element", "add", "SUCK-MY-BALLS");

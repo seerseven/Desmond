@@ -1,135 +1,134 @@
-const { task, series, watch, src, dest, parallel } = require('gulp');
-const concat = require('gulp-concat');
-const uglify = require('gulp-uglify');
-const rename = require('gulp-rename');
-const plumber = require('gulp-plumber');
-const clean = require('gulp-clean');
-const chalk = require('./chalk.js');
-const log = require('./chalk.js');
-const c = require('./chalk.js');
-const z = ' JSX: ';
+const { series, parallel, src, dest, task } = require('gulp');
 
-//Main Variables
-const v = {
-	build: 'src/build/',
-	jsLibs: 'src/js/libs/',
-	srcDist: 'src/dist',
-	paraDist: 'parallax/assets',
-	shopDist: 'shopify/assets',
-	dist: ['parallax/assets', 'shopify/assets'],
-	clean: [
-		'shopify/assets/*.js',
-		'!shopify/assets/*.css',
-		'!shopify/assets/desmond.js',
-		'!shopify/assets/desmond.min.js',
-	],
-	fQuery: ['jquery.js', 'jqueryUI.js'],
-	fLibs: ['three.js', 'vanta.js', 'aos.js', 'rellax.js'],
-	fCore: ['jquery.js', 'jqueryUI.js', 'popper.js', 'mdball.js'],
-	fBuild: ['shopify.js', 'core.js', 'libs.js', 'theme.js'],
-};
-v.fQuery = v.fQuery.map((i) => v.jsLibs + i);
-v.fLibs = v.fLibs.map((i) => v.jsLibs + i);
-v.fCore = v.fCore.map((i) => v.jsLibs + i);
-v.fBuild = v.fBuild.map((i) => v.srcDist + i);
-
-const js = {
-	shopify: function () {
-		c.logger(' JSX ', 'COMPILE SHOPIFY JS  ( module )', c.yell);
-		const s = chalk.start();
-		log.cmd('Compile MODULES to JS', c.lpurp);
-		return src([v.build + 'shopify/shopify.js'])
-			.pipe(plumber())
-			.pipe(dest(v.jsLibs), log.cmd('Dist Unminified JS', c.lpink))
-			.pipe(dest(v.srcDist))
-			.pipe(dest(v.shopDist))
-			.pipe(uglify(), log.cmd('Rename, Minify & Build', c.teal))
-			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist))
-			.on('end', () => {
-				chalk.end(z, 'SHOPIFY.MIN.JS', c.cyan, s);
-				chalk.desmond(c.yell);
-			});
-	},
-	query: function () {
-		return src(v.fQuery)
-			.pipe(plumber())
-			.pipe(concat('jQuery.js'))
-			.pipe(uglify())
-			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.paraDist));
-	},
-	libs: function () {
-		c.logger(' JSX ', 'COMPILE LIBS JS  ( lib )', c.oj);
-		const s = chalk.start();
-		log.cmd('Compile MODULES to JS', c.lpurp);
-		return src(v.fLibs)
-			.pipe(plumber())
-			.pipe(concat('libs.js'), log.cmd('Concatenate JS Libraries', c.pink))
-			.pipe(dest(v.srcDist), log.cmd('Dist Unminified JS', c.lpink))
-			.pipe(dest(v.shopDist))
-			.pipe(uglify(), log.cmd('Rename, Minify & Build', c.teal))
-			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist))
-			.on('end', () => {
-				chalk.end(z, 'LIBS.MIN.JS', c.cyan, s);
-				chalk.desmond(c.oj);
-			});
-	},
-	core: function () {
-		c.logger(' JSX ', 'COMPILE CORE JS  ( lib )', c.oj);
-		const s = chalk.start();
-		log.cmd('Compile LIBS to JS', c.lpurp);
-		return src(v.fCore)
-			.pipe(plumber())
-			.pipe(concat('core.js'), log.cmd('Concatenate JS Libraries', c.pink))
-			.pipe(dest(v.srcDist), log.cmd('Dist Unminified JS', c.lpink))
-			.pipe(dest(v.shopDist))
-			.pipe(uglify(), log.cmd('Rename, Minify & Build', c.teal))
-			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist))
-			.on('end', () => {
-				chalk.end(z, 'CORE.MIN.JS', c.cyan, s);
-				chalk.desmond(c.oj);
-			});
-	},
-	theme: function () {
-		c.logger(' JSX ', 'COMPILE THEME JS  ( module )', c.yell);
-		const s = chalk.start();
-		log.cmd('Compile MODULES to JS', c.lpurp);
-		return src([v.build + 'theme/theme.js'])
-			.pipe(plumber())
-			.pipe(dest(v.srcDist), log.cmd('Dist Unminified JS', c.lpink))
-			.pipe(dest(v.shopDist))
-			.pipe(uglify(), log.cmd('Rename, Minify & Build', c.teal))
-			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.shopDist))
-			.on('end', () => {
-				chalk.end(z, 'THEME.MIN.JS', c.cyan, s);
-				chalk.desmond(c.yell);
-			});
-	},
-	build: function () {
-		return src(v.fBuild)
-			.pipe(plumber())
-			.pipe(concat('desmond.js'))
-			.pipe(dest(v.shopDist))
-			.pipe(uglify())
-			.pipe(rename({ suffix: '.min' }))
-			.pipe(dest(v.dist));
-	},
-	clean: function () {
-		return src(v.clean).pipe(clean());
+//require
+const conf = require('../config/config');
+const log = require('../config/cmd');
+const auto = {
+	generateTasks: function () {
+		const exportsArray = Object.keys(module.exports);
+		exportsArray.map((element) => {
+			return task(element, module.exports[element]);
+		});
 	},
 };
 
-exports.shopify = js.shopify;
-exports.query = js.query;
-exports.libs = js.libs;
-exports.core = js.core;
-exports.theme = js.theme;
-exports.build = js.build;
-exports.clean = js.clean;
+//config
+const x = conf.colors;
+const p = conf.plugins;
+const s = conf.paths.input;
+const d = conf.paths.output;
+const o = conf.plugins.opts;
+const l = log;
 
-exports.jsmods = parallel(js.shopify, js.theme);
-exports.jslibs = parallel(js.libs, js.core);
+module.exports = {
+	shopifyjs: function () {
+		return src(s.shopifyjs, l.shopifyjs(1))
+			.pipe(p.plum(), l.mods())
+			.pipe(dest(d.libs), l.multi())
+			.pipe(dest(d.dist))
+			.pipe(dest(d.shopify))
+			.pipe(p.uglify(), l.ugly())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.shopify), l.dist())
+			.on(d.end, () => l.shopifyjs(0));
+	},
+	themejs: function () {
+		return src(s.themejs, l.themejs(1))
+			.pipe(p.plum(), l.mods())
+			.pipe(dest(d.dist), l.multi())
+			.pipe(dest(d.shopify))
+			.pipe(p.uglify(), l.ugly())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.shopify), l.dist())
+			.on(d.end, () => l.themejs(0));
+	},
+	queryjs: function () {
+		return src(s.jsquery, l.queryjs(1))
+			.pipe(p.plum(), l.libs())
+			.pipe(p.concat(o.query), l.concqry())
+			.pipe(dest(d.dist), l.multi())
+			.pipe(p.uglify(), l.ugly())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.min))
+			.pipe(dest(d.parallax), l.dist())
+			.on(d.end, () => l.queryjs(0));
+	},
+	mdbjs: function () {
+		return src(s.jsmdb, l.mdbjs(1))
+			.pipe(p.plum(), l.libs())
+			.pipe(p.concat(o.mdb), l.concmdb())
+			.pipe(dest(d.dist), l.multi())
+			.pipe(p.uglify(), l.ugly())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.min), l.dist())
+			.on(d.end, () => l.mdbjs(0));
+	},
+	canvasjs: function () {
+		return src(s.jscanvas, l.canvasjs(1))
+			.pipe(p.plum(), l.libs())
+			.pipe(p.concat(o.canvas), l.conccan())
+			.pipe(dest(d.dist), l.multi())
+			.pipe(p.uglify(), l.ugly())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.min), l.dist())
+			.on(d.end, () => l.canvasjs(0));
+	},
+	vendorjs: function () {
+		return src(s.jsvendor, l.vendorjs(1))
+			.pipe(p.plum(), l.libs())
+			.pipe(p.concat(o.vendor), l.concven())
+			.pipe(dest(d.dist), l.multi())
+			.pipe(p.uglify(), l.ugly())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.min), l.dist())
+			.on(d.end, () => l.vendorjs(0));
+	},
+	libjs: function () {
+		return src(s.jslibs, l.libjs(1))
+			.pipe(p.plum(), l.libs())
+			.pipe(p.concat(o.libs), l.conclibs())
+			.pipe(dest(d.dist))
+			.pipe(dest(d.shopify), l.multi())
+			.pipe(p.uglify(), l.ugly())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.shopify), l.dist())
+			.on(d.end, () => l.libjs(0));
+	},
+	corejs: function () {
+		return src(s.jscore, l.corejs(1))
+			.pipe(p.plum(), l.libs())
+			.pipe(p.concat(o.core), l.conccore())
+			.pipe(dest(d.dist))
+			.pipe(dest(d.shopify), l.multi())
+			.pipe(p.uglify(), l.ugly())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.shopify), l.dist())
+			.on(d.end, () => l.corejs(0));
+	},
+	concatjs: function () {
+		return src(s.concatjs, l.concatjs(1))
+			.pipe(p.plum(), l.concmin())
+			.pipe(p.concat(o.concat), l.concjsc())
+			.pipe(dest(d.dist), l.multi())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.min), l.dist())
+			.on(d.end, () => l.concatjs(0));
+	},
+	buildjs: function () {
+		return src(s.buildjs, l.buildjs(1))
+			.pipe(p.plum(), l.concjs())
+			.pipe(p.concat(o.desjs), l.concjsb())
+			.pipe(dest(d.shopify), l.multi())
+			.pipe(p.uglify(), l.ugly())
+			.pipe(p.rname(o.min), l.rname())
+			.pipe(dest(d.shopify), l.dist())
+			.on(d.end, () => l.buildjs(0));
+	},
+	cleanjs: function () {
+		return src(s.cleanjs, l.cleanjs(1))
+			.pipe(p.clean(), l.clean())
+			.on(d.end, () => l.cleanjs(0));
+	},
+};
+
+auto.generateTasks();

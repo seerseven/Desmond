@@ -21,12 +21,11 @@ const o = conf.plugins.opts;
 const l = log;
 
 module.exports = {
-	sass: function () {
-		return src(s.sass, l.sassy(1))
+	commit: function () {
+		return src(s.addall, l.sassy(1))
 			.pipe(p.plum(), l.sass())
-			.pipe(p.sass(o.expand))
-			.pipe(p.rname(o.css))
-			.pipe(dest(d.scss), l.scss())
+			.pipe(p.git.add())
+			.pipe(p.git.commit(undefined, o.args))
 			.on(d.end, () => l.sassy(0));
 	},
 	schema: function () {

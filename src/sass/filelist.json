@@ -3,11 +3,11 @@
 @forward 'em-to-px';
 @forward 'em-to-rem';
 @forward 'fun';
+@forward 'index';
 @forward 'px-to-em';
 @forward 'px-to-rem';
 @forward 'rfs';
 @forward 'root';
 @forward 'schema';
 @forward 'strip-unit';
-@forward 'sun';
 @forward 'text-contrast';

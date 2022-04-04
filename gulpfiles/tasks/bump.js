@@ -1,44 +1,37 @@
-const { series, parallel, src, dest, task } = require('gulp');
+const { src, dest, task } = require('gulp');
 
 //require
 const conf = require('../config/config');
-const cmd = require('../config/cmd');
-
-//config
-const x = conf.colors;
-const p = conf.plugins;
-const d = conf.paths.input;
-const s = conf.paths.output;
-
-//settings
-tag = 'BUMP';
-hex = x.pink;
-end = cmd.end;
-srt = cmd.start;
-log = cmd.log;
-
-module.exports = {
-	npm: function () {
-		return src(conf.pkg, srt('NPM.JSON VERSION'))
-			.pipe(p.plum(), log('Get Current Package Version', x.bump))
-			.pipe(p.bump(), log('Save New Package Version', x.shop))
-			.pipe(dest(d.app))
-			.on('end', () => end('PACKAGE.JSON'));
-	},
-	main: function () {
-		return src(conf.pkg, srt('PACKAGE.JSON VERSION'))
-			.pipe(p.plum(), log('Get Current Package Version', x.bump))
-			.pipe(p.bump(), log('Save New Package Version', x.shop))
-			.pipe(dest(d.app))
-			.on('end', () => end('PACKAGE.JSON'));
+const log = require('../config/cmd');
+const auto = {
+	generateTasks: function () {
+		const exportsArray = Object.keys(module.exports);
+		exportsArray.map((element) => {
+			return task(element, module.exports[element]);
+		});
 	},
 };
 
-const taskGenerator = (function generateTasks() {
-	const exportsArray = Object.keys(module.exports);
-	exportsArray.map((element) => {
-		return task(element, module.exports[element]);
-	});
+//config
+const p = conf.plugins;
+const d = conf.paths.output;
+const l = log;
 
-	return generateTasks;
-})();
+module.exports = {
+	themebump: function () {
+		return src(conf.pkg, l.themeb(1))
+			.pipe(p.plum())
+			.pipe(p.bump())
+			.pipe(dest(d.app))
+			.on('end', () => l.themeb(0));
+	},
+	npmbump: function () {
+		return src(conf.pkg, l.npmb(1))
+			.pipe(p.plum())
+			.pipe(p.bump())
+			.pipe(dest(d.app))
+			.on('end', () => l.npmb(0));
+	},
+};
+
+auto.generateTasks();

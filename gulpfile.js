@@ -1,14 +1,23 @@
 'use strict';
 
 const { series, parallel, src, dest } = require('gulp');
-const task = require('./gulpfiles/config/modules');
+const tasks = require('./gulpfiles/config/modules');
 
-exports.shop = task.css.shopify;
-exports.theme = task.css.theme;
-exports.note = task.css.notion;
-exports.build = task.css.build;
-exports.clean = task.css.clean;
-exports.default = task.css.mdb;
+//JS TASKS
+exports.jsx = tasks.js.all;
+exports.jlib = tasks.js.lib;
+exports.jmod = tasks.js.mod;
+exports.jcore = tasks.js.core;
+exports.jsbuild = tasks.js.build;
+
+//CSS TASKS
+exports.css = tasks.css.all;
+exports.cssbuild = tasks.css.build;
+
+//CLEAN TASKS
+exports.clean = tasks.clean.all;
+
+exports.default = tasks.css.mdb;
 
 // const config = require('./gulp.config');
 
