@@ -430,7 +430,7 @@ const js = {
 const git = {
 	save: function (type) {
 		if (type === 1) {
-			theStart('GIT', 'ADD', '& COMMIT CHANGES', x.git, x.git, x.mith);
+			theStart('GIT', 'ADD', '& COMMIT CHANGES', x.git, x.gitl, x.mith);
 		}
 		if (type === 0) {
 			thealtEnd('LOCAL CHANGES SAVED', x.git, x.gitl);
@@ -438,10 +438,10 @@ const git = {
 	},
 	push: function (type) {
 		if (type === 1) {
-			theStart('GIT', 'PUSH', 'CHANGES TO REMOTE', x.git, x.gitl, x.mith);
+			theStart('GIT', 'PUSH', 'CHANGES TO REMOTE', x.gitl, x.git, x.mith);
 		}
 		if (type === 0) {
-			thealtEnd('BRANCH UP-TO-DATE W/ ORIGIN/MASTER', x.git, x.gitl);
+			thealtEnd('LOCAL BRANCH = ORIGIN MASTER', x.gitl, x.git);
 		}
 	},
 	pull: function (type) {

@@ -20,6 +20,7 @@ exports.clean = tasks.clean.all;
 //GIT TASKS
 exports.save = tasks.git.save;
 exports.push = tasks.git.push;
+exports.git = tasks.git.git;
 
 exports.default = tasks.css.mdb;
 

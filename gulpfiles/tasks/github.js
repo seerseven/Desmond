@@ -34,9 +34,11 @@ module.exports = {
 		l.push(1);
 		p.git.push('origin', 'master', function (err) {
 			if (err) throw err;
-		}),
-			l.push(0);
+		});
 		done();
+	},
+	pushend: function () {
+		return src(s.addall).on(d.end, () => l.push(0));
 	},
 	// pull: function (done) {
 	// 	p.git.pull('origin', 'master', {args: '--rebase'}, function (err) {
