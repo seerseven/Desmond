@@ -40,6 +40,7 @@ module.exports = {
 		done();
 	},
 	pushend: function () {
+		p.wait(1000);
 		return src(s.addall).on(d.end, () => l.push(0));
 	},
 	// pull: function (done) {
