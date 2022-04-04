@@ -430,18 +430,18 @@ const js = {
 const git = {
 	save: function (type) {
 		if (type === 1) {
-			theStart('GIT', 'ADD', '& COMMIT CHANGES', x.dpurp, x.purp, x.mith);
+			theStart('GIT', 'ADD', '& COMMIT CHANGES', x.purp, x.purp, x.mith);
 		}
 		if (type === 0) {
-			thealtEnd('LOCAL CHANGES SAVED', x.dpurp, x.purp);
+			thealtEnd('LOCAL CHANGES SAVED', x.purp, x.purp);
 		}
 	},
 	push: function (type) {
 		if (type === 1) {
-			theStart('GIT', 'PUSH', 'CHANGES TO REMOTE', x.git2, x.dgit2, x.mith);
+			theStart('GIT', 'PUSH', 'CHANGES TO REMOTE', x.git2, x.git2, x.mith);
 		}
 		if (type === 0) {
-			thealtEnd('LOCAL BRANCH = ORIGIN MASTER', x.git2, x.dgit2);
+			thealtEnd('LOCAL BRANCH = ORIGIN MASTER', x.git2, x.git2);
 		}
 	},
 	pull: function (type) {
