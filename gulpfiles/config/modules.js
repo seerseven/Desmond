@@ -14,8 +14,8 @@ module.exports = {
 	},
 	git: {
 		save: series(git.gitsave, git.saveend),
-		push: series(git.gitpush),
-		git: series(git.gitsave, git.saveend, git.gitpush),
+		push: series(git.gitpush, git.pushend),
+		git: series(git.gitsave, git.saveend, git.gitpush, git.pushend),
 	},
 	css: {
 		all: parallel(css.shopifycss, css.mdbcss, css.themecss),

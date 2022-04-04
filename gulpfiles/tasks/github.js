@@ -29,19 +29,25 @@ module.exports = {
 			.pipe(p.wait(1000));
 	},
 	saveend: function () {
-		return src(s.addall).on(d.end, () => l.save(0));
+		return src(s.addall)
+			.pipe(p.plum())
+			.on(d.end, () => {
+				l.save(0), p.wait(1000), l.push(1);
+			});
 	},
 	gitpush: function (done) {
-		l.push(1);
-		setTimeout(l.push(0), 5000);
 		p.git.push('origin', 'master', function (err) {
 			if (err) throw err;
-		});
+		}),
+			p.wait(1500);
 		done();
 	},
-	// pushend: function () {
-	// 	return src(s.addall).on(d.end, () => l.push(0));
-	// },
+	pushend: function () {
+		return src(s.addall)
+			.pipe(p.plum())
+			.pipe(p.wait(2500))
+			.on(d.end, () => l.push(0));
+	},
 	// pull: function (done) {
 	// 	p.git.pull('origin', 'master', {args: '--rebase'}, function (err) {
 	//     if (err) throw err;
