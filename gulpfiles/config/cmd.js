@@ -470,6 +470,21 @@ const admin = {
 			thealtEnd('ALL FILES REMOVED', x.drem, x.rem);
 		}
 	},
+	sort: function (type) {
+		if (type === 1) {
+			theStart(
+				'SORT',
+				'MOVE',
+				'COMPILED FILES ON BUILD',
+				x.dyell,
+				x.yell,
+				x.yell
+			);
+		}
+		if (type === 0) {
+			thealtEnd('BUILD FILES SORTED', x.dyell, x.yell);
+		}
+	},
 };
 const bump = {
 	theme: function (type) {
@@ -576,6 +591,15 @@ const logs = {
 	remshop: function () {
 		setLog(x.text, x.text, ' Removed Shopify Assets');
 	},
+	shopifyFiles: function () {
+		setLog(x.teal, x.teal, ' Moved Shopify JS / CSS');
+	},
+	themeFiles: function () {
+		setLog(x.sass, x.sass, ' Moved Theme JS / CSS');
+	},
+	vendorFiles: function () {
+		setLog(x.text, x.text, ' Moved MDB & Notion CSS');
+	},
 };
 
 exports.start = taskStart;
@@ -607,14 +631,18 @@ exports.concjsc = logs.jsconcat;
 exports.concjsb = logs.jsbuild;
 exports.conccsb = logs.cssbuild;
 exports.clean = logs.clean;
-
-//Admin Tasks
-exports.remall = admin.clean;
 exports.remesb = logs.remesb;
 exports.remmin = logs.remmin;
 exports.remdist = logs.remdist;
 exports.remshop = logs.remshop;
 exports.remlax = logs.remlax;
+exports.sfiles = logs.shopifyFiles;
+exports.tfiles = logs.themeFiles;
+exports.vfiles = logs.vendorFiles;
+
+//Admin Tasks
+exports.remall = admin.clean;
+exports.sort = admin.sort;
 
 // CSS Tasks
 exports.shopifycss = css.shopify;

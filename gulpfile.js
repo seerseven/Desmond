@@ -17,12 +17,19 @@ exports.cssbuild = tasks.css.build;
 //CLEAN TASKS
 exports.clean = tasks.clean.all;
 
+//BUMP TASKS
+exports.bump = tasks.bump.version;
+
+//SORT TASKS
+exports.sort = tasks.sort.esbuild;
+
 //GIT TASKS
 exports.save = tasks.git.save;
 exports.push = tasks.git.push;
 exports.git = tasks.git.git;
+exports.deploy = tasks.git.git;
 
-exports.default = tasks.css.mdb;
+exports.default = tasks.git.git;
 
 // const config = require('./gulp.config');
 

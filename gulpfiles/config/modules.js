@@ -4,13 +4,24 @@ const css = require('../tasks/styles');
 const js = require('../tasks/scripts');
 const cln = require('../tasks/clean');
 const scss = require('../tasks/sass');
-const git = require('../tasks/github');
+const git = require('../tasks/git');
+const sort = require('../tasks/sort');
 module.exports = {
 	bump: {
 		version: series(bump.themebump, bump.npmbump),
 	},
 	scss: {
 		cts: scss.cts,
+	},
+	sort: {
+		esbuild: series(
+			sort.sortstart,
+			sort.sortshopify,
+			sort.sorttheme,
+			sort.sortvendors,
+			cln.cleanbuild,
+			sort.sortend
+		),
 	},
 	git: {
 		save: series(git.gitsave, git.saveend),

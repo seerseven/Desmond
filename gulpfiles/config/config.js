@@ -7,6 +7,9 @@ module.exports = {
 	paths: {
 		input: {
 			app: './',
+			shopstart: ['src/build/shopify.js', 'src/build/shopify.css'],
+			themstart: ['src/build/theme.js', 'src/build/theme.css'],
+			venstart: ['src/build/notion.css', 'src/build/mdb.css'],
 			sass: 'src/sass/*.scss',
 			schema: 'src/sass/abstracts/utilities/schema/schema.scss',
 			cts: 'shopify/assets/*.css',
@@ -84,6 +87,9 @@ module.exports = {
 			sass: 'src/sass',
 			cts: 'src/sass/cts',
 			scss: 'src/build/scss',
+			shopend: 'src/build/shopify',
+			themend: 'src/build/theme',
+			venend: 'src/build/vendors',
 			multi: ['src/dist', 'shopify/assets'],
 			pro: ['parallax/assets', 'shopify/assets'],
 		},
@@ -93,6 +99,7 @@ module.exports = {
 				'!src/build/shopify/**',
 				'!src/build/theme/**',
 				'!src/build/vendors/**',
+				'!src/build/scss/**',
 			],
 			min: 'src/dist/min/**/*',
 			dist: ['src/dist/**/*', '!src/dist/min/**'],
@@ -251,6 +258,9 @@ module.exports = {
 			args: {
 				args: '-m "initial commit"',
 				disableMessageRequirement: true,
+			},
+			empty: {
+				allowEmpty: true,
 			},
 			descss: 'desmond.css',
 			desjs: 'desmond.js',
