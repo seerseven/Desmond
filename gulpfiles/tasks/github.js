@@ -25,8 +25,7 @@ module.exports = {
 	save: function () {
 		return src(s.addall, l.save(1))
 			.pipe(p.git.add())
-			.pipe(p.git.commit(u, o.args))
-			.on(d.end, () => l.save(0));
+			.pipe(p.git.commit(u, o.args), l.save(0));
 	},
 	push: function (done) {
 		l.save(0);

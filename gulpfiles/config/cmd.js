@@ -430,7 +430,7 @@ const js = {
 const git = {
 	save: function (type) {
 		if (type === 1) {
-			theStart('GIT', 'ADD', '& COMMIT CHANGES', x.git, x.gitl, x.mith);
+			theStart('GIT', 'ADD', '& COMMIT CHANGES', x.git, x.git, x.mith);
 		}
 		if (type === 0) {
 			thealtEnd('LOCAL CHANGES SAVED', x.git, x.gitl);
