@@ -441,7 +441,7 @@ const git = {
 			theStart('GIT', 'PUSH', 'CHANGES TO REMOTE', x.git2, x.git2, x.mith);
 		}
 		if (type === 0) {
-			thealtEnd('LOCAL BRANCH = ORIGIN MASTER', x.git2, x.git2);
+			thealtEnd('SYNCED ORIGIN MASTER', x.git2, x.git2);
 		}
 	},
 	pull: function (type) {
