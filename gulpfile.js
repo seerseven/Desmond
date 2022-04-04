@@ -17,6 +17,10 @@ exports.cssbuild = tasks.css.build;
 //CLEAN TASKS
 exports.clean = tasks.clean.all;
 
+//GIT TASKS
+exports.save = tasks.git.save;
+exports.push = tasks.git.push;
+
 exports.default = tasks.css.mdb;
 
 // const config = require('./gulp.config');

@@ -22,13 +22,16 @@ const l = log;
 const u = undefined;
 
 module.exports = {
-	save: function () {
+	gitsave: function () {
 		return src(s.addall, l.save(1))
 			.pipe(p.git.add())
-			.pipe(p.git.commit(u, o.args), l.save(0));
+			.pipe(p.git.commit(u, o.args));
 	},
-	push: function (done) {
-		l.save(0);
+	saveend: function () {
+		return src(s.addall).on(d.end, () => l.save(0));
+	},
+	gitpush: function (done) {
+		l.push(1);
 		p.git.push('origin', 'master', function (err) {
 			if (err) throw err;
 		}),

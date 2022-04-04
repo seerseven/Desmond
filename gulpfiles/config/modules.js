@@ -13,7 +13,8 @@ module.exports = {
 		cts: scss.cts,
 	},
 	git: {
-		save: git.save,
+		save: series(git.gitsave, git.saveend),
+		push: git.gitpush,
 	},
 	css: {
 		all: parallel(css.shopifycss, css.mdbcss, css.themecss),
