@@ -1,6 +1,6 @@
 {
   "name": "desmond-core",
-  "version": "1.0.49",
+  "version": "1.0.196",
   "description": "Modern development workflow, built with performance and best practices in mind..",
   "repository": "seerseven/desmond",
   "author": "Seerseven <dev@seerseven.com>",
@@ -18,12 +18,15 @@
     "serve": "concurrently \"desmond serve\" \"gulp\"",
     "watch": "desmond watch",
     "build": "desmond build",
-    "lint": "desmond lint"
+    "lint": "desmond lint",
+    "bump": "npm --no-git-tag-version version patch --quiet"
   },
   "devDependencies": {
     "@seerseven/desmond": "^1.0.21",
+    "ansi-colors": "^4.1.1",
     "autoprefixer": "^10.4.2",
     "chalk": "^4.1.0",
+    "cli-progress": "^3.10.0",
     "concurrently": "^7.0.0",
     "cron": "^1.8.2",
     "css-declaration-sorter": "^6.1.4",
@@ -45,6 +48,7 @@
     "gulp-hub": "^4.2.0",
     "gulp-imagemin": "^7.1.0",
     "gulp-load-plugins": "^2.0.7",
+    "gulp-multi-dest": "^1.3.7",
     "gulp-noop": "^1.0.1",
     "gulp-notify": "^4.0.0",
     "gulp-plumber": "^1.2.1",
@@ -85,6 +89,7 @@
     "postcss-short": "^5.0.0",
     "postcss-tipsy": "^1.0.2",
     "postcss-utilities": "^0.8.4",
+    "progress-stream": "^2.0.0",
     "sass": "^1.49.7"
   },
   "engines": {

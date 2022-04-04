@@ -1,74 +1,29 @@
-const { task, series, watch, src, dest, parallel } = require('gulp');
-const { performance } = require('perf_hooks');
-//require
-const plugins = require('./plugins');
-const conf = require('./config');
-const v = require('./variables');
+const text = {
+	sass: 'Compile SASS to CSS',
+	post: 'Dist Unminified CSS',
+	dist: 'Process POST to CSS',
+	build: 'Rename, Minify & Build',
+};
 
-const chalk = plugins.chalk;
-const hx = v.colors;
-
-function begin() {
-	const str = performance.now();
-	return str;
-}
-function end(taskName, taskDescription, taskColor, s, type = 1) {
-	const e = performance.now();
-	var ms = e - s;
-	var sec = ms.toFixed(2);
-	var done = sec / 1000.0;
-	done = done.toFixed(2);
-	if (type === 1) {
-		console.log(
-			`${chalk.hex('#7e7e7e').bgHex('#000000').bold('   ✓')}`,
-			`${chalk
-				.hex(hx.text)
-				.italic(
-					`${taskDescription} ${chalk.white.dim(`compiled in:`)} ${chalk
-						.hex(hx.milliseconds)
-						.bgBlack.bold(`${done}s`)}`
-				)}`
-		);
-	}
-	if (type === 2) {
-		console.log(
-			`${chalk.hex('#000000').bgHex(taskColor).bold(taskName)}`,
-			`${chalk
-				.hex(hx.text)
-				.italic(
-					`${taskDescription} ${chalk.gray.dim(`finished in:`)} ${chalk
-						.hex(hx.milliseconds)
-						.bgBlack.bold(`${done}ms`)}`
-				)}`
-		);
-	}
-}
-
-function logger(taskName, taskDesc, taskColor, type = 1) {
-	console.log(
-		`${chalk
-			.hex(taskColor)
-			.dim('-------------------------------------------------------')}`
-	);
-	if (type === 1) {
-		console.log(
-			`${chalk.white.bgHex(taskColor).bold(taskName)}`,
-			`${chalk.hex(taskColor).italic.bold(taskDesc)}`
-		);
-	}
-	if (type === 2) {
-		console.log(
-			`${chalk.hex('#000000').bgHex(taskColor).bold(taskName)}`,
-			`${chalk.hex(taskColor).italic.bold(taskDesc)}`
-		);
-	}
-	console.log(
-		`${chalk
-			.hex(taskColor)
-			.dim('-------------------------------------------------------')}`
-	);
-}
-
+module.exports.css = {
+	shopify: {
+		title: c.logger(' CSS ', 'COMPILE SHOPIFY CSS', c.blue),
+		sass: log.cmd(text.sass, c.pink),
+		dist: log.cmd(text.dist, c.yell),
+		build: log.cmd(text.build, c.teal),
+		end: c.end(z, 'SHOPIFY.MIN.CSS', c.cyan),
+		break: c.desmond(c.bhex),
+	},
+	theme: {
+		title: c.logger(' CSS ', 'COMPILE THEME CSS', c.blue),
+		sass: log.cmd(text.sass, c.pink),
+		post: log.cmd(text.post, c.purp),
+		dist: log.cmd(text.dist, c.yell),
+		build: log.cmd(text.build, c.teal),
+		end: c.end(z, 'THEME.MIN.CSS', c.cyan),
+		break: c.desmond(c.bhex),
+	},
+};
 function cmd(taskDesc, taskColor, type = 1) {
 	if (type === 1) {
 		console.log(
@@ -300,17 +255,3 @@ function dev() {
 	);
 	empty();
 }
-
-exports.end = end;
-exports.start = begin;
-exports.dir = mkdir;
-exports.cmd = logger;
-exports.log = cmd;
-exports.break = linebreak;
-exports.br = series(br);
-exports.empty = empty;
-exports.frey = frey;
-exports.desmond = desmond;
-exports.url = links;
-exports.dev = dev;
-exports.watcher = watcher;

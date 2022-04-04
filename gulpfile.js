@@ -1,10 +1,21 @@
 'use strict';
 
-const { series, parallel, src, dest, task } = require('gulp');
+const { series, parallel, src, dest } = require('gulp');
+const task = require('./gulpfiles/config/modules');
 
-const req = require('./gulpfiles/config/modules.js');
+exports.shop = task.css.shopify;
+exports.theme = task.css.theme;
+exports.note = task.css.notion;
+exports.build = task.css.build;
+exports.clean = task.css.clean;
+exports.default = task.css.mdb;
 
-exports.default = req.bump.bump;
+// const config = require('./gulp.config');
+
+// config.map((config) => {
+// 	return task(config.name, job[config.name]);
+// });
+
 // //Require
 // const css = require('./styles.js');
 // const js = require('./scripts.js');

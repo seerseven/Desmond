@@ -1,43 +1,44 @@
 const { series, parallel, src, dest, task } = require('gulp');
 
 //require
-const plugins = require('../config/plugins');
 const conf = require('../config/config');
-const v = require('../config/variables');
-const c = require('../config/chalk');
-const f = require('../config/functions');
+const cmd = require('../config/cmd');
 
 //config
-const opts = conf.pluginOpts;
-const scr = conf.paths;
-const dist = conf.paths;
-const hx = v.colors;
-const log = conf.logger.bumpTasks;
-const start = c.start();
-const s = start;
+const x = conf.colors;
+const p = conf.plugins;
+const d = conf.paths.input;
+const s = conf.paths.output;
 
-var pckg = require('../../package.json');
+//settings
+tag = 'BUMP';
+hex = x.pink;
+end = cmd.end;
+srt = cmd.start;
+log = cmd.log;
 
-const bumped = f.bump(pckg.version);
+module.exports = {
+	npm: function () {
+		return src(conf.pkg, srt('NPM.JSON VERSION'))
+			.pipe(p.plum(), log('Get Current Package Version', x.bump))
+			.pipe(p.bump(), log('Save New Package Version', x.shop))
+			.pipe(dest(d.app))
+			.on('end', () => end('PACKAGE.JSON'));
+	},
+	main: function () {
+		return src(conf.pkg, srt('PACKAGE.JSON VERSION'))
+			.pipe(p.plum(), log('Get Current Package Version', x.bump))
+			.pipe(p.bump(), log('Save New Package Version', x.shop))
+			.pipe(dest(d.app))
+			.on('end', () => end('PACKAGE.JSON'));
+	},
+};
 
-function bump() {
-	start;
-	c.cmd(' Bump: ', 'PACKAGE VERSION', hx.bump);
-	return src(conf.pkg)
-		.pipe(
-			plugins.strip({
-				// Options (optional)
-				// eg:
-				// namespace: ['console', 'window.console']
-			})
-		)
-		.pipe(plugins.plumber())
-		.pipe(plugins.bump({ version: bumped }), c.log(bumped, hx.shop))
+const taskGenerator = (function generateTasks() {
+	const exportsArray = Object.keys(module.exports);
+	exportsArray.map((element) => {
+		return task(element, module.exports[element]);
+	});
 
-		.pipe(dest(dist.app))
-		.on('end', () => {
-			c.end(' Bump: ', 'PACKAGE.JSON', hx.bump, s);
-		});
-}
-
-exports.bump = bump;
+	return generateTasks;
+})();
