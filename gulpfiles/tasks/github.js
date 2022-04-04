@@ -37,12 +37,12 @@ module.exports = {
 			if (err) throw err;
 		}),
 			p.wait(1000);
-		done();
+		done(l.push(0));
 	},
-	pushend: function () {
-		p.wait(3000);
-		return src(s.addall).on(d.end, () => l.push(0));
-	},
+	// pushend: function () {
+	// 	p.wait(3000);
+	// 	return src(s.addall).on(d.end, () => );
+	// },
 	// pull: function (done) {
 	// 	p.git.pull('origin', 'master', {args: '--rebase'}, function (err) {
 	//     if (err) throw err;
