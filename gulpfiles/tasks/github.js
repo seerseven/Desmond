@@ -37,7 +37,8 @@ module.exports = {
 			if (err) throw err;
 		}),
 			p.wait(1000);
-		done(l.push(0));
+		done();
+		setTimeout(l.push(0), 5000);
 	},
 	// pushend: function () {
 	// 	p.wait(3000);
