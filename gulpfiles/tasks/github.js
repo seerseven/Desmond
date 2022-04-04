@@ -31,13 +31,13 @@ module.exports = {
 	saveend: function () {
 		return src(s.addall).on(d.end, () => l.save(0));
 	},
-	gitpush: function (done) {
+	gitpush: function (setTimeout) {
 		l.push(1);
 		p.git.push('origin', 'master', function (err) {
 			if (err) throw err;
 		}),
 			p.wait(1000);
-		done();
+
 		setTimeout(l.push(0), 5000);
 	},
 	// pushend: function () {
