@@ -32,10 +32,11 @@ module.exports = {
 		return src(s.addall)
 			.pipe(p.plum())
 			.on(d.end, () => {
-				l.save(0), p.wait(1000), l.push(1);
+				l.save(0), p.wait(1000);
 			});
 	},
 	gitpush: function (done) {
+		l.push(1);
 		p.git.push('origin', 'master', function (err) {
 			if (err) throw err;
 		}),
