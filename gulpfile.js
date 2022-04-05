@@ -17,6 +17,14 @@ exports.cssbuild = tasks.css.build;
 //CLEAN TASKS
 exports.clean = tasks.clean.all;
 
+//CLEAN TASKS
+exports.node = tasks.arc.node;
+exports.merge = tasks.arc.merge;
+exports.app = tasks.arc.des;
+exports.theme = tasks.arc.theme;
+exports.arc = tasks.arc.arc;
+exports.freeze = tasks.arc.vault;
+
 //BUMP TASKS
 exports.bump = tasks.bump.version;
 

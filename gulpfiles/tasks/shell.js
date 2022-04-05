@@ -18,81 +18,48 @@ const p = conf.plugins;
 const s = conf.paths.input;
 const d = conf.paths.output;
 const o = conf.plugins.opts;
+const sh = conf.shell;
 const l = log;
-const u = undefined;
 
 module.exports = {
-	npmpublish: function () {
+	publish: function () {
+		return src(s.npm, l.publish(1))
+			.pipe(p.shell(sh.publish))
+			.on(d.end, () => l.publish(0));
+	},
+	install: function () {
 		start;
-		return src('./npm')
-			.pipe($.shell('cd npm && npm publish'))
-			.on('end', () => {
-				c.frey();
-				c.end(v, 'Package Published... ', c.nhex);
-				c.frey();
+		return src(s.app, l.install(1))
+			.pipe(p.shell(sh.install))
+			.on(d.end, () => l.install(0));
+	},
+	updatecli: function () {
+		return src(s.shopify, l.cli(1))
+			.pipe(p.shell(sh.cli))
+			.on(d.end, () => l.cli(0));
+	},
+	serve: function () {
+		return src(s.shopify, l.themeserve(1))
+			.pipe(p.shell(sh.login))
+			.pipe(p.shell(sh.serve))
+			.on(d.end, () => {
+				l.links(), l.themeserve(0);
 			});
 	},
-	npminstall: function () {
-		start;
-		return src('./app')
-			.pipe(
-				$.shell(
-					'cd app && npm install -f --save-dev --no-audit @seerseven/desmond@latest'
-				)
-			)
-			.on('end', () => {
-				c.frey();
-				c.end(v, 'Package Installed... ', c.nhex);
-				c.frey();
-			});
-	},
-	themeserve: function () {
-		c.empty();
-		c.desmond(c.shex);
-		start;
-		return src('app/shopify')
-			.pipe($.shell('shopify login --store seerseven.myshopify.com'))
-			.pipe($.shell('cd app/shopify && shopify theme serve'))
-			.on('end', () => {
-				c.end(v, 'Logged into Shopify Local Theme... ', c.shex);
-				c.desmond(c.shex);
-			});
-	},
-	themename: function () {
-		c.break();
-		c.desmond(c.shex);
-		start;
-		return src('app/shopify')
-			.pipe($.shell('cd app/shopify && shopify theme push --unpublished'))
-			.on('end', () => {
-				c.desmond(c.shex);
-				c.end(v, 'Theme Pushed Successfully... ', c.shex);
-				c.desmond(c.shex);
-			});
+	unpublished: function () {
+		return src(s.shopify, l.themeunpub(1))
+			.pipe(p.shell(sh.unpublished))
+			.on(d.end, () => l.themeunpub(0));
 	},
 	themepull: function () {
-		c.break();
-		c.desmond(c.shex);
-		start;
-		return src('app/shopify')
-			.pipe($.shell('cd app/shopify && echo y && echo y | shopify theme pull'))
-			.on('end', () => {
-				c.desmond(c.shex);
-				c.end(v, 'Theme Pulled Successfully... ', c.shex);
-				c.desmond(c.shex);
-			});
+		return src(s.shopify, l.themepull(1))
+			.pipe(p.shell(sh.pull))
+			.on(d.end, () => l.themepull(0));
 	},
 	themepush: function () {
-		c.break();
-		c.desmond(c.shex);
-		start;
-		return src('app/shopify')
-			.pipe(shell('cd app/shopify && echo y && echo y | shopify theme push'))
-			.on('end', () => {
-				c.desmond(c.shex);
-				c.end(v, 'Theme Pushed Successfully... ', c.shex);
-				c.desmond(c.shex);
-			});
+		return src(s.shopify, l.themepush(1))
+			.pipe(shell(sh.push))
+			.on(d.end, () => l.themepush(0));
 	},
 };
 

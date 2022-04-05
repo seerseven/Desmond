@@ -1,12 +1,15 @@
-function formatter(filePath) {
-	return '@forward ' + "'" + filePath.replaceAll('_', '') + "'" + ';' + '\r\n';
-}
-
+const f = require('../config/functions');
+var timeDate = f.datetime();
 module.exports = {
 	pkg: './package.json',
 	paths: {
 		input: {
 			app: './',
+			npm: './package',
+			nodemon: './node_modules/@seerseven/desmond/src/*.js',
+			shopify: './shopify',
+			video: 'src/assets/video',
+			images: 'src/assets/img',
 			shopstart: ['src/build/shopify.js', 'src/build/shopify.css'],
 			themstart: ['src/build/theme.js', 'src/build/theme.css'],
 			venstart: ['src/build/notion.css', 'src/build/mdb.css'],
@@ -74,10 +77,30 @@ module.exports = {
 				'!./state/**',
 				'!./package-lock.json',
 			],
+			backup: ['./**/*', './.*/**/*', '!./.git/**', '!./node_modules/**'],
+			archive: [
+				'./**/*',
+				'./.*/**/*',
+				'!./.git/**',
+				'!./node_modules/**',
+				'!./state/**',
+			],
+			arcproject: [
+				'./**/*',
+				'./.*/**/*',
+				'!./.git/**',
+				'!./node_modules/**',
+				'!./state/**',
+				'!./package/**',
+				'!./shopify/themes/**',
+			],
+			arctheme: ['./shopify/**/*', '!./shopify/themes/**'],
+			arcnode: 'package/**/*',
 		},
 		output: {
 			end: 'end',
 			app: './',
+			npm: './package/src/',
 			dist: 'src/dist',
 			min: 'src/dist/min',
 			libs: 'src/js/libs/',
@@ -90,10 +113,13 @@ module.exports = {
 			shopend: 'src/build/shopify',
 			themend: 'src/build/theme',
 			venend: 'src/build/vendors',
+			vault: 'state/archives',
+			themevault: 'state/themes',
 			multi: ['src/dist', 'shopify/assets'],
 			pro: ['parallax/assets', 'shopify/assets'],
 		},
 		clean: {
+			rem: './state/stage/*',
 			build: [
 				'src/build/**/*',
 				'!src/build/shopify/**',
@@ -106,6 +132,39 @@ module.exports = {
 			shopify: ['shopify/assets/*.css', 'shopify/assets/*.js'],
 			parallax: ['parallax/assets/*.css', 'parallax/assets/*.js'],
 		},
+	},
+	assets: {
+		vids: {
+			ff: 'ffmpeg',
+		},
+		imgs: {
+			logo: 'src/assets/img/logo/*.{JPG,jpg,png,gif,svg}',
+			jpg: 'src/assets/img/jpg/*.{JPG,jpg}',
+			png: 'src/assets/img/png/*.png',
+			svg: 'src/assets/img/svg/*.svg',
+			gif: 'src/assets/img/gif/*.gif',
+		},
+	},
+	directories: {
+		node: 'state/stage/NPM-' + timeDate,
+		nodezip: 'NPM-' + timeDate + '.zip',
+		des: 'state/stage/DES-' + timeDate,
+		deszip: 'DES-' + timeDate + '.zip',
+		shop: 'state/stage/THEME-V00-' + timeDate,
+		shopzip: 'THEME-V00-' + timeDate + '.zip',
+		arc: 'state/stage/DES-ARCHIVE-' + timeDate,
+		arczip: 'DES-ARCHIVE-' + timeDate + '.zip',
+		back: 'F:/Mithrasatori/Desmond/BACKUP-' + timeDate,
+	},
+	shell: {
+		publish: 'cd package && npm publish',
+		install: 'npm install -f --save-dev --no-audit @seerseven/desmond@latest',
+		login: 'shopify login --store seerseven.myshopify.com',
+		serve: 'cd shopify && shopify theme serve',
+		unpublished: 'cd shopify && shopify theme push --unpublished',
+		pull: 'cd shopify && echo y && echo y | shopify theme pull',
+		push: 'cd shopify && echo y && echo y | shopify theme push',
+		cli: 'gem update shopify-cli',
 	},
 	colors: {
 		sass: '#e17eb0',
@@ -146,6 +205,7 @@ module.exports = {
 		concat: '#c43b88',
 		ugly: '#f1a124',
 		dugly: '#ab731c',
+		redsh: '#b80000',
 		red: '#e0334c',
 		dredl: '#812634',
 		redl: '#ca5465',
@@ -159,6 +219,7 @@ module.exports = {
 		bump: '#1cb1dc',
 		dblue: '#135366',
 		blue: '#1cb1dc',
+		lblue: '#1bb7ff',
 		ojay: '#fd802d',
 		dojay: '#7c3e14',
 		app: '#d3b352',
@@ -173,12 +234,13 @@ module.exports = {
 		libs: '#cf3b8e',
 		dlibs: '#5d1a40',
 		pink: '#fd2169',
-		dpink: '#550c24',
+		dpink: '#6e1431',
 		git: '#7952d3',
-		dep: '#2b0f6b',
+		dep: '#482d86',
 		mill: '#d3b352',
 		yell: '#d3b352',
 		dyell: '#795e0e',
+		green: '#197f28',
 		text: '#00a2ff',
 		grey: '#7e7e7e',
 		dgrey: '#575758',
@@ -190,7 +252,6 @@ module.exports = {
 	variables: {
 		border: '-------------------------------------------------------',
 	},
-
 	plugins: {
 		progstream: require('progress-stream'),
 		progress: require('cli-progress'),
@@ -207,7 +268,7 @@ module.exports = {
 		wait: require('gulp-wait'),
 		img: require('gulp-imagemin'),
 		gendex: require('gulp-filelist')('_index.scss', {
-			destRowTemplate: formatter,
+			destRowTemplate: f.formatter,
 			flatten: true,
 			removeExtensions: true,
 		}),

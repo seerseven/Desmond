@@ -6,12 +6,25 @@ const cln = require('../tasks/clean');
 const scss = require('../tasks/sass');
 const git = require('../tasks/git');
 const sort = require('../tasks/sort');
+const sh = require('../tasks/shell');
+const arc = require('../tasks/state');
 module.exports = {
 	bump: {
 		version: series(bump.themebump, bump.npmbump),
 	},
 	scss: {
 		cts: scss.cts,
+	},
+	shell: {
+		publish: sh.publish,
+	},
+	arc: {
+		node: series(arc.savenpm, arc.cleanstage),
+		merge: series(arc.sync, arc.cleanstage),
+		des: series(arc.savedes, arc.cleanstage),
+		theme: series(arc.savetheme, arc.cleanstage),
+		arc: series(arc.archive, arc.cleanstage),
+		vault: series(arc.backup, arc.cleanstage),
 	},
 	sort: {
 		esbuild: series(

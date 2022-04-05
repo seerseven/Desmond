@@ -461,6 +461,143 @@ const git = {
 	},
 };
 
+const shell = {
+	publish: function (type) {
+		if (type === 1) {
+			theStart('SHELL', 'PUBLISH', 'NPM PACKAGE', x.redsh, x.redsh, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('PACKAGE PUBLISHED!!', x.redsh, x.redsh);
+		}
+	},
+	install: function (type) {
+		if (type === 1) {
+			theStart(
+				'SHELL',
+				'COMPILE',
+				'ENTRYPOINTS.SCSS',
+				x.build,
+				x.build,
+				x.mith
+			);
+		}
+		if (type === 0) {
+			thealtEnd('@DESMOND SUCCESSFULLY INSTALLED', x.build, x.build);
+		}
+	},
+	serve: function (type) {
+		if (type === 1) {
+			theStart(
+				'SHELL',
+				'SERVE',
+				'SHOPIFY DEVELOPMENT THEME',
+				x.lblue,
+				x.lblue,
+				x.mith
+			);
+		}
+		if (type === 0) {
+			thealtEnd('THEME AVAILABLE ON LOCALHOST', x.lblue, x.lblue);
+		}
+	},
+	push: function (type) {
+		if (type === 1) {
+			theStart(
+				'SHELL',
+				'PUSH',
+				'SHOPIFY THEME (LIVE)',
+				x.shopjs,
+				x.shopjs,
+				x.mith
+			);
+		}
+		if (type === 0) {
+			thealtEnd('THEME SUCCESSFULLY PUSHED', x.shopjs, x.shopjs);
+		}
+	},
+	pull: function (type) {
+		if (type === 1) {
+			theStart('SHELL', 'PULL', '(LIVE) SHOPIFY THEME', x.bump, x.bump, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('THEME SUCCESSFULLY PUSHED', x.bump, x.bump);
+		}
+	},
+	unpublished: function (type) {
+		if (type === 1) {
+			theStart(
+				'SHELL',
+				'PUSH',
+				'SHOPIFY THEME UNPUBLISHED',
+				x.redl,
+				x.redl,
+				x.mith
+			);
+		}
+		if (type === 0) {
+			thealtEnd('THEME SUCCESSFULLY PUSHED', x.redl, x.redl);
+		}
+	},
+	cli: function (type) {
+		if (type === 1) {
+			theStart('SHELL', 'SHOPIFY', 'CLI UPDATE', x.mith, x.mith, x.dark);
+		}
+		if (type === 0) {
+			thealtEnd('GEMS UPDATED: SHOPIFY-CLI', x.mith, x.mith);
+		}
+	},
+};
+
+const state = {
+	node: function (type) {
+		if (type === 1) {
+			theStart('STATE', 'ARCHIVE', 'NPM PACKAGE', x.arc, x.arc, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('NPM PACKAGE ARCHIVED', x.arc, x.arc);
+		}
+	},
+	ject: function (type) {
+		if (type === 1) {
+			theStart('ARC', 'ARCHIVE', 'BASE PROJECT FILES', x.bump, x.bump, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('PROJECT ARCHIVED', x.bump, x.bump);
+		}
+	},
+	sho: function (type) {
+		if (type === 1) {
+			theStart('ARC', 'SHOPIFY', 'THEME SAVE', x.green, x.green, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('SHOPIFY THEME SAVED', x.green, x.green);
+		}
+	},
+	arc: function (type) {
+		if (type === 1) {
+			theStart('ARC', 'ARCHIVE', 'DESMOND FILES', x.build, x.build, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('PROJECT ARCHIVED', x.build, x.build);
+		}
+	},
+	bak: function (type) {
+		if (type === 1) {
+			theStart('ARC', 'DEEP', 'FREEZE FILES', x.dep, x.dep, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('NPM PACKAGE ARCHIVED', x.dep, x.dep);
+		}
+	},
+	merge: function (type) {
+		if (type === 1) {
+			theStart('ARC', 'MERGE', 'NODE MODULE FILES', x.dpink, x.dpink, x.mith);
+		}
+		if (type === 0) {
+			thealtEnd('MODULES SYNCED', x.dpink, x.dpink);
+		}
+	},
+};
 const admin = {
 	clean: function (type) {
 		if (type === 1) {
@@ -600,6 +737,29 @@ const logs = {
 	vendorFiles: function () {
 		setLog(x.text, x.text, ' Moved MDB & Notion CSS');
 	},
+	devlinks: function () {
+		setLog(x.text, x.text, " admin: 'https://seerseven.myshopify.com/admin'");
+		setLog(
+			x.text,
+			x.text,
+			" customize: 'https://tinyurl.com/seerseven-theme-editor'"
+		);
+		setLog(x.text, x.text, " local: 'http://127.0.0.1:9292'");
+		setLog(
+			x.text,
+			x.text,
+			" preview: 'https://tinyurl.com/seerseven-theme-preview'"
+		);
+	},
+	copy: function () {
+		setLog(x.text, x.text, ' Copying Files');
+	},
+	zip: function () {
+		setLog(x.teal, x.teal, ' Creating Zip Archive');
+	},
+	rem: function () {
+		setLog(x.yell, x.yell, ' Cleaning Stage');
+	},
 };
 
 exports.start = taskStart;
@@ -608,6 +768,9 @@ exports.time = timeStart;
 exports.log = taskLog;
 //Log Tasks
 
+exports.copy = logs.copy;
+exports.zip = logs.zip;
+exports.rem = logs.rem;
 exports.dist = logs.dist;
 exports.sass = logs.sass;
 exports.scss = logs.scss;
@@ -639,10 +802,28 @@ exports.remlax = logs.remlax;
 exports.sfiles = logs.shopifyFiles;
 exports.tfiles = logs.themeFiles;
 exports.vfiles = logs.vendorFiles;
+exports.links = logs.devlinks;
 
 //Admin Tasks
 exports.remall = admin.clean;
 exports.sort = admin.sort;
+
+//State Tasks
+exports.node = state.node;
+exports.ject = state.ject;
+exports.sho = state.sho;
+exports.arc = state.arc;
+exports.bak = state.bak;
+exports.merge = state.merge;
+
+//Shell Tasks
+exports.publish = shell.publish;
+exports.install = shell.install;
+exports.themeserve = shell.serve;
+exports.themepush = shell.push;
+exports.themepull = shell.pull;
+exports.themeunpub = shell.unpublished;
+exports.cli = shell.cli;
 
 // CSS Tasks
 exports.shopifycss = css.shopify;
