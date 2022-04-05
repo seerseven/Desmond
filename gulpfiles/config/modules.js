@@ -42,10 +42,15 @@ module.exports = {
 		git: series(git.gitsave, git.saveend, git.gitpush, git.pushend),
 	},
 	css: {
+		shopify: css.shopifycss,
+		theme: css.themecss,
+		mdb: css.mdbcss,
 		all: parallel(css.shopifycss, css.mdbcss, css.themecss),
 		build: series(css.buildcss, css.cleancss),
 	},
 	js: {
+		shopify: js.shopifyjs,
+		theme: js.themejs,
 		all: series(
 			parallel(js.shopifyjs, js.themejs),
 			parallel(js.queryjs, js.mdbjs, js.canvasjs, js.vendorjs),

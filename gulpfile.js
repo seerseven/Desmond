@@ -1,6 +1,6 @@
 'use strict';
 
-const { series, parallel, src, dest } = require('gulp');
+const { series, parallel, src, dest, watch } = require('gulp');
 const tasks = require('./gulpfiles/config/modules');
 
 //JS TASKS
@@ -37,52 +37,20 @@ exports.push = tasks.git.push;
 exports.git = tasks.git.git;
 exports.deploy = tasks.git.git;
 
-exports.default = tasks.git.git;
+exports.default = function () {
+	watch(['src/build/*.css', 'src/build/*.js'], tasks.sort.esbuild);
+	watch('src/build/shopify/shopify.css', tasks.css.shopify);
+	watch('src/build/theme/theme.css', tasks.css.theme);
+	watch('src/build/shopify/shopify.js', tasks.js.shopify);
+	watch('src/build/theme/theme.js', tasks.js.theme);
+};
 
-// const config = require('./gulp.config');
-
-// config.map((config) => {
-// 	return task(config.name, job[config.name]);
-// });
-
-// //Require
-// const css = require('./styles.js');
-// const js = require('./scripts.js');
-// const ass = require('./assets.js');
-// const sass = require('./sass.js');
-// const watch = require('./watch.js');
-
-// //Sass Tasks
-// exports.scss = sass.scss;
-// exports.cts = sass.cts;
-// exports.list = sass.list;
-
-// //Assets Tasks
-// exports.img = ass.img;
-// exports.vid = ass.vid;
-// exports.mvtheme = ass.mvtheme;
-// exports.mvshop = ass.mvshop;
-// exports.mvven = ass.mvven;
-// exports.cleanbuild = ass.cleanbuild;
-
-// //CSS TASKS
-// exports.csshopify = css.shopify;
-// exports.csmdb = css.mdb;
-// exports.csnotion = css.notion;
-// exports.cstheme = css.theme;
-// exports.csbuild = css.build;
-// exports.csclean = css.clean;
-
-// //JS TASKS
-// exports.jsshopify = js.shopify;
-// exports.jsquery = js.query;
-// exports.jslibs = js.libs;
-// exports.jscore = js.core;
-// exports.jstheme = js.theme;
-// exports.jsbuild = js.build;
-// exports.jsclean = js.clean;
-
-// //Consts
-// exports.default = series(ass.desmond, watch.files);
-// exports.sortfiles = ass.sortbuild;
-// exports.desmond = ass.desmond;
+// watch('src/build/vendors/mdb.css', task.cssmdb);
+// watch(['src/js/libs/*.js', '!src/js/libs/shopify.js'], task.jslibs);
+// watch('src/assets/img/**/*', ass.img);
+// (err) => {
+// 	if (err) {
+// 		console.error('error', err);
+// 	}
+// 	done();
+// };

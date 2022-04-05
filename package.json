@@ -15,7 +15,7 @@
     "defaults"
   ],
   "scripts": {
-    "serve": "concurrently \"desmond serve\"",
+    "serve": "concurrently \"desmond serve\" \" gulp -L \" \" cd shopify && shopify theme serve \"",
     "watch": "desmond watch",
     "build": "desmond build",
     "lint": "desmond lint",

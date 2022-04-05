@@ -43,3 +43,29 @@ exports.files = series(watchFiles);
 //     // do stuff after task foo has finished
 //   }
 // });
+
+//Watch Tasks
+const task = {
+	theme: series(shop.theme),
+	deploy: series(git.deploy),
+	npmpackage: series(ver.npm, npx.package),
+	archive: series(zip.project),
+};
+
+function watcherWoman() {
+	const s = chalk.start();
+	chalk.watcher();
+	return src('app/shopify');
+}
+
+// Watch files
+function watchFiles() {
+	watch('./README.md', task.deploy);
+	watch('app/shopify/LOG.md', task.theme);
+	watch('state/LOG.md', task.backup);
+	watch('app/node_modules/@seerseven/desmond/src/*.js', task.node);
+}
+watchFiles.displayName = 'Watchfiles : Watch Files for Changes';
+
+exports.files = series(watchFiles);
+exports.status = series(watcherWoman);
