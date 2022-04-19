@@ -10,6 +10,8 @@ $delay: var(--animate-delay);
 
 $durate: var(--animate-duration);
 
+$fade: all 200ms ease;
+
 @alias {
 	@i: @import;
 	@m: @media;

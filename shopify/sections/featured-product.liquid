@@ -622,3 +622,11 @@
 }
 
 {% endschema %}
+
+{% if product %}
+<script>
+window.curVariant = {{ product.selected_or_first_available_variant | json }};
+window.featuredProduct = {{ product | json }};
+</script>
+{% endif %}
+<!-- globoswatch installed -->

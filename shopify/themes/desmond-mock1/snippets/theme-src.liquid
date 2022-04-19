@@ -1,0 +1,22 @@
+{{ 'shopify.css' | asset_url | stylesheet_tag }}
+{{ 'mdb.css' | asset_url | stylesheet_tag }}
+{{ 'theme.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'shopify.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'core.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'libs.js' | asset_url }}" defer="defer"></script>
+<!-- <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script> -->
+
+
+<script>
+  document.documentElement.className = document
+    .documentElement
+    .className
+    .replace("no-js", "js");
+  // if (Shopify.designMode) {
+  // document
+  //     .documentElement
+  //     .classList
+  //     .add("shopify-design-mode");
+  // }
+</script>

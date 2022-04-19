@@ -4,6 +4,8 @@
   assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
 %}
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>  
+
 
 {%- unless settings.type_body_font.system? -%}
 <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
@@ -141,7 +143,6 @@
     box-sizing: border-box;
     font-size: calc(var(--font-body-scale) * 62.5%);
     height: 100%;
-    overflow-x: hidden;
   }
 
   body {

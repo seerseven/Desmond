@@ -1,0 +1,64 @@
+{% assign quantitySteps = product.metafields.accentuate.quantitysteps | plus: 0 %}
+{% assign maximumQuantity = product.metafields.accentuate.maximumquantity | plus: 0 %}
+{% if quantitySteps > 0 and maximumQuantity > 0 %}
+
+  <!-- <quantity-input class="quantity">
+  <button class="quantity__button no-js-hidden" name="minus" type="button">
+    <span class="visually-hidden">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>
+    {% render 'icon-minus' %}
+  </button>
+  <input class="quantity__input"
+      type="number"
+      name="quantity"
+      id="Quantity-{{ section.id }}"
+      min="1"
+      value="1"
+      form="{{ product_form_id }}"
+    >
+  <button class="quantity__button no-js-hidden" name="plus" type="button">
+    <span class="visually-hidden">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>
+    {% render 'icon-plus' %}
+  </button>
+</quantity-input> -->
+
+  <quantity-input class="quantity">
+    <div class="form-input">
+      <div class="select-custom-dropdown">
+        <select class="select-custom-qty" id="quantity" name="quantity" style="display:block;"></select>
+        <div class="select_arrow"></div>
+        <input id="qty_information" name="properties[_qtysteps]" type="hidden" value="" form="{{ product_form_id }}">
+
+      </div>
+    </div>
+  </quantity-input>
+
+
+  <script>
+    window.addEventListener ('load', function () {
+    var myQtySteps = [];
+    var x = document.getElementById("quantity");
+
+      for (var i = {{quantitySteps}}; i <= {{maximumQuantity}}; i+={{quantitySteps}}) {
+          myQtySteps.push(i);
+          var option = document.createElement("option");
+          option.text = i;
+          x.add(option);
+      }
+                                          
+      document.getElementById("qty_information").value = myQtySteps.toString(); 
+    });
+</script>
+
+{% else %}
+  <div class="quantity-wrap">
+
+    <input class="product-form__input" data-quantity-input id="Quantity-{{ section.id }}" min="1" name="quantity" pattern="[0-9]*" type="number" value="1" form="{{ product_form_id }}">
+    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"></button>
+    <button class="plus" onclick="this.parentNode.querySelector('input[type=number]').stepUp()"></button>
+
+  </div>
+{% endif %}
+
+
+<!-- 
+  <input class="product-form__input quantity__input" data-quantity-input id="Quantity-{{ section.id }}" min="1" name="quantity" pattern="[0-9]*" type="number" value="1" form="{{ product_form_id }}"> -->

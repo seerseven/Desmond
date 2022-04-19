@@ -1,0 +1,69 @@
+{% assign quantitySteps = product.metafields.accentuate.quantitysteps | plus: 0 %}
+{% assign maximumQuantity = product.metafields.accentuate.maximumquantity | plus: 0 %}
+{% if quantitySteps > 0 and maximumQuantity > 0 %}
+
+
+  <quantity-input class="quantity">
+    <div class="form-input">
+      <div class="select-custom-dropdown">
+        <select class="select-custom-qty" id="quantity" name="quantity" style="display:block;"></select>
+        <div class="select_arrow"></div>
+        <input id="qty_information" name="properties[_qtysteps]" type="hidden" value="" form="{{ product_form_id }}">
+
+      </div>
+    </div>
+  </quantity-input>
+
+
+  <script>
+    window.addEventListener ('load', function () {
+    var myQtySteps = [];
+    var x = document.getElementById("quantity");
+
+      for (var i = {{quantitySteps}}; i <= {{maximumQuantity}}; i+={{quantitySteps}}) {
+          myQtySteps.push(i);
+          var option = document.createElement("option");
+          option.text = i;
+          x.add(option);
+      }
+                                          
+      document.getElementById("qty_information").value = myQtySteps.toString(); 
+    });
+</script>
+
+
+{% else %}
+
+  <div class="quantity-wrap-round">
+    <div class="flxr">
+      <div class="qbar">
+        &nbsp;</div>
+      <div class="arrow-up-rd" onclick="dn()">
+        <i class="fas fa-angle-left"></i>
+      </div>
+      <div class="the-input-round">
+        <input class="product-form__input" data-quantity-input id="Quantity-{{ section.id }}" min="1" name="quantity" pattern="[0-9]*" type="number" value="1" form="{{ product_form_id }}">
+      </div>
+      <div class="arrow-down-rd" onclick="up()">
+        <i class="fas fa-angle-right"></i>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <div class="quantity-wrap flxr">
+    <div class="the-input">
+      <input class="product-form__input" data-quantity-input id="Quantity-{{ section.id }}" min="1" name="quantity" pattern="[0-9]*" type="number" value="1" form="{{ product_form_id }}">
+    </div>
+    <div class="the-arrows">
+      <div class="flxd">
+        <div class="arrow-up" onclick="up()">
+          <i class="fas fa-angle-up"></i>
+        </div>
+        <div class="arrow-down" onclick="dn()">
+          <i class="fas fa-angle-down"></i>
+        </div>
+      </div>
+    </div>
+  </div> -->
+{% endif %}

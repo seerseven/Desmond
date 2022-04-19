@@ -1,0 +1,277 @@
+{%- case product-info -%}
+
+  <!-- $ Vendor Block Type -->
+    {%- when 'vendor' -%}
+      <p class="product__text{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing subtitle{% endif %}" {{ block.shopify_attributes }}>
+        {{ product.vendor | escape }}
+      </p>
+
+  <!-- $ Title Block Type -->
+  {%- when 'header' -%}
+    <div class="row product-header">
+      <div class="col-md-9">
+        <h2 class=" fs-36 product__title" {{ block.shopify_attributes }}>
+          {{ product.title | escape }}
+        </h2>
+      </div>
+      <div class="col-md-2">
+        <div class="flxr pt-2">
+          <div class="no-js-hidden text" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+            {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: 'price--large' -%}
+          </div>
+        </div>
+        {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+            <div class="product__tax caption rte">
+              {%- if shop.taxes_included -%}
+                {{ 'products.product.include_taxes' | t }}
+              {%- endif -%}
+              {%- if shop.shipping_policy.body != blank -%}
+                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          <div {{ block.shopify_attributes }}>
+            {%- form 'product', product, id: 'product-form-installment', class: 'installment caption-large' -%}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              {{ form | payment_terms }}
+            {%- endform -%}
+          </div>
+      </div>
+    </div>
+
+  <!-- $ Title Block Type -->
+    {%- when 'title' -%}
+      <h1 class="product__title" {{ block.shopify_attributes }}>
+        {{ product.title | escape }}
+      </h1>
+
+  {%- when 'price' -%}
+    <div class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+      {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: 'price--large' -%}
+    </div>
+    {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+      <div class="product__tax caption rte">
+        {%- if shop.taxes_included -%}
+          {{ 'products.product.include_taxes' | t }}
+        {%- endif -%}
+        {%- if shop.shipping_policy.body != blank -%}
+          {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div {{ block.shopify_attributes }}>
+      {%- form 'product', product, id: 'product-form-installment', class: 'installment caption-large' -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {{ form | payment_terms }}
+      {%- endform -%}
+    </div>
+
+  {%- when 'variant_picker' -%}
+      <div id="varient-section" class="row">
+          {%- unless product.has_only_default_variant -%}
+          {%- if block.settings.picker_type == 'button' -%}
+            <variant-radios class="no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}" {{ block.shopify_attributes }}>
+              {%- for option in product.options_with_values -%}
+                  <fieldset class="js product-form__input">
+                    <legend class="form__label">{{ option.name }}</legend>
+                    {%- for value in option.values -%}
+                      <input type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                            name="{{ option.name }}"
+                            value="{{ value | escape }}"
+                            form="{{ product_form_id }}"
+                            {% if option.selected_value == value %}checked{% endif %}
+                      >
+                      <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
+                        {{ value }}
+                      </label>
+                    {%- endfor -%}
+                  </fieldset>
+              {%- endfor -%}
+              <script type="application/json">
+
+{{ product.variants | json }}
+
+</script>
+            </variant-radios>
+          {%- else -%}
+            <variant-selects class="no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}" {{ block.shopify_attributes }}>
+              {%- for option in product.options_with_values -%}
+                <div class="product-form__input product-form__input--dropdown">
+                  <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+                    {{ option.name }}
+                  </label>
+                  <div class="select">
+                    <select id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                      class="select__select"
+                      name="options[{{ option.name | escape }}]"
+                      form="{{ product_form_id }}"
+                    >
+                      {%- for value in option.values -%}
+                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                          {{ value }}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                    {% render 'icon-caret' %}
+                  </div>
+                </div>
+              {%- endfor -%}
+    
+              <script type="application/json">
+
+{{ product.variants | json }}
+
+</script>
+            </variant-selects>
+          {%- endif -%}
+        {%- endunless -%}
+  
+        <noscript class="product-form__noscript-wrapper-{{ section.id }}">
+          <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+            <label class="form__label" for="Variants-{{ section.id }}">{{ 'products.product.product_variants' | t }}</label>
+            <div class="select">
+              <select name="id" id="Variants-{{ section.id }}" class="select__select" form="{{ product_form_id }}">
+                {%- for variant in product.variants -%}
+                  <option
+                    {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                    {% if variant.available == false %}disabled{% endif %}
+                    value="{{ variant.id }}"
+                  >
+                    {{ variant.title }}
+                    {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                    - {{ variant.price | money | strip_html }}
+                  </option>
+                {%- endfor -%}
+              </select>
+              {% render 'icon-caret' %}
+            </div>
+          </div>
+        </noscript>
+      </div>
+
+
+  {%- when 'quantity_selector' -%}
+
+      <!-- <div class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}" {{ block.shopify_attributes }}>
+        <label class="form__label" for="Quantity-{{ section.id }}">
+          {{ 'products.product.quantity.label' | t }}
+        </label>
+
+        <quantity-input class="quantity">
+          <button class="quantity__button no-js-hidden" name="minus" type="button">
+            <span class="visually-hidden">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>
+            {% render 'icon-minus' %}
+          </button>
+          <input class="quantity__input"
+              type="number"
+              name="quantity"
+              id="Quantity-{{ section.id }}"
+              min="1"
+              value="1"
+              form="{{ product_form_id }}"
+            >
+          <button class="quantity__button no-js-hidden" name="plus" type="button">
+            <span class="visually-hidden">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>
+            {% render 'icon-plus' %}
+          </button>
+        </quantity-input>
+      </div> -->
+
+  {%- when 'description' -%}
+      {%- if product.description != blank -%}
+      <div class="product__description rte">
+        {{ product.description }}
+      </div>
+    {%- endif -%}
+
+  {%- when 'collapsible_tab' -%}
+    <div class="product__accordion accordion" {{ block.shopify_attributes }}>
+      <details id="Details-{{ block.id }}-{{ section.id }}">
+        <summary>
+          <div class="summary__title">
+            {% render 'icon-accordion', icon: block.settings.icon %}
+            <h2 class="h4 accordion__title">
+              {{ block.settings.heading | default: block.settings.page.title }}
+            </h2>
+          </div>
+          {% render 'icon-caret' %}
+        </summary>
+        <div class="accordion__content rte" id="ProductAccordion-{{ block.id }}-{{ section.id }}">
+          {{ block.settings.content }}
+          {{ block.settings.page.content }}
+        </div>
+      </details>
+    </div>
+
+  {%- when 'popup' -%}
+    <modal-opener class="product-popup-modal__opener no-js-hidden" data-modal="#PopupModal-{{ block.id }}" {{ block.shopify_attributes }}>
+      <button id="ProductPopup-{{ block.id }}" class="product-popup-modal__button link" type="button" aria-haspopup="dialog">{{ block.settings.text | default: block.settings.page.title }}</button>
+    </modal-opener>
+    <a href="{{ block.settings.page.url }}" class="product-popup-modal__button link no-js">{{ block.settings.text }}</a>
+
+  {%- when 'share' -%}
+  <share-button id="Share-{{ section.id }}" class="share-button" {{ block.shopify_attributes }}>
+    <button class="share-button__button hidden">
+      {% render 'icon-share' %}
+      {{ block.settings.share_label | escape }}
+    </button>
+    <details id="Details-{{ block.id }}-{{ section.id }}">
+      <summary class="share-button__button">
+        {% render 'icon-share' %}
+        {{ block.settings.share_label | escape }}
+      </summary>
+      <div id="Product-share-{{ section.id }}" class="share-button__fallback motion-reduce">
+        <div class="field">
+          <span id="ShareMessage-{{ section.id }}" class="share-button__message hidden" role="status">
+          </span>
+          <input type="text"
+                class="field__input"
+                id="url"
+                value="{{ product.selected_variant.url | default: product.url | prepend: request.origin }}"
+                placeholder="{{ 'general.share.share_url' | t }}"
+                onclick="this.select();"
+                readonly
+          >
+          <label class="field__label" for="url">{{ 'general.share.share_url' | t }}</label>
+        </div>
+        <button class="share-button__close hidden no-js-hidden">
+          {% render 'icon-close' %}
+          <span class="visually-hidden">{{ 'general.share.close' | t }}</span>
+        </button>
+        <button class="share-button__copy no-js-hidden">
+          {% render 'icon-clipboard' %}
+          <span class="visually-hidden">{{ 'general.share.copy_to_clipboard' | t }}</span>
+        </button>
+      </div>
+    </details>
+  </share-button>
+  <script src="{{ 'share.js' | asset_url }}" defer="defer"></script>
+
+
+
+
+  {%- when 'rating' -%}
+    {%- if product.metafields.reviews.rating.value != blank -%}
+    {% liquid
+    assign rating_decimal = 0
+    assign decimal = product.metafields.reviews.rating.value.rating | modulo: 1
+    if decimal >= 0.3 and decimal <= 0.7
+      assign rating_decimal = 0.5
+    elsif decimal > 0.7
+      assign rating_decimal = 1
+    endif
+    %}
+    <div class="rating" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}">
+      <span aria-hidden="true" class="rating-star color-icon-{{ settings.accent_icons }}" style="--rating: {{ product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"></span>
+    </div>
+    <p class="rating-text caption">
+      <span aria-hidden="true">{{ product.metafields.reviews.rating.value }} / {{ product.metafields.reviews.rating.value.scale_max }}</span>
+    </p>
+    <p class="rating-count caption">
+      <span aria-hidden="true">({{ product.metafields.reviews.rating_count }})</span>
+      <span class="visually-hidden">{{ product.metafields.reviews.rating_count }} {{ "accessibility.total_reviews" | t }}</span>
+    </p>
+  {%- endif -%}
+
+
+  {%- endcase -%}
